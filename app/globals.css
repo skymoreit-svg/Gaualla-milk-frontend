@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Playfair Display SC", serif;
+}
+
+/* "Lora", serif; */
+body {
+  font-family: "Lora", serif;
+}
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+
+.swiper-pagination-bullet {
+  background-color: white !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: white !important;
+}
+
+.rfm-marquee-container {
+  overflow-y: hidden;
+}
+
+.bottom-icon-image-filter {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(7%) saturate(2790%)
+    hue-rotate(173deg) brightness(113%) contrast(106%);
+}
+
+.our-product-anime {
+  animation: leafAnimation 8s infinite ease-in-out;
+}
+@keyframes leafAnimation {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+.why-pure-1::after {
+  content: "";
+  position: absolute;
+  z-index: -10;
+  color: green;
+  top: 69%;
+  right: 6px;
+  height: 1px;
+  border: 1px dotted green;
+  width: 61%;
+  transform: rotate(5deg);
+}
+
+.why-pure-2::before {
+  content: "";
+  position: absolute;
+  z-index: -10;
+  color: green;
+  top: 90%;
+  left: -285px;
+  height: 1px;
+  border: 1px dotted green;
+  width: 230%;
+  transform: rotate(-5deg);
+}
+
+.whyAyurveda {
+  animation: whyAnime 2s infinite ease-in-out;
+}
+
+@keyframes whyAnime {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* move up by 10px */
+  }
+}
+
+/* @keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+.offerAnime {
+  animation: shake 0.6s ease-in-out infinite;
+} */
+
+@keyframes blinkSlide {
+  0% {
+    opacity: 0.5;
+    transform: translateY(-10px);
+    color: #8be541;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translateY(-10px);
+  }
+}
+
+.offerAnime {
+  animation: blinkSlide 1.5s ease-in-out infinite;
+}
+
+/* contact form animations  */
+
+@keyframes floatLeft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes floatRight {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(15px);
+  }
+}
+
+.float-left {
+  animation: floatLeft 4s ease-in-out infinite;
+}
+
+.float-right {
+  animation: floatRight 6s ease-in-out infinite;
+}
+
+.custom-shadow {
+  box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.12);
+}
+
+.widget-title:before,
+blockquote:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #62371f;
+}
+
+.widget-title:before {
+  width: 3px;
+  height: 100%;
+}
+
+blockquote:after {
+  bottom: 0;
+  width: 3px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.widget-title:before,
+blockquote:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #62371f;
+}
+
+/* styles/globals.css or wherever you add global styles */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.category-box {
+  box-shadow: 0 2px 16.8px 3.2px rgba(0, 38, 66, 0.08);
+}
+
+.swiper-pagination-bullet {
+  background: gray;
+  opacity: 0.5;
+  transition: 0.3s;
+}
+.swiper-pagination-bullet-active {
+  background: black;
+  opacity: 1;
+}
+
+
+
+
+
+
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10%); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s infinite;
+}
