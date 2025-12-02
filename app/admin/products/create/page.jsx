@@ -2,8 +2,13 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import slugify from "slugify";
+import Link from "next/link";
 import { adminurl } from "../../adminCompo/adminapis";
 import { FaPlus, FaPlusCircle,FaTag,FaSignature,FaLink,FaAlignLeft,FaDollarSign,FaRegMoneyBillAlt,FaBoxes,FaWeight,FaInfoCircle,FaExclamationCircle ,FaImages,FaUpload} from "react-icons/fa";
+import { ArrowLeft } from "lucide-react";
+
+import toast from "react-hot-toast";
+
 
 
 const ProductCreatePage = () => {
@@ -26,6 +31,7 @@ const ProductCreatePage = () => {
   const getCategories = async () => {
     try {
       const response = await axios.get(`${adminurl}/category`);
+          console.log("CATEGORY API RESPONSE =", response.data);
       const data = response.data;
       if (data.success) setCategories(data.category);
     } catch (e) {
@@ -61,6 +67,25 @@ const ProductCreatePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // ✅ Client-side validation
+    if (!form.category_id) {
+  toast.error("Please select a category");
+  return;
+}
+if (!form.name.trim()) {
+  toast.error("Please enter product name");
+  return;
+}
+if (!form.price) {
+  toast.error("Please enter price");
+  return;
+}
+if (!form.stock) {
+  toast.error("Please enter stock quantity");
+  return;
+}
+
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
@@ -68,7 +93,7 @@ const ProductCreatePage = () => {
           for (let i = 0; i < value.length; i++) {
             formData.append("images", value[i]);
           }
-        } else {
+        } else if (value !== null && value !== undefined) {
           formData.append(key, value);
         }
       });
@@ -78,25 +103,28 @@ const ProductCreatePage = () => {
       });
 
       if (res.data.success) {
-        alert("Product created successfully!");
-        setForm({
-          category_id: "",
-          name: "",
-          slug: "",
-          description: "",
-          price: "",
-          old_price: "",
-          stock: "",
-          unit_quantity: "",
-          details: "",
-          images: null,
-          one_time: false,
-        });
-      }
+  toast.success("✅ Product created successfully!");
+  setForm({
+    category_id: "",
+    name: "",
+    slug: "",
+    description: "",
+    price: "",
+    old_price: "",
+    stock: "",
+    unit_quantity: "",
+    details: "",
+    images: null,
+    one_time: false,
+  });
+} else {
+  toast.error(`❌ Error: ${res.data.message || "Product creation failed"}`);
+}
     } catch (err) {
-      console.error(err);
-      alert("Product creation failed");
-    }
+  console.error(err);
+  const errorMsg = err.response?.data?.message || err.message || "Product creation failed";
+  toast.error(`❌ ${errorMsg}`);
+}
   };
 
 
@@ -107,9 +135,12 @@ const ProductCreatePage = () => {
   <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
     {/* Header */}
     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
-      <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
-        <FaPlusCircle className="inline" /> Create New Product
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
+          <FaPlusCircle className="inline" /> Create New Product
+        </h1>
+
+      </div>
       <p className="text-blue-100 mt-1">Add a new product to your inventory</p>
     </div>
 
@@ -120,19 +151,19 @@ const ProductCreatePage = () => {
           <FaTag className="text-blue-600" /> Category
         </label>
         <select
-          name="category_id"
-          value={form.category_id}
-          onChange={handleChange}
-          required
-          className="w-full border border-blue-200 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-        >
-          <option value="">Select Category</option>
-          {categories?.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
+  name="category_id"
+  value={form.category_id}
+  onChange={handleChange}
+  required
+  className="w-full border border-blue-200 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+>
+  <option value="">Select Category</option>
+  {categories.map((cat) => (
+    <option key={cat.id} value={cat.id}>
+      {cat.name}
+    </option>
+  ))}
+</select>
       </div>
 
       {/* Name */}
@@ -304,10 +335,19 @@ const ProductCreatePage = () => {
       </div>
 
       {/* Submit Button */}
-      <div className="pt-4">
+      <div className="flex justify-between items-center pt-4">
+
+        <Link 
+          href="/admin/products" 
+          className="flex items-center gap-2 bg-black bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200"
+        >
+          <ArrowLeft size={20} />
+          Back
+        </Link>
+
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+          className=" bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
         >
           <FaPlus className="inline" /> Create Product
         </button>

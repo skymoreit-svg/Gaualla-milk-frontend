@@ -7,6 +7,8 @@ import MyNav from "./components/MyNav";
 import BottomfixLinks from "./components/BottomfixLinks";
 import NextLayout from "./NextLayout";
 
+import { Toaster } from "react-hot-toast";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,6 +31,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+
+        <Toaster position="top-right" reverseOrder={false} />
+
         <Providers>
           <NextLayout>
 

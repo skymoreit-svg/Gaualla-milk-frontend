@@ -1,69 +1,187 @@
-"use client"; // if you are using Next.js App Router
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaHome, FaShoppingCart, FaUser, FaBars ,FaBlogger} from "react-icons/fa";
+import { usePathname } from "next/navigation";
+
+import { FaHome, FaShoppingCart, FaUser, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { PiFlagBannerFill } from "react-icons/pi";
-
-
+import { LuPackage } from "react-icons/lu";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Detect cookie
+  useEffect(() => {
+    const logged = document.cookie.includes("adminToken");
+    setIsLoggedIn(logged);
+  }, []);
+
+  const handleLogout = () => {
+    document.cookie = "adminToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/admin/Login";
+  };
+
+  const [activeRoute, setActiveRoute] = useState(pathname || "");
+  useEffect(() => {
+    setActiveRoute(pathname || "");
+  }, [pathname]);
+
+  const isActive = (route) => {
+    const ar = (activeRoute || "").toLowerCase();
+    const r = (route || "").toLowerCase();
+    if (!r) return "hover:bg-gray-700";
+    if (r === "/admin") {
+      return ar === "/admin" || ar === "/admin/"
+        ? "bg-gray-700 border-l-4 border-green-400"
+        : "hover:bg-gray-700";
+    }
+    return ar === r || ar.startsWith(r + "/")
+      ? "bg-gray-700 border-l-4 border-green-400"
+      : "hover:bg-gray-700";
+  };
+
+
+
+  
+
+
+
 
   return (
-    <div className="flex">
-      {/* Sidebar */}
-      <div
-        className={`${
-          open ? "w-64" : "w-20"
-        } bg-gray-900 h-screen p-5 pt-8 relative duration-300`}
+    <>
+      {/* Hamburger menu only on small screens */}
+      <button
+        className="fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-lg md:hidden hover:bg-gray-800 transition-colors duration-200"
+        onClick={() => setOpen(true)}
       >
-        {/* Toggle Button */}
-        <FaBars
-          className="absolute cursor-pointer -right-3 top-9 w-7 h-7 
-          bg-white rounded-full border border-gray-300"
-          onClick={() => setOpen(!open)}
-        />
+        <RxHamburgerMenu size={24} />
+      </button>
 
-        <div className="flex gap-x-4 items-center">
-          <FaShoppingCart className="text-white text-2xl" />
-          {open && <h1 className="text-white font-bold text-xl">MyShop</h1>}
+      {/* Sidebar overlay for mobile */}
+      {open && (
+        <>
+          <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setOpen(false)} />
+          <div className="fixed top-0 left-0 h-full w-64 bg-gray-900 p-5 pt-8 z-50 md:hidden">
+            <button className="absolute top-4 right-4 text-white" onClick={() => setOpen(false)}>
+              ✕
+            </button>
+
+            <div className="flex gap-x-4 items-center mb-8">
+              <FaShoppingCart className="text-white text-2xl" />
+              <h1 className="text-white font-bold text-xl">MyShop</h1>
+            </div>
+
+            <ul className="pt-6 space-y-1">
+              <li className={`p-2 text-white rounded-md ${isActive("/admin")}`}>
+                <Link href="/admin" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaHome /> <span>Dashboard</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/category")}`}>
+                <Link href="/admin/category" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <BiCategory /> <span>Categories</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/products")}`}>
+                <Link href="/admin/products" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaShoppingCart /> <span>Products</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/bannners")}`}>
+                <Link href="/admin/bannners" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <PiFlagBannerFill /> <span>Bannners</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/orders")}`}>
+                <Link href="/admin/orders" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <LuPackage /> <span>Orders</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
+                <Link href="/admin/user" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaUser /> <span>Users</span>
+                </Link>
+              </li>
+
+              <li className="p-2 text-white rounded-md hover:bg-gray-700 cursor-pointer"
+                  onClick={handleLogout}>
+                <div className="flex items-center gap-x-4">
+                  <FaSignOutAlt /> <span>Logout</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </>
+      )}
+
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex">
+        <div className="w-64 bg-gray-900 h-screen p-5 pt-8">
+          <div className="flex gap-x-4 items-center mb-8">
+            <FaShoppingCart className="text-white text-2xl" />
+            <h1 className="text-white font-bold text-xl">MyShop</h1>
+          </div>
+
+          <ul className="pt-6 space-y-1">
+            <li className={`p-2 text-white rounded-md ${isActive("/admin")}`}>
+              <Link href="/admin" className="flex items-center gap-x-4">
+                <FaHome /> <span>Dashboard</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/category")}`}>
+              <Link href="/admin/category" className="flex items-center gap-x-4">
+                <BiCategory /> <span>Categories</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/products")}`}>
+              <Link href="/admin/products" className="flex items-center gap-x-4">
+                <FaShoppingCart /> <span>Products</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/bannners")}`}>
+              <Link href="/admin/bannners" className="flex items-center gap-x-4">
+                <PiFlagBannerFill /> <span>Bannners</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/orders")}`}>
+              <Link href="/admin/orders" className="flex items-center gap-x-4">
+                <LuPackage /> <span>Orders</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
+              <Link href="/admin/user" className="flex items-center gap-x-4">
+                <FaUser /> <span>Users</span>
+              </Link>
+            </li>
+
+
+              <li className="p-2 text-white rounded-md hover:bg-gray-700 cursor-pointer"
+                  onClick={handleLogout}>
+                <div className="flex items-center gap-x-4">
+                  <FaSignOutAlt /> <span>Logout</span>
+                </div>
+              </li>
+       
+          </ul>
         </div>
-
-        {/* Menu */}
-        <ul className="pt-6">
-          <li className="flex items-center gap-x-4 p-2 hover:bg-gray-700 rounded-md text-white">
-            <FaHome />
-            {open && <Link href="/admin">Dashboard</Link>}
-          </li>
-         <li className="flex items-center gap-x-4 p-2 hover:bg-gray-700 rounded-md text-white">
-            <BiCategory />
-            {open && <Link href="/admin/category">Categories</Link>}
-          </li>
-
-          <li className="flex items-center gap-x-4 p-2 hover:bg-gray-700 rounded-md text-white">
-            <FaShoppingCart />
-            {open && <Link href="/admin/products">Products</Link>}
-          </li>
-          <li className="flex items-center gap-x-4 p-2 hover:bg-gray-700 rounded-md text-white">
-            <PiFlagBannerFill />
-            {open && <Link href="/admin/bannners">Bannners</Link>}
-          </li>
-
-<li className="flex items-center gap-x-4 p-2 hover:bg-gray-700 rounded-md text-white">
-            <FaBlogger />
-            {open && <Link href="/admin#">Blog</Link>}
-          </li>
-
-          <li className="flex items-center gap-x-4 p-2 hover:bg-gray-700 rounded-md text-white">
-            <FaUser />
-            {open && <Link href="/admin/users">Users</Link>}
-          </li>
-        </ul>
       </div>
-
-     
-    </div>
+    </>
   );
 }
+
+

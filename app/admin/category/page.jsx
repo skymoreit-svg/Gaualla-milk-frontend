@@ -1,276 +1,218 @@
-"use client"
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { FiUpload, FiImage, FiX, FiCheck } from 'react-icons/fi';
-import { adminimg, adminurl } from '../adminCompo/adminapis';
+"use client";
+import React, { useMemo, useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Search, Edit2, Trash2, Plus } from "lucide-react";
+import axios from "axios";
+import { adminurl, adminimg } from "../adminCompo/adminapis";
 
-const FileUploadPage = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [category, setCategory] = useState('');
-  const [isDragging, setIsDragging] = useState(false);
+import DeletePopup from "../../components/DeletePopup";
+import toast from "react-hot-toast";
 
+export default function CategoryPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [allCategory,setAllCategory]=useState( )
+  // popup states
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setSelectedFile(file);
-    }
+  // OPEN POPUP
+  const openPopup = (id) => {
+    setDeleteId(id);
+    setPopupOpen(true);
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+  // DELETE CONFIRM HANDLER
+  const handleConfirmDelete = async () => {
+    setPopupOpen(false);
+    const toastId = toast.loading("Deleting...");
 
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
+    try {
+      const res = await axios.delete(`${adminurl}/category/${deleteId}`);
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setSelectedFile(file);
-    }
-  };
-
-  const removeFile = () => {
-    setSelectedFile(null);
-  };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-  formData.append("image", selectedFile);   
-  formData.append("category", category);   
-
-  try {
-    const response = await axios.post(
-      `${adminurl}/category/create`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" }
+      if (res.data.success) {
+        toast.success("Category deleted successfully!", { id: toastId });
+        fetchCategories();
+      } else {
+        toast.error("Delete failed!", { id: toastId });
       }
-    );
+    } catch (err) {
+      console.error(err);
+      toast.error("Delete failed!", { id: toastId });
+    }
+  };
 
-    const data = await response.data;
-     if(data.success){
-      setCategory("")
-      setSelectedFile(null)
-     }
+  // FETCH CATEGORIES
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${adminurl}/category`);
+      const data = response.data;
 
-   getCategory()
+      if (data.success) {
+        setCategories(data.category);
+      } else {
+        setError("Failed to fetch categories");
+      }
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+      setError("Failed to load categories. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  } catch (error) {
-    console.error("❌ Error:", error.response?.data || error.message);
-  }
-};
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
+  // FILTERED LIST
+  const filtered = useMemo(() => {
+    return categories.filter((c) => {
+      const search = searchTerm.trim().toLowerCase();
+      const matchesSearch =
+        c.name.toLowerCase().includes(search) ||
+        (c.description || "").toLowerCase().includes(search);
 
+      const matchesStatus =
+        selectedStatus === "all" || c.status === selectedStatus;
 
-
-const getCategory= async()=>{
-  const response = await axios.get(`${adminurl}/category`);
-  const data= await response.data;
-  if(data.success){
-    setAllCategory(data.category)
-  }
-}
-useEffect(()=>{
-  getCategory()
-}
-,[])
-
-
-
-
-
-
-
-
-const handeldelete = async (id) => {
-  const response = await axios.delete(`${adminurl}/category/${id}`);
-  const data = response.data;
-  
-  if (data.success) {
-    // getCategory();
-    location.reload() 
-  }
-};
-
-
-
-
-
-
+      return matchesSearch && matchesStatus;
+    });
+  }, [categories, searchTerm, selectedStatus]);
 
   return (
-    <div className="min-h-screen  w-full  bg-gradient-to-br from-blue-50 to-indigo-100 flex justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 md:w-lg ">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Upload Image</h1>
-          <p className="text-gray-600">Select an image and add a category</p>
+    <div className="container mx-auto px-7 py-8">
+
+      {/* DELETE POPUP */}
+      <DeletePopup
+        isOpen={popupOpen}
+        title="Delete Category?"
+        message="This action cannot be undone."
+        onCancel={() => setPopupOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
+
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
+          <p className="text-gray-900 text-sm mt-1">Manage product categories</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* File Upload Area */}
-          <div
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
-              isDragging
-                ? 'border-blue-500 bg-blue-50'
-                : selectedFile
-                ? 'border-green-500 bg-green-50'
-                : 'border-gray-300 hover:border-gray-400'
-            }`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <input
-              type="file"
-              id="file-upload"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-            
-            <label htmlFor="file-upload" className="cursor-pointer">
-              {selectedFile ? (
-                <div className="space-y-4">
-                  <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-                    <FiCheck className="w-8 h-8 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-green-600 mb-1">File Selected</p>
-                    <p className="text-sm text-gray-600 truncate">{selectedFile.name}</p>
-                    <p className="text-xs text-gray-500">
-                      {(selectedFile.size / 1024).toFixed(2)} KB
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={removeFile}
-                    className="text-red-500 hover:text-red-700 text-sm flex items-center justify-center mx-auto"
-                  >
-                    <FiX className="w-4 h-4 mr-1" />
-                    Remove file
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
-                    <FiImage className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-700">Drop image here or click to browse</p>
-                    <p className="text-sm text-gray-500 mt-1">Supports JPG, PNG, GIF</p>
-                  </div>
-                  <div className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    <FiUpload className="w-4 h-4 mr-2" />
-                    Choose File
-                  </div>
-                </div>
-              )}
-            </label>
-          </div>
+        <Link
+          href="/admin/category/create"
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
+        >
+          <Plus size={20} />
+          Add Category
+        </Link>
+      </div>
 
-          {/* Category Input */}
-          <div className="space-y-2">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-              Category
-            </label>
+      {/* Search + Filters */}
+      <div className="bg-white border border-gray-400 rounded-lg p-4 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="Enter category name"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+              placeholder="Search categories by name or description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={!selectedFile || !category}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           >
-            <FiUpload className="w-5 h-5 mr-2" />
-            Upload Image
-          </button>
-        </form>
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
 
-        {/* Preview (optional) */}
-        {selectedFile && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Preview:</h3>
-            <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
-              <img
-                src={URL.createObjectURL(selectedFile)}
-                alt="Preview"
-                className="w-full h-48 object-cover rounded-lg"
-              />
-            </div>
+      {/* CONTENT */}
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <p className="mt-2 text-gray-600">Loading categories...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-12 bg-red-50 rounded-lg">
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={fetchCategories}
+            className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        <>
+          <p className="text-gray-600 mb-6">
+            Showing <strong>{filtered.length}</strong> of {categories.length} categories
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filtered.length === 0 ? (
+              <div className="col-span-3 text-center py-12 bg-white rounded-2xl shadow">
+                No categories found
+              </div>
+            ) : (
+              filtered.map((cat) => (
+                <div
+                  key={cat.id}
+                  className="bg-white rounded-lg shadow p-5 relative border border-gray-100"
+                >
+                  <div className="absolute top-3 right-3 flex items-center gap-2">
+                    <Link
+                      href={`/admin/category/edit/${cat.id}`}
+                      title="Edit"
+                      className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                    >
+                      <Edit2 className="w-5 h-5" />
+                    </Link>
+
+                    <button
+                      title="Delete"
+                      onClick={() => openPopup(cat.id)}
+                      className="p-1 text-red-600 hover:bg-red-50 rounded"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="mb-4">
+                    <Image
+                      src={`${adminimg}/uploads/${cat.image}`}
+                      alt={cat.name}
+                      width={200}
+                      height={150}
+                      className="w-40 h-40 rounded-lg object-cover border mx-auto"
+                    />
+                  </div>
+
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {cat.name}
+                  </h3>
+
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <span className="text-green-600 font-medium">Active</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        )}
-      </div>
-
-      <div className='w-full'>
-
-<table className="min-w-full border border-gray-200 shadow-sm rounded-lg overflow-hidden">
-  <thead className="bg-gray-100 text-gray-700">
-    <tr>
-      <th className="px-4 py-2 text-left text-sm font-semibold">Sr No.</th>
-      <th className="px-4 py-2 text-left text-sm font-semibold">Image</th>
-      <th className="px-4 py-2 text-left text-sm font-semibold">Category</th>
-      <th className="px-4 py-2 text-left text-sm font-semibold">Action</th>
-    </tr>
-  </thead>
-  <tbody className="divide-y divide-gray-200">
-    {allCategory?.map((item, index) => (
-      <tr
-        key={index}
-        className="hover:bg-gray-50 transition duration-150 ease-in-out"
-      >
-        {/* Serial Number */}
-        <td className="px-4 py-3 text-sm text-gray-600">{index + 1}</td>
-
-        {/* Image */}
-        <td className="px-4 py-3">
-          <img
-            src={`${adminimg}/uploads/${item.image}`}
-            alt={item.name}
-            className="w-12 h-12 object-cover rounded-lg border"
-          />
-        </td>
-
-        {/* Category Name */}
-        <td className="px-4 py-3 text-sm font-medium text-gray-800">
-          {item.name}
-        </td>
-
-        {/* Action Buttons */}
-        <td className="px-4 py-3 flex gap-2">
-        
-          <button onClick={()=>handeldelete(item.id)} className="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600">
-            Delete
-          </button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
-
-
-      </div>
+        </>
+      )}
     </div>
   );
-};
-
-export default FileUploadPage;
+}
