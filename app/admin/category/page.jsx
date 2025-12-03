@@ -87,7 +87,7 @@ export default function CategoryPage() {
   }, [categories, searchTerm, selectedStatus]);
 
   return (
-    <div className="container mx-auto px-7 py-8">
+    <div className="container mx-auto px-7 py-8 font-sans">
 
       {/* DELETE POPUP */}
       <DeletePopup

@@ -106,7 +106,8 @@ export default function ProductsPage() {
 	};
 
 	return (
-		<div className="container mx-auto px-7 py-8">
+		<div className="container mx-auto px-7 py-8 font-sans">
+
 			<div className="flex justify-between items-start mb-8">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900">Products</h1>

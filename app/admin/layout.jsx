@@ -10,10 +10,14 @@ export default function Layout({ children }) {
   const [allowed, setAllowed] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Normalize pathname to handle trailing slashes and case
+  const normalizedPath = pathname?.replace(/\/$/, "").toLowerCase() || "";
+  const isLoginPage = normalizedPath === "/admin/login";
+
   useEffect(() => {
     const checkAuth = async () => {
       // Don't run auth check on login page
-      if (pathname === "/admin/Login" || pathname === "/admin/login") {
+      if (isLoginPage) {
         setAllowed(true);
         setLoading(false);
         return;
@@ -41,9 +45,14 @@ export default function Layout({ children }) {
     };
 
     checkAuth();
-  }, [pathname, router]);
+  }, [pathname, router, isLoginPage]);
 
-  // Show loading state while checking auth
+  // For login page, show immediately
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  // Show loading state while checking auth for other pages
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -55,14 +64,12 @@ export default function Layout({ children }) {
     );
   }
 
-  // Prevent page flicker
+  // Prevent page flicker for protected pages
   if (!allowed) return null;
-
-  const isLoginPage = pathname === "/admin/Login" || pathname === "/admin/login";
 
   return (
     <div className="flex">
-      {!isLoginPage && <Sidebar />}
+      <Sidebar />
       <div className="w-full h-screen overflow-auto pt-12 md:pt-0">
         {children}
       </div>

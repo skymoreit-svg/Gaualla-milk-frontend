@@ -127,7 +127,7 @@ const handeldelete = async (id) => {
       <div className="bg-white rounded-2xl shadow-xl p-8 md:w-lg ">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Upload Image</h1>
-          <p className="text-gray-600">Select an image and add a category</p>
+          <p className="text-gray-600">Select an image and add a categorylrhjhgi</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -231,7 +231,16 @@ const handeldelete = async (id) => {
             </div>
           </div>
         )}
+
+         <button
+        type="button"
+        onClick={() => window.history.back()}
+        className="mt-8 w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition"
+      >
+        ← Go Back
+      </button>
       </div>
+      
     </div>
   );
 };

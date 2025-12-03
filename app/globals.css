@@ -1,17 +1,27 @@
+
+
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: "Playfair Display SC", serif;
+
+
+body {
+  font-family: var(--font-geist-sans), sans-serif; /* default body font */
 }
 
-/* "Lora", serif; */
-body {
-  font-family: "Lora", serif;
+
+
+h1, h2, h3, h4 {
+  font-family: var(--font-geist-sans), sans-serif; /* headings */
 }
+
+
+
+code, pre {
+  font-family: var(--font-geist-mono), monospace;
+}
+
+
 @import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
 
 .swiper-pagination-bullet {
