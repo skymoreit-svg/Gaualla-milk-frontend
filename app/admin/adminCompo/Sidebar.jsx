@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import axios from "axios";
+import { adminurl } from "./adminapis";
 
 import { FaHome, FaShoppingCart, FaUser, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
@@ -11,19 +13,28 @@ import { LuPackage } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Sidebar() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Detect cookie
   useEffect(() => {
-    const logged = document.cookie.includes("adminToken");
+    const logged = document.cookie.includes("admin=");
     setIsLoggedIn(logged);
   }, []);
 
-  const handleLogout = () => {
-    document.cookie = "adminToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/admin/Login";
+  const handleLogout = async () => {
+    try {
+      await axios.get(`${adminurl}/logout`, {
+        withCredentials: true,
+      });
+      router.push("/admin/Login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Still redirect even if logout fails
+      router.push("/admin/Login");
+    }
   };
 
   const [activeRoute, setActiveRoute] = useState(pathname || "");

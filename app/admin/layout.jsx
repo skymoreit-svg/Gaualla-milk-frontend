@@ -2,43 +2,67 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./adminCompo/Sidebar";
 import { useRouter, usePathname } from "next/navigation";
+import { adminurl } from "./adminCompo/adminapis";
 
 export default function Layout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const [allowed, setAllowed] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Don't run auth check on login page
+      if (pathname === "/admin/Login" || pathname === "/admin/login") {
+        setAllowed(true);
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await fetch("http://localhost:9002/admin/verify", {
+        const res = await fetch(`${adminurl}/verify`, {
           credentials: "include",
         });
 
-        if (!res.ok) {
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
           router.push("/admin/Login");
-        } else {
-          setAllowed(true);
+          return;
         }
+
+        setAllowed(true);
       } catch (err) {
+        console.error("Auth check error:", err);
         router.push("/admin/Login");
+      } finally {
+        setLoading(false);
       }
     };
 
-    // Don't run auth check on login page
-    if (pathname !== "/admin/Login") {
-      checkAuth();
-    } else {
-      setAllowed(true);
-    }
-  }, [pathname]);
+    checkAuth();
+  }, [pathname, router]);
+
+  // Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Prevent page flicker
   if (!allowed) return null;
 
+  const isLoginPage = pathname === "/admin/Login" || pathname === "/admin/login";
+
   return (
     <div className="flex">
-      {pathname !== "/admin/Login" && <Sidebar />}
+      {!isLoginPage && <Sidebar />}
       <div className="w-full h-screen overflow-auto pt-12 md:pt-0">
         {children}
       </div>
