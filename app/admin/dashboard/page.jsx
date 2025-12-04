@@ -5,42 +5,42 @@ import { Users, Package, ShoppingCart, TrendingUp } from "lucide-react";
 const DashboardPage = () => {
   // Mock data
   const stats = [
-    { label: "Total Users", value: "2", icon: Users, color: "bg-blue-500" },
-    { label: "Total Products", value: "12", icon: Package, color: "bg-green-500" },
-    { label: "Total Orders", value: "1", icon: ShoppingCart, color: "bg-purple-500" },
+    { label: "Total Users", value: "0", icon: Users, color: "bg-blue-500" },
+    { label: "Total Products", value: "0", icon: Package, color: "bg-green-500" },
+    { label: "Total Orders", value: "0", icon: ShoppingCart, color: "bg-purple-500" },
     { label: "Today's Revenue", value: "₹0.00", icon: TrendingUp, color: "bg-orange-500" },
   ];
 
   const orderBreakdown = [
-    { status: "Out For_delivery", count: 1 },
+    { status: "Out For_delivery", count: 0 },
     { status: "Pending", count: 0 },
     { status: "Completed", count: 0 },
   ];
 
   const recentOrders = [
-    {
-      id: "QD1763968517352001",
-      status: "out for_delivery",
-      amount: "₹249.00",
-      date: "24 Nov 2025, 12:45 pm",
-    },
-    {
-      id: "QD1763968517352002",
-      status: "completed",
-      amount: "₹500.00",
-      date: "23 Nov 2025, 10:30 am",
-    },
-    {
-      id: "QD1763968517352003",
-      status: "pending",
-      amount: "₹150.00",
-      date: "22 Nov 2025, 02:15 pm",
-    },
+    // {
+    //   id: "QD1763968517352001",
+    //   status: "out for_delivery",
+    //   amount: "₹249.00",
+    //   date: "24 Nov 2025, 12:45 pm",
+    // },
+    // {
+    //   id: "QD1763968517352002",
+    //   status: "completed",
+    //   amount: "₹500.00",
+    //   date: "23 Nov 2025, 10:30 am",
+    // },
+    // {
+    //   id: "QD1763968517352003",
+    //   status: "pending",
+    //   amount: "₹150.00",
+    //   date: "22 Nov 2025, 02:15 pm",
+    // },
   ];
 
   const lowStockProducts = [
-    { name: "Product A", stock: 5 },
-    { name: "Product B", stock: 2 },
+    { name: "Product A", stock: 0 },
+    { name: "Product B", stock: 0 },
   ];
 
   const getStatusColor = (status) => {

@@ -9,51 +9,51 @@ const OrdersPage = () => {
 
   // Mock orders data
   const mockOrders = [
-    {
-      id: "QD1763968517352001",
-      customer: { name: "Shiyam Kumar", phone: "9122053667" },
-      items: "1 item(s)",
-      amount: "₹249.00",
-      status: "out for_delivery",
-      payment: "pending",
-      date: "24 Nov 2025, 12:45 pm",
-    },
-    {
-      id: "QD1763968517352002",
-      customer: { name: "Rahul Singh", phone: "9876543210" },
-      items: "2 item(s)",
-      amount: "₹500.00",
-      status: "completed",
-      payment: "paid",
-      date: "23 Nov 2025, 10:30 am",
-    },
-    {
-      id: "QD1763968517352003",
-      customer: { name: "Priya Sharma", phone: "9123456789" },
-      items: "3 item(s)",
-      amount: "₹750.00",
-      status: "pending",
-      payment: "pending",
-      date: "22 Nov 2025, 02:15 pm",
-    },
-    {
-      id: "QD1763968517352004",
-      customer: { name: "Amit Patel", phone: "9988776655" },
-      items: "1 item(s)",
-      amount: "₹199.00",
-      status: "out for_delivery",
-      payment: "paid",
-      date: "21 Nov 2025, 05:00 pm",
-    },
-    {
-      id: "QD1763968517352005",
-      customer: { name: "Neha Gupta", phone: "9111222333" },
-      items: "4 item(s)",
-      amount: "₹1200.00",
-      status: "completed",
-      payment: "paid",
-      date: "20 Nov 2025, 08:45 am",
-    },
+    // {
+    //   id: "QD1763968517352001",
+    //   customer: { name: "Shiyam Kumar", phone: "9122053667" },
+    //   items: "1 item(s)",
+    //   amount: "₹249.00",
+    //   status: "out for_delivery",
+    //   payment: "pending",
+    //   date: "24 Nov 2025, 12:45 pm",
+    // },
+    // {
+    //   id: "QD1763968517352002",
+    //   customer: { name: "Rahul Singh", phone: "9876543210" },
+    //   items: "2 item(s)",
+    //   amount: "₹500.00",
+    //   status: "completed",
+    //   payment: "paid",
+    //   date: "23 Nov 2025, 10:30 am",
+    // },
+    // {
+    //   id: "QD1763968517352003",
+    //   customer: { name: "Priya Sharma", phone: "9123456789" },
+    //   items: "3 item(s)",
+    //   amount: "₹750.00",
+    //   status: "pending",
+    //   payment: "pending",
+    //   date: "22 Nov 2025, 02:15 pm",
+    // },
+    // {
+    //   id: "QD1763968517352004",
+    //   customer: { name: "Amit Patel", phone: "9988776655" },
+    //   items: "1 item(s)",
+    //   amount: "₹199.00",
+    //   status: "out for_delivery",
+    //   payment: "paid",
+    //   date: "21 Nov 2025, 05:00 pm",
+    // },
+    // {
+    //   id: "QD1763968517352005",
+    //   customer: { name: "Neha Gupta", phone: "9111222333" },
+    //   items: "4 item(s)",
+    //   amount: "₹1200.00",
+    //   status: "completed",
+    //   payment: "paid",
+    //   date: "20 Nov 2025, 08:45 am",
+    // },
   ];
 
   const filteredOrders = useMemo(() => {
@@ -151,7 +151,7 @@ const OrdersPage = () => {
             {filteredOrders.length === 0 ? (
               <tr>
                 <td colSpan={8} className="text-center py-12 text-gray-500">
-                  No orders found
+                  No orders available right now
                 </td>
               </tr>
             ) : (

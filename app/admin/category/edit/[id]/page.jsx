@@ -47,36 +47,36 @@ const EditCategoryPage = () => {
 
   // Submit Updated Data
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const formData = new FormData();
-  if (selectedFile) {
-    formData.append("image", selectedFile);
-  }
-  formData.append("category", category);
-
-  try {
-    const response = await axios.put(
-      `${adminurl}/category/${categoryId}`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-
-      
-    const data = response.data;
-    if (data.success) {
-      toast.success("Category Updated Successfully! 🎉"); // <-- toast here
-      router.push("/admin/category"); // Redirect back
-    } else {
-      toast.error(data.message || "Failed to update category"); // <-- toast for error
+    const formData = new FormData();
+    if (selectedFile) {
+      formData.append("image", selectedFile);
     }
-  } catch (error) {
-    console.log("Error:", error.response?.data || error.message);
-    toast.error("Failed to update category!"); // <-- toast for error
-  }
-};
+    formData.append("category", category);
+
+    try {
+      const response = await axios.put(
+        `${adminurl}/category/${categoryId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+
+      const data = response.data;
+      if (data.success) {
+        toast.success("Category Updated Successfully! 🎉"); // <-- toast here
+        router.push("/admin/category"); // Redirect back
+      } else {
+        toast.error(data.message || "Failed to update category"); // <-- toast for error
+      }
+    } catch (error) {
+      console.log("Error:", error.response?.data || error.message);
+      toast.error("Failed to update category!"); // <-- toast for error
+    }
+  };
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
@@ -144,6 +144,13 @@ const EditCategoryPage = () => {
             Save Changes
           </button>
         </form>
+        <button
+          type="button"
+          onClick={() => window.history.back()}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 transition mb-6 mt-7"
+        >
+          ← Go Back
+        </button>
       </div>
     </div>
   );

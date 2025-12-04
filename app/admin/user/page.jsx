@@ -1,71 +1,68 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 import { Search, Eye } from "lucide-react";
 
 const UsersPage = () => {
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  // Mock users data
-  const mockUsers = [
-    {
-      id: 1,
-      name: "Shiyam Kumar",
-      phone: "1234567890",
-      email: "shiyam@example.com",
-      address: "123 Main St, City",
-      profile: "incomplete",
-      joined: "24 Nov 2025, 12:28 pm",
-    },
-    {
-      id: 2,
-      name: "Rahul Singh",
-      phone: "9876543210",
-      email: "rahul@example.com",
-      address: "456 Oak Ave, Town",
-      profile: "complete",
-      joined: "23 Nov 2025, 10:30 am",
-    },
-    {
-      id: 3,
-      name: "Priya Sharma",
-      phone: "9123456789",
-      email: "priya@example.com",
-      address: "789 Pine Rd, Village",
-      profile: "incomplete",
-      joined: "22 Nov 2025, 02:15 pm",
-    },
-    {
-      id: 4,
-      name: "Amit Patel",
-      phone: "9988776655",
-      email: "amit@example.com",
-      address: "321 Elm St, District",
-      profile: "complete",
-      joined: "21 Nov 2025, 05:00 pm",
-    },
-    {
-      id: 5,
-      name: "Neha Gupta",
-      phone: "9111222333",
-      email: "neha@example.com",
-      address: "654 Maple Dr, Region",
-      profile: "incomplete",
-      joined: "20 Nov 2025, 08:45 am",
-    },
-  ];
+  // NEW STATES FOR MODAL
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleView = (user) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedUser(null);
+  };
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const res = await axios.get("http://localhost:9002/admin/users");
+
+      if (res.data.success) {
+        setUsers(res.data.users);
+      } else {
+        setErrorMsg("Failed to load users. Please try again.");
+      }
+    } catch (error) {
+      console.log("Error fetching users:", error);
+      setErrorMsg("Backend error — unable to fetch users.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const filteredUsers = useMemo(() => {
-    return mockUsers.filter((user) => {
+    return users.filter((user) => {
       const search = searchTerm.trim().toLowerCase();
+
       const matchesSearch =
-        user.name.toLowerCase().includes(search) ||
-        user.phone.includes(search) ||
-        user.email.toLowerCase().includes(search);
-      const matchesFilter = filterStatus === "all" || user.profile === filterStatus;
+        (user.name || "").toLowerCase().includes(search) ||
+        (user.phone || "").includes(search) ||
+        (user.email || "").toLowerCase().includes(search);
+
+      const matchesFilter =
+        filterStatus === "all" || user.profile === filterStatus;
+
       return matchesSearch && matchesFilter;
     });
-  }, [searchTerm, filterStatus]);
+  }, [users, searchTerm, filterStatus]);
 
   const getProfileColor = (status) => {
     if (status === "complete") return "bg-green-100 text-green-700";
@@ -74,16 +71,18 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      {/* Header */}
+    <div className="container mx-auto px-7 py-8 font-sans">
+
+      {/* HEADER */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Users</h1>
-        <p className="text-gray-600 mt-1">Manage user accounts</p>
+        <p className="text-gray-900 text-sm mt-1">Manage user accounts</p>
       </div>
 
-      {/* Search & Filter Bar */}
-      <div className="bg-white border border-gray-300 rounded-lg p-5 mb-6">
+      {/* SEARCH + FILTERS CARD */}
+      <div className="bg-white border border-gray-400 rounded-lg p-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+
           {/* Search Input */}
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -96,7 +95,7 @@ const UsersPage = () => {
             />
           </div>
 
-          {/* Filter Dropdown */}
+          {/* Filter */}
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -109,52 +108,124 @@ const UsersPage = () => {
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* ERROR MESSAGE */}
+      {errorMsg && (
+        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-lg mb-6 flex justify-between items-center">
+          <span>{errorMsg}</span>
+          <button
+            onClick={fetchUsers}
+            className="px-4 py-2 bg-red-600 text-white rounded-md"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* TABLE CARD */}
       <div className="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Phone</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Address</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Profile</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Joined</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredUsers.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-2 text-gray-600">Loading users...</p>
+          </div>
+        ) : (
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
               <tr>
-                <td colSpan={7} className="text-center py-12 text-gray-500">
-                  No users found
-                </td>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Name</th>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Phone</th>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Email</th>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Address</th>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Profile</th>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Joined</th>
+                <th className="px-6 py-4 text-left text-xs font-bold uppercase">Actions</th>
               </tr>
-            ) : (
-              filteredUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{user.name || "N/A"}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{user.phone || "N/A"}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{user.email || "N/A"}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{user.address || "N/A"}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold capitalize ${getProfileColor(user.profile)}`}>
-                      {user.profile}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{user.joined}</td>
-                  <td className="px-6 py-4">
-                    <button title="View" className="text-green-600 hover:text-green-800 transition flex items-center gap-1 font-medium text-sm">
-                      <Eye className="w-4 h-4" />
-                      View
-                    </button>
+            </thead>
+
+            <tbody className="divide-y">
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-12 text-gray-500">
+                    No users found
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                filteredUsers.map((user) => (
+                  <tr key={user._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-semibold">
+                      {user.name || "N/A"}
+                    </td>
+                    <td className="px-6 py-4 text-sm">{user.phone || "N/A"}</td>
+                    <td className="px-6 py-4 text-sm">{user.email || "N/A"}</td>
+                    <td className="px-6 py-4 text-sm">{user.address || "N/A"}</td>
+
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-bold capitalize ${getProfileColor(
+                          user.profile
+                        )}`}
+                      >
+                        {user.profile}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 text-sm">
+                      {user.createdAt
+                        ? new Date(user.createdAt).toLocaleString()
+                        : "N/A"}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleView(user)}
+                        className="text-green-600 font-medium flex items-center gap-1 cursor-pointer"
+                      >
+                        <Eye className="w-4 h-4" />
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
+
+      {/* USER DETAILS MODAL */}
+      {showModal && selectedUser && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">
+              User Details
+            </h2>
+
+            <div className="space-y-2 text-gray-700">
+              <p><strong>Name:</strong> {selectedUser.name || "N/A"}</p>
+              <p><strong>Email:</strong> {selectedUser.email || "N/A"}</p>
+              <p><strong>Phone:</strong> {selectedUser.phone || "N/A"}</p>
+              <p><strong>Address:</strong> {selectedUser.address || "N/A"}</p>
+              <p><strong>Profile:</strong> {selectedUser.profile}</p>
+              <p>
+                <strong>Joined:</strong>{" "}
+                {selectedUser.createdAt
+                  ? new Date(selectedUser.createdAt).toLocaleString()
+                  : "N/A"}
+              </p>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-800 text-white rounded-lg cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
