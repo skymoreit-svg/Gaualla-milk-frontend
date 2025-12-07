@@ -2,6 +2,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import axios from "axios";
 import { Search, Eye } from "lucide-react";
+import { adminurl } from "../adminCompo/adminapis";
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -29,7 +30,7 @@ const UsersPage = () => {
     setErrorMsg("");
 
     try {
-      const res = await axios.get("http://localhost:9002/admin/users");
+      const res = await axios.get(`${adminurl}/users`);
 
       if (res.data.success) {
         setUsers(res.data.users);

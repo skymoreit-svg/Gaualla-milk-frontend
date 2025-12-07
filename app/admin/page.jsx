@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { adminurl } from "./adminCompo/adminapis";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -30,7 +31,7 @@ export default function AdminLogin() {
     // Check if already authenticated
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:9002/admin/verify", {
+        const res = await fetch(`${adminurl}/verify`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -58,7 +59,7 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:9002/admin/login", {
+      const res = await fetch(`${adminurl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -12,7 +12,8 @@ export default function Layout({ children }) {
 
   // Normalize pathname to handle trailing slashes and case
   const normalizedPath = pathname?.replace(/\/$/, "").toLowerCase() || "";
-  const isLoginPage = normalizedPath === "/admin/login";
+  // Check for both /admin and /admin/login (case-insensitive)
+  const isLoginPage = normalizedPath === "/admin" || normalizedPath === "/admin/login";
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -31,23 +32,38 @@ export default function Layout({ children }) {
         const data = await res.json();
 
         if (!res.ok || !data.success) {
-          router.push("/admin/Login");
+          // Only redirect if not already on login page to prevent loops
+          if (normalizedPath !== "/admin" && normalizedPath !== "/admin/login") {
+            router.push("/admin");
+          }
+          setAllowed(false);
           return;
         }
 
+        // If authenticated and on login page, redirect to dashboard
+        if (normalizedPath === "/admin" || normalizedPath === "/admin/login") {
+          router.push("/admin/dashboard");
+          setAllowed(false);
+          return;
+        }
+
+        // Authenticated and on protected page - allow access
         setAllowed(true);
       } catch (err) {
         console.error("Auth check error:", err);
-        router.push("/admin/Login");
+        // Only redirect if not already on login page
+        if (normalizedPath !== "/admin" && normalizedPath !== "/admin/login") {
+          router.push("/admin");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     checkAuth();
-  }, [pathname, router, isLoginPage]);
+  }, [pathname, router, isLoginPage, normalizedPath]);
 
-  // For login page, show immediately
+  // For login page, show immediately (no sidebar)
   if (isLoginPage) {
     return <>{children}</>;
   }
