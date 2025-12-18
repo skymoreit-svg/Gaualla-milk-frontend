@@ -82,11 +82,11 @@ export default function OfferProductValid() {
       <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-green-100 opacity-30"></div>
       <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-amber-100 opacity-30"></div>
 
-      <div className="container mx-auto px-0 py-12 lg:py-20">
+      <div className="container mx-auto px-0 py-12 lg:py-16">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-100">
           <div className="flex flex-col lg:flex-row">
             {/* Left side - Image with offer badge */}
-            <div className="relative lg:w-2/5 p-8 lg:p-12 bg-gradient-to-br from-green-50 to-amber-50 flex items-center justify-center">
+            <div className="relative lg:w-2/5 p-8 lg:p-16 bg-gradient-to-br from-green-50 to-amber-50 flex items-center justify-center">
               <div className="relative w-full max-w-sm">
                 <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
                   <Image
@@ -123,7 +123,7 @@ export default function OfferProductValid() {
             </div>
 
             {/* Right side - Content */}
-            <div className="lg:w-3/5 p-5 lg:p-12">
+            <div className="lg:w-3/5 p-5 lg:p-16">
               {/* Tagline */}
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex gap-1">

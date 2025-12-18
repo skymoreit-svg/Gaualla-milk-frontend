@@ -31,7 +31,7 @@ const features = [
 
 const AboutSection = () => {
   return (
-    <section className="py-16 px-5 md:px-16 xl:px-32 bg-white">
+    <section className="py-9 px-5 md:px-16 xl:px-16 bg-white">
       <div className="flex flex-col lg:flex-row items-center gap-10">
         {/* Left Image */}
         <div className="w-full lg:w-1/2 relative flex justify-center">

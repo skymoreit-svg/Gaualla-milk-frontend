@@ -19,7 +19,7 @@ import { FaMinus } from "react-icons/fa";
 
 
 
-import { addCart } from "@/app/store/cartSlice";
+import { addCart, setCartItems } from "@/app/store/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SecurePayments from "@/app/components/Payments";
 import FAQSection from "@/app/components/Faq";
@@ -32,6 +32,7 @@ import Swal from "sweetalert2";
 
 const ProductDetails = ({ slug }) => {
   const route = useRouter()
+  const dispatch = useDispatch()
   const { info, isLoading, isError, errorMessage } = useSelector(
     (state) => state.user
   );
@@ -101,6 +102,7 @@ const ProductDetails = ({ slug }) => {
 
     if (!userLogin) {
       route.push("/login");
+      return;
     }
 
     const response = await axios.post(`${baseurl}/cart/addtocart`, { product_id, price })
@@ -112,8 +114,26 @@ const ProductDetails = ({ slug }) => {
         draggable: true
       });
       setIncart(true)
-      location.reload()
-
+      
+      // Fetch updated cart from server and update Redux state
+      // Add a small delay to ensure server has processed the add request
+      setTimeout(async () => {
+        try {
+          const cartResponse = await axios.get(`${baseurl}/cart/cartallcart`);
+          const cartData = await cartResponse.data;
+          if (cartData.success) {
+            // Always dispatch, even if carts array is empty
+            const carts = cartData.carts || [];
+            dispatch(setCartItems(carts));
+          } else {
+            // If fetch failed, clear cart
+            dispatch(setCartItems([]));
+          }
+        } catch (error) {
+          console.error("Error fetching cart after add:", error);
+          dispatch(setCartItems([]));
+        }
+      }, 300); // Small delay to ensure server has processed
     } else {
       Swal.fire({
         icon: "error",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 import AyutramartData from "../AyutramartData";
@@ -17,36 +17,36 @@ import { useRouter } from "next/navigation";
 
 export default function MyCart({ cart, setCart }) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState();
   const [subTotal, setsubTotal] = useState()
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${baseurl}/cart/cartallcart`);
       const data = await response.data;
       if (data.success) {
-        setCartData(data.carts)
-        const totalamount = data.carts.reduce((acc, item) => acc + parseInt(item.total_price), 0);
+        const carts = data.carts || [];
+        setCartData(carts.length > 0 ? carts : "")
+        const totalamount = carts.reduce((acc, item) => acc + parseInt(item.total_price || 0), 0);
         setsubTotal(totalamount)
+        
+        // Update Redux store with cart data (always dispatch, even if empty array)
+        dispatch(setCartItems(carts));
       } else {
         setCartData("")
+        dispatch(setCartItems([]));
       }
-
-      // setCartData({
-      //   data,
-      //   total
-      // });
-
-      // Update Redux store if needed
-      // dispatch(setCartItems(data));
     } catch (error) {
       console.error("Error fetching cart:", error);
+      // On error, clear cart in Redux
+      dispatch(setCartItems([]));
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch]);
 
 
   const removeItem = async (itemId) => {
@@ -54,18 +54,28 @@ export default function MyCart({ cart, setCart }) {
       const response = await axios.delete(`${baseurl}/cart/deletecart/${itemId}`);
       const data = await response.data;
       if (data.success) {
+        // Fetch updated cart from server and update Redux
+        fetchCart();
+      } else {
         fetchCart();
       }
     } catch (error) {
       console.error("Error removing item:", error);
+      fetchCart();
     }
   };
 
   useEffect(() => {
-
+    // Fetch cart when component mounts
     fetchCart();
+  }, [fetchCart]);
 
-  }, []);
+  useEffect(() => {
+    if (cart) {
+      fetchCart();
+    }
+  }, [cart, fetchCart]);
+
 
   const handelcartquentity = async (bool, id) => {
 

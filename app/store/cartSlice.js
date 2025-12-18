@@ -50,9 +50,33 @@ const cartSlice = createSlice({
       state.cartItem = updateProduct.filter((elm) => elm.qnty > 0);
       localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
     },
+    setCartItems: (state, action) => {
+      // Handle null/undefined or non-array
+      if (!action.payload || !Array.isArray(action.payload)) {
+        state.cartItem = [];
+        localStorage.setItem("cartItem", JSON.stringify([]));
+        return;
+      }
+      
+      // Handle empty array
+      if (action.payload.length === 0) {
+        state.cartItem = [];
+        localStorage.setItem("cartItem", JSON.stringify([]));
+        return;
+      }
+      // Server returns: { cart_id, product_id, quantity, total_price, name, images, ... }
+      // Redux expects: { id, qnty, ... }
+      const transformedItems = action.payload.map((item) => ({
+        id: item.product_id || item.id,
+        qnty: item.quantity || item.qnty || 1,
+        ...item, 
+      }));
+      state.cartItem = transformedItems;
+      localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
+    },
   },
 });
 
-export const { addCart, removeCart, increQunty, decareseQunty } =
+export const { addCart, removeCart, increQunty, decareseQunty, setCartItems } =
   cartSlice.actions;
 export default cartSlice.reducer;

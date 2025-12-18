@@ -61,7 +61,7 @@ export default function ProductAyurved() {
                 </div>
 
                 {productData.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-2 lg:gap-y-8">
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-2 lg:gap-y-8">
                         {productData.map((product) => (
                             <ProductAyurvedCard 
                                 key={product.id} 

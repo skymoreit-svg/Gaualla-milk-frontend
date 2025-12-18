@@ -13,6 +13,7 @@ import axios from "axios";
 import { baseurl, imageurl, adminurl } from "./utlis/apis"; // adminurl added
 import { GetUser } from "../store/userSlice";
 import { MdOutlineLocalPhone } from "react-icons/md";
+import { setCartItems } from "../store/cartSlice";
 
 export default function MyNav() {
   const [sideBar, setSideBar] = useState(false);
@@ -21,9 +22,10 @@ export default function MyNav() {
   const [productSearch, setProductSearch] = useState("");
   const [cart, setCart] = useState(false);
 
-  const cartCount = useSelector((state) =>
-    state.cart.cartItem.reduce((total, item) => total + item.qnty, 0)
-  );
+  const cartCount = useSelector((state) => {
+    const cartItems = state.cart.cartItem || [];
+    return cartItems.reduce((total, item) => total + (item.qnty || 0), 0);
+  });
 
   const MobileLinks = [
     { "title": "Home", "link": "/" },
@@ -139,6 +141,33 @@ export default function MyNav() {
   }, [productSearch])
 
   useEffect(() => { dispatch(GetUser()) }, [])
+
+  // Fetch cart from server and update Redux state
+  useEffect(() => {
+    const fetchCartFromServer = async () => {
+      if (userLogin) {
+        try {
+          const response = await axios.get(`${baseurl}/cart/cartallcart`);
+          const data = await response.data;
+          if (data.success) {
+            // Always update Redux, even if carts is empty 
+            const carts = data.carts || [];
+            dispatch(setCartItems(carts));
+          } else {
+            // If API call failed, clear cart
+            dispatch(setCartItems([]));
+          }
+        } catch (error) {
+          console.error("Error fetching cart:", error);
+          dispatch(setCartItems([]));
+        }
+      }
+    };
+    
+    if (!isLoading) {
+      fetchCartFromServer();
+    }
+  }, [userLogin, isLoading, dispatch])
 
   return (
     <>
