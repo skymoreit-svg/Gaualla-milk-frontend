@@ -2,6 +2,7 @@
 import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
 export default function Revival() {
@@ -58,21 +59,21 @@ export default function Revival() {
                         </h5>
 
                         <p className="text-base md:text-lg xl:text-xl text-gray-500">
-                            Treat yourself to the real taste, simplicity, and tradition of our premium dairy items. 
-                            All of our products, from the A2 desi cow milk to the bilona A2 ghee and desi cow paneer, 
-                            are made with thoughtfulness, love, and are meant to keep your family healthy. 
+                            Treat yourself to the real taste, simplicity, and tradition of our premium dairy items.
+                            All of our products, from the A2 desi cow milk to the bilona A2 ghee and desi cow paneer,
+                            are made with thoughtfulness, love, and are meant to keep your family healthy.
                             Order now and feel what Gaualla is all about.
                         </p>
 
                         <p className="text-gray-600">
-                            The purity of milk is blended with tradition at Gaualla, Thata. Buy premium quality fresh cow milk 
+                            The purity of milk is blended with tradition at Gaualla, Thata. Buy premium quality fresh cow milk
                             from us because we sell dairy products that are refreshed, wholesome, and carefully made—
                             full of healthy nutrients, based on traditions, and unbeatable in quality.
                         </p>
 
                         <p className="text-gray-600">
-                            You can buy standardized milk online—farm-fresh dairy right at your home. Give your family 
-                            nutrient-rich A2 desi cow ghee, milk, and many more healthy dairy items. 
+                            You can buy standardized milk online—farm-fresh dairy right at your home. Give your family
+                            nutrient-rich A2 desi cow ghee, milk, and many more healthy dairy items.
                             Feel free to buy hygienic processed goods that are made with care and attention.
                         </p>
 
@@ -80,17 +81,21 @@ export default function Revival() {
                             Order your fresh milk with the Gaualla App; it only takes a few taps.
                         </p>
 
-                        <button className="flex mx-auto lg:mx-0 group items-center gap-x-2 px-5 py-2 lg:px-8 bg-[#62371f] text-white font-bold rounded-3xl">
+
+                        <Link
+                            href="/product?name=all"
+                            className="flex mx-auto lg:mx-0 group items-center gap-x-2 px-5 py-2 lg:px-8 bg-[#62371f] text-white font-bold rounded-3xl w-fit"
+                        >
                             Order Now
                             <FaLongArrowAltRight className="group-hover:translate-x-2 duration-200 ease-in transition-transform" />
-                        </button>
+                        </Link>
                     </div>
 
                     {/* RIGHT SIDE IMAGE */}
                     {/* <div className="rounded-full p-10"> */}
                     <div
                         className="mx-auto lg:mx-0 h-[250px] w-[250px] xl:h-[550px] md:h-[170px] md:w-[170px] lg:w-[300px] lg:h-[300px] xl:w-[38%]    "
-                       
+
                     >
 
                         <img src="/img4.webp" alt="" className="w-full h-full" />

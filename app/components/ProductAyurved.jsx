@@ -43,7 +43,7 @@ export default function ProductAyurved() {
             <div className="w-full relative z-10 container mx-auto px-5 md:px-12 xl:px-32">
                 <div className="block lg:flex justify-between items-center mb-6">
                     <h6 className="text-center text-xl lg:text-4xl">Our all time Favourites</h6>
-                    <div className="flex justify-center space-x-2 lg:space-x-4 mt-2 lg:mt-0">
+                    {/* <div className="flex justify-center space-x-2 lg:space-x-4 mt-2 lg:mt-0">
                         {tabs.map((tab) => (
                             <button
                                 key={tab}
@@ -57,7 +57,7 @@ export default function ProductAyurved() {
                                 {tab}
                             </button>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
 
                 {productData.length > 0 ? (

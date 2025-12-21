@@ -3,6 +3,7 @@ import React from "react";
 import { FaLongArrowAltRight, FaLeaf, FaHeart, FaShieldAlt, FaSeedling, FaMapMarkerAlt, FaFirstAid } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function OfferProductValid() {
   const calculateTimeLeft = () => {
@@ -169,10 +170,13 @@ export default function OfferProductValid() {
 
               {/* CTA Button */}
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <button className="group flex items-center gap-3 bg-green-700 hover:bg-green-800 text-white font-semibold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <Link
+                  href="/product?name=all"
+                  className="group flex items-center gap-3 bg-green-700 hover:bg-green-800 text-white font-semibold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-fit"
+                >
                   Order Now
                   <FaLongArrowAltRight className="group-hover:translate-x-1 transition-transform duration-200" />
-                </button>
+                </Link>
 
                 <div className="flex items-center text-sm text-gray-500">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600 mr-1" viewBox="0 0 20 20" fill="currentColor">

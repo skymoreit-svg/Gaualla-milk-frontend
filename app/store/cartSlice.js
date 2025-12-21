@@ -7,12 +7,11 @@ const cartDataFromLocal = () => {
   return storeData ? JSON.parse(storeData) : [];
 };
 
-
-
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cartItem: cartDataFromLocal(),
+    isCartOpen: false,
   },
   reducers: {
     addCart: (state, action) => {
@@ -57,26 +56,41 @@ const cartSlice = createSlice({
         localStorage.setItem("cartItem", JSON.stringify([]));
         return;
       }
-      
+
       // Handle empty array
       if (action.payload.length === 0) {
         state.cartItem = [];
         localStorage.setItem("cartItem", JSON.stringify([]));
         return;
       }
+
+      // Transform server cart data to match Redux cart structure
       // Server returns: { cart_id, product_id, quantity, total_price, name, images, ... }
       // Redux expects: { id, qnty, ... }
       const transformedItems = action.payload.map((item) => ({
         id: item.product_id || item.id,
         qnty: item.quantity || item.qnty || 1,
-        ...item, 
+        ...item, // Preserve all original fields from server
       }));
       state.cartItem = transformedItems;
       localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
     },
+    openCartDrawer: (state) => {
+      state.isCartOpen = true;
+    },
+    closeCartDrawer: (state) => {
+      state.isCartOpen = false;
+    },
   },
 });
 
-export const { addCart, removeCart, increQunty, decareseQunty, setCartItems } =
-  cartSlice.actions;
+export const {
+  addCart,
+  removeCart,
+  increQunty,
+  decareseQunty,
+  setCartItems,
+  openCartDrawer,
+  closeCartDrawer,
+} = cartSlice.actions;
 export default cartSlice.reducer;

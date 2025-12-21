@@ -13,14 +13,15 @@ import axios from "axios";
 import { baseurl, imageurl, adminurl } from "./utlis/apis"; // adminurl added
 import { GetUser } from "../store/userSlice";
 import { MdOutlineLocalPhone } from "react-icons/md";
-import { setCartItems } from "../store/cartSlice";
+import { setCartItems, openCartDrawer, closeCartDrawer } from "../store/cartSlice";
 
 export default function MyNav() {
   const [sideBar, setSideBar] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { info, isLoading } = useSelector((state) => state.user);
   const [productSearch, setProductSearch] = useState("");
-  const [cart, setCart] = useState(false);
+
+  const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
   const cartCount = useSelector((state) => {
     const cartItems = state.cart.cartItem || [];
@@ -28,12 +29,12 @@ export default function MyNav() {
   });
 
   const MobileLinks = [
-    { "title": "Home", "link": "/" },
-    { "title": "About us", "link": "/about" },
-    { "title": "Blogs", "link": "#" },
-    { "title": "WishList", "link": "/wishlist" },
-    { "title": "Products", "link": "/product?name=all" },
-    { "title": "Contact us", "link": "/contact-us" },
+    { title: "Home", link: "/" },
+    { title: "About us", link: "/about" },
+    { title: "Blogs", link: "#" },
+    { title: "WishList", link: "/wishlist" },
+    { title: "Products", link: "/product?name=all" },
+    { title: "Contact us", link: "/contact-us" },
   ];
 
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false);
@@ -44,10 +45,10 @@ export default function MyNav() {
   useEffect(() => {
     if (!isLoading) {
       if (info?.success) {
-        setUserLogin(true)
+        setUserLogin(true);
       }
     }
-  }, [isLoading])
+  }, [isLoading]);
 
   // Detect admin login
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function MyNav() {
   const SideBarComp = () => {
     return (
       <div
-        className={`  ${sideBar ? "translate-x-0" : "-translate-x-full"
+        className={`${sideBar ? "translate-x-0" : "-translate-x-full"
           } duration-400 transition-transform fixed bg-black/40 inset-0 z-[9999] flex  xl:hidden justify-start  `}
       >
         <div className="w-full md:w-[50%] bg-white h-full p-6">
@@ -123,24 +124,28 @@ export default function MyNav() {
     );
   };
 
-  const cartItems = useSelector((state) => state.cart.cartItem)
-  const cartLengthTotal = cartItems.reduce((accum, curntVal) => accum + curntVal.qnty, 0)
-  const [searchProducts, setSearchProducts] = useState()
+  const cartItems = useSelector((state) => state.cart.cartItem);
+  const cartLengthTotal = cartItems.reduce((accum, curntVal) => accum + curntVal.qnty, 0);
+  const [searchProducts, setSearchProducts] = useState();
 
   const getProduct = async () => {
     if (productSearch.trim().length >= 2) {
-      const response = await axios.get(`${baseurl}/getproduct/product/search/${productSearch}`)
+      const response = await axios.get(`${baseurl}/getproduct/product/search/${productSearch}`);
       const data = await response.data;
-      if (data.success) setSearchProducts(data.data)
-    } else return
-  }
+      if (data.success) setSearchProducts(data.data);
+    } else return;
+  };
 
   useEffect(() => {
-    const inter = setTimeout(() => { getProduct() }, 500);
-    return () => clearTimeout(inter)
-  }, [productSearch])
+    const inter = setTimeout(() => {
+      getProduct();
+    }, 500);
+    return () => clearTimeout(inter);
+  }, [productSearch]);
 
-  useEffect(() => { dispatch(GetUser()) }, [])
+  useEffect(() => {
+    dispatch(GetUser());
+  }, [dispatch]);
 
   // Fetch cart from server and update Redux state
   useEffect(() => {
@@ -150,7 +155,7 @@ export default function MyNav() {
           const response = await axios.get(`${baseurl}/cart/cartallcart`);
           const data = await response.data;
           if (data.success) {
-            // Always update Redux, even if carts is empty 
+            // Always update Redux, even if carts is empty array or null
             const carts = data.carts || [];
             dispatch(setCartItems(carts));
           } else {
@@ -163,11 +168,11 @@ export default function MyNav() {
         }
       }
     };
-    
+
     if (!isLoading) {
       fetchCartFromServer();
     }
-  }, [userLogin, isLoading, dispatch])
+  }, [userLogin, isLoading, dispatch]);
 
   return (
     <>
@@ -244,7 +249,7 @@ export default function MyNav() {
 
           {userLogin && !adminLogin && (
             <li className="">
-              <button onClick={() => setCart(true)} className="w-8 h-8 relative flex justify-center items-center rounded-full bg-[#b2e18c30] border border-[#62371f] cursor-pointer">
+              <button onClick={() => dispatch(openCartDrawer())} className="w-8 h-8 relative flex justify-center items-center rounded-full bg-[#b2e18c30] border border-[#62371f] cursor-pointer">
                 <BsCartPlus className="text-[#62371f]" />
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                   {cartCount}
@@ -262,7 +267,16 @@ export default function MyNav() {
       </div>
 
       <SideBarComp />
-      <MyCart cart={cart} setCart={setCart} />
+      <MyCart
+        cart={isCartOpen}
+        setCart={(value) => {
+          if (value) {
+            dispatch(openCartDrawer());
+          } else {
+            dispatch(closeCartDrawer());
+          }
+        }}
+      />
     </>
   );
 }
