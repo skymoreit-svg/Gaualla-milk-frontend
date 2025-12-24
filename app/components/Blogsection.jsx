@@ -14,7 +14,7 @@ export default function BlogCardsGrid() {
 
     useEffect(() => {
         const apiBase =
-            process.env.NEXT_PUBLIC_API_URL || "http://localhost:9002";
+            process.env.NEXT_PUBLIC_API_URL || "https://api.gauallamilk.com";
         const url = `${apiBase}/admin/blog/getall`;
 
         (async () => {
