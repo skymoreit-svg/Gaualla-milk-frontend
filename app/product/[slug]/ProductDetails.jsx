@@ -15,7 +15,6 @@ import ProductAyurvedCard from "@/app/components/ProductAyurvedCard";
 import { FaStar } from "react-icons/fa";
 import { IoIosArrowUp } from "react-icons/io";
 import { FaMinus } from "react-icons/fa";
-
 import { addCart, setCartItems, openCartDrawer } from "@/app/store/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SecurePayments from "@/app/components/Payments";
@@ -30,16 +29,24 @@ import Swal from "sweetalert2";
 const ProductDetails = ({ slug }) => {
   const route = useRouter();
   const dispatch = useDispatch();
-  const { info, isLoading, isError, errorMessage } = useSelector(
-    (state) => state.user
-  );
+
+  // USER STATE (unchanged)
+  const { info, isLoading } = useSelector((state) => state.user);
+
+  //  CART STATE FROM REDUX (SOURCE OF TRUTH)
+  const cartItems = useSelector((state) => state.cart.cartItem);
+
   const [loader, setLoader] = useState(true);
   const [userLogin, setUserLogin] = useState(false);
   const [activeImg, setActiveImg] = useState(null);
-  const [inCart, setIncart] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const [productData, setProductData] = useState();
   const [AyutramartProduct, setAyutramartProduct] = useState();
+
+  //  DERIVED STATE (NO useState)
+  const inCart = cartItems.some(
+    (item) => item.id === productData?.id
+  );
 
   const fetchallProduct = async () => {
     const response = await axios.get(`${baseurl}/getproduct/all`);
@@ -56,18 +63,19 @@ const ProductDetails = ({ slug }) => {
     if (data.success) {
       setProductData(data.product);
       setActiveImg(data.product.images[0]);
-      fetchAllreadyincart(data.product?.id);
+      //  REMOVED: fetchAllreadyincart
     }
     setLoader(false);
   };
 
-  const fetchAllreadyincart = async (productid) => {
-    const response = await axios.get(`${baseurl}/cart/cart/${productid}`);
-    const data = response.data;
-    if (data.success) {
-      setIncart(true);
-    }
-  };
+  //  REMOVED COMPLETELY
+  // const fetchAllreadyincart = async (productid) => {
+  //   const response = await axios.get(`${baseurl}/cart/cart/${productid}`);
+  //   const data = response.data;
+  //   if (data.success) {
+  //     setIncart(true);
+  //   }
+  // };
 
   const handeladdtocart = async (product_id, price) => {
     if (!userLogin) {
@@ -79,40 +87,30 @@ const ProductDetails = ({ slug }) => {
       product_id,
       price,
     });
+
     const data = await response.data;
+
     if (data.success) {
       Swal.fire({
         title: data.message,
         icon: "success",
         draggable: true,
       });
-      setIncart(true);
 
-      // Fetch updated cart from server and update Redux state
-      // Add a small delay to ensure server has processed the add request
+      
+
+      //  SYNC REDUX CART FROM SERVER
       setTimeout(async () => {
         try {
           const cartResponse = await axios.get(`${baseurl}/cart/cartallcart`);
           const cartData = await cartResponse.data;
-          if (cartData.success) {
-            // Always dispatch, even if carts array is empty
-            const carts = cartData.carts || [];
-            dispatch(setCartItems(carts));
-          } else {
-            // If fetch failed, clear cart
-            dispatch(setCartItems([]));
-          }
+
+          dispatch(setCartItems(cartData.carts || []));
         } catch (error) {
-          console.error("Error fetching cart after add:", error);
+          console.error("Error fetching cart:", error);
           dispatch(setCartItems([]));
         }
-      }, 300); // Small delay to ensure server has processed
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Login for Add to Product",
-      });
+      }, 300);
     }
   };
 
@@ -122,16 +120,15 @@ const ProductDetails = ({ slug }) => {
   }, []);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (info?.success) {
-        setUserLogin(true);
-      }
+    if (!isLoading && info?.success) {
+      setUserLogin(true);
     }
   }, [isLoading]);
 
   const Skeleton = ({ className = "" }) => (
     <div className={`animate-pulse rounded-md bg-gray-200/80 ${className}`} />
   );
+
 
   if (loader) {
     return (
@@ -388,6 +385,8 @@ const ProductDetails = ({ slug }) => {
 
                   <div className="flex gap-3 lg:gap-6">
                     <div className="flex gap-3 text-xl">
+
+
                       {inCart ? (
                         <button
                           onClick={() => {
@@ -408,6 +407,7 @@ const ProductDetails = ({ slug }) => {
                           ADD TO CART
                         </button>
                       )}
+
 
                       <button className="hidden  p-2 lg:px-4 border border-gray-400 text-xs lg:text-sm  rounded-lg hover:bg-[#073439] hover:text-white">
                         BUY NOW

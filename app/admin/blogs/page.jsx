@@ -1,135 +1,121 @@
-"use client"
-import axios from 'axios'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { adminimg, adminurl } from '../adminCompo/adminapis'
+"use client";
 
-const page = () => {
-    const [blogs, setBlogs] = useState();
+import { useRef, useState } from "react";
+import dynamic from "next/dynamic";
 
+// Dynamic import for client-side only
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
-    const fetchAllBlog = async () => {
-        const response = await axios.get(`${adminurl}/blog/getall`)
-        const data = await response.data;
+export default function AdminBlogEditor() {
+  const editor = useRef(null);
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [tag, setTag] = useState("");           
+  const [readTime, setReadTime] = useState(""); 
+  const [content, setContent] = useState("");   
+  const [saving, setSaving] = useState(false);
 
-        if (data.success) {
-            setBlogs(data.blogs)
-        }
+  
+  const [editorKey, setEditorKey] = useState(0);
+
+  const handleSave = async () => {
+    if (!title || !author || !content || !tag || !readTime) { 
+      alert("All fields are required");
+      return;
     }
 
+    setSaving(true);
+    try {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9002";
+      const res = await fetch(`${apiBase}/admin/blog/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, author, tag, readTime, content }),
+      });
 
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        const msg = data?.message || data?.error || "Save failed";
+        throw new Error(msg);
+      }
 
-  const handelDelete=async(id)=>{
-    const response = await axios.delete(`${adminurl}/blog/delete/${id}`);
-    const data = response.data;
-    if(data.success){
-       fetchAllBlog() 
+      alert("Blog saved successfully ✅");
+
+      // Reset all fields
+      setTitle("");
+      setAuthor("");
+      setTag("");        
+      setReadTime("");   
+      setContent("");
+      setEditorKey((prev) => prev + 1); 
+    } catch (err) {
+      alert(`Save failed ❌ - ${err.message || err}`);
+    } finally {
+      setSaving(false);
     }
-  }
+  };
 
+  return (
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow">
+      <h1 className="text-2xl font-bold mb-4">Create Blog</h1>
 
+      {/* Title, Author, Tag & Read Time */}
+      <input
+        className="w-full border p-2 mb-3 rounded"
+        placeholder="Blog Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <input
+        className="w-full border p-2 mb-3 rounded"
+        placeholder="Author"
+        value={author}
+        onChange={(e) => setAuthor(e.target.value)}
+      />
+      <input
+        className="w-full border p-2 mb-3 rounded"
+        placeholder="Tag"
+        value={tag}
+        onChange={(e) => setTag(e.target.value)}
+      />
+      <input
+        className="w-full border p-2 mb-4 rounded"
+        placeholder="Read Time (e.g., 5 min)"
+        value={readTime}
+        onChange={(e) => setReadTime(e.target.value)}
+      />
 
+      {/* Jodit Editor */}
+      <JoditEditor
+        key={editorKey} 
+        ref={editor}
+        defaultValue={content}
+        onBlur={(newContent) => setContent(newContent)} 
+        config={{
+          readonly: false,
+          height: 400,
+          toolbarSticky: true,
+          toolbarButtonSize: "middle",
+          toolbarAdaptive: true,
+          listStylePosition: true,
+          buttons:
+            "bold,italic,underline,strikethrough,|," +
+            "ul,ol,|," +
+            "outdent,indent,|," +
+            "link,image,video,|," +
+            "font,fontsize,paragraph,|," +
+            "source,undo,redo",
+        }}
+      />
 
-
-
-
-
-    useEffect(() => {
-        fetchAllBlog()
-    }, [])
-
-
-    return (
-       <div>
-  {/* Header Section */}
-  <div className="flex justify-between items-center px-6 py-4 bg-white shadow rounded-lg mb-6">
-    <p className="text-2xl font-bold text-gray-800">📚 Blogs</p>
-    <Link
-      href="/admin#/create"
-      className="bg-yellow-600 hover:bg-yellow-700 text-white text-lg px-4 py-2 rounded-lg font-semibold shadow transition"
-    >
-      + Create Blog
-    </Link>
-  </div>
-
-  {/* Table Section */}
-  <div className="p-6 bg-gray-100 min-h-screen">
-    <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-xl font-bold text-gray-700">All Blogs</h2>
-      </div>
-
-      <table className="w-full text-left border-collapse">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="p-4">#</th>
-            <th className="p-4">Title</th>
-            <th className="p-4">Writer</th>
-            <th className="p-4">Media</th>
-            <th className="p-4">Type</th>
-            <th className="p-4">Created At</th>
-            <th className="p-4 text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {blogs?.length > 0 ? (
-            blogs.map((blog, idx) => (
-              <tr
-                key={blog.id}
-                className="border-t hover:bg-gray-50 transition"
-              >
-                <td className="p-4">{idx + 1}</td>
-                <td className="p-4 font-semibold text-gray-800">
-                  {blog.title}
-                </td>
-                <td className="p-4 text-gray-600">{blog.writer}</td>
-                <td className="p-4">
-                  {blog.type === "img" && blog.img ? (
-                    <img
-                      src={`${adminimg}/uploads/${blog.img}`}
-                      alt={blog.title}
-                      className="h-16 w-28 object-cover rounded shadow-sm"
-                    />
-                  ) : blog.type === "video" && blog.yt_link ? (
-                    <iframe
-                      width="200"
-                      height="110"
-                      src={blog.yt_link.replace("watch?v=", "embed/")}
-                      title="YouTube video player"
-                      className="rounded shadow-sm"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <span className="text-gray-400 italic">No Media</span>
-                  )}
-                </td>
-                <td className="p-4 capitalize text-gray-700">{blog.type}</td>
-                <td className="p-4 text-gray-600">
-                  {new Date(blog.created_at).toLocaleDateString()}
-                </td>
-                <td className="p-4 text-center">
-                  <button onClick={()=>handelDelete(blog.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg font-medium shadow transition">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td className="p-6 text-center text-gray-500" colSpan="7">
-                No blogs found 🚫
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {/* Save Button */}
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+      >
+        {saving ? "Saving..." : "Save Blog"}
+      </button>
     </div>
-  </div>
-</div>
-
-  )
+  );
 }
-
-export default page

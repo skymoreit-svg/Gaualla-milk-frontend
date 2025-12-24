@@ -28,6 +28,7 @@ const cartSlice = createSlice({
 
       localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
     },
+
     removeCart: (state, action) => {
       const updateProduct = state.cartItem.filter(
         (elm) => elm.id !== action.payload
@@ -35,6 +36,7 @@ const cartSlice = createSlice({
       state.cartItem = updateProduct;
       localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
     },
+
     increQunty: (state, action) => {
       const updateProduct = state.cartItem.map((elm) =>
         elm.id == action.payload ? { ...elm, qnty: elm.qnty + 1 } : elm
@@ -64,8 +66,7 @@ const cartSlice = createSlice({
         return;
       }
 
-      // Transform server cart data to match Redux cart structure
-      // Server returns: { cart_id, product_id, quantity, total_price, name, images, ... }
+      
       // Redux expects: { id, qnty, ... }
       const transformedItems = action.payload.map((item) => ({
         id: item.product_id || item.id,
@@ -94,3 +95,5 @@ export const {
   closeCartDrawer,
 } = cartSlice.actions;
 export default cartSlice.reducer;
+
+

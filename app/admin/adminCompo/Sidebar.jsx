@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { adminurl } from "./adminapis";
 
-import { FaHome, FaShoppingCart, FaUser, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaShoppingCart, FaUser, FaSignInAlt, FaSignOutAlt, FaBlog } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { PiFlagBannerFill } from "react-icons/pi";
 import { LuPackage } from "react-icons/lu";
@@ -112,6 +112,12 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/blogs")}`}>
+                <Link href="/admin/blogs/create" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaBlog /> <span>Blogs</span>
+                </Link>
+              </li>
+
               <li className={`p-2 text-white rounded-md ${isActive("/admin/orders")}`}>
                 <Link href="/admin/orders" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
                   <LuPackage /> <span>Orders</span>
@@ -165,6 +171,12 @@ export default function Sidebar() {
             <li className={`p-2 text-white rounded-md ${isActive("/admin/bannners")}`}>
               <Link href="/admin/bannners" className="flex items-center gap-x-4">
                 <PiFlagBannerFill /> <span>Bannners</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/blogs")}`}>
+              <Link href="/admin/blogs" className="flex items-center gap-x-4">
+                <FaBlog /> <span>Blogs</span>
               </Link>
             </li>
 

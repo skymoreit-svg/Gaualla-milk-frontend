@@ -9,6 +9,7 @@ import Image from "next/image";
 import { FaGreaterThan } from "react-icons/fa6";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import OtherBanner from "./OtherBanner";
+import Blogsection from "./Blogsection";
 
 const BlogPage = ({ blogs }) => {
 
@@ -16,8 +17,10 @@ const BlogPage = ({ blogs }) => {
   return (
     <>
       <OtherBanner  text={"Blogs"}/>
+      <Blogsection />
 
-      <div className="flex flex-wrap gap-10 lg:gap-0 px-0 md:px-12 xl:px-32 my-20">
+      
+      {/* <div className="flex flex-wrap gap-10 lg:gap-0 px-0 md:px-12 xl:px-32 my-20">
         <div className="widget-area widget-area-left relative top-0 lg:sticky lg:top-10 h-full w-full lg:w-[28%] px-3 lg:order-1 order-2">
           <BlogLeft />
         </div>
@@ -128,7 +131,8 @@ const BlogPage = ({ blogs }) => {
             </nav>
           </div>
         </div>
-      </div>
+      </div> */}
+
     </>
   );
 };
