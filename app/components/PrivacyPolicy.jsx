@@ -1,109 +1,187 @@
-import Link from "next/link";
-import React from 'react'
-import { FaGreaterThan } from 'react-icons/fa6'
+import React from "react";
 import OtherBanner from "./OtherBanner";
+
+export const metadata = {
+  title: "Privacy Policy | Gaualla Milk Dairy",
+};
 
 export default function PrivacyPolicy() {
   return (
     <>
       <OtherBanner text="Privacy Policy" />
 
-      <main className="mx-5 lg:mx-28  p-6 text-gray-800">
-        <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
-        <p className="mb-6">
-          <strong>Effective Date:</strong> [Insert Date]
-        </p>
+      <main className="bg-[#f9fafb] py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6 sm:p-10 text-gray-800">
 
-        <section className="mb-6">
-          <p>
-            Welcome to <strong>Gaualla Milk Dairy</strong> (“we,” “our,” or “us”). Your privacy is important to us. This Privacy Policy explains how we collect, use, share, and protect your personal information when you visit or make a purchase from our website.
+          {/* Heading */}
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4">
+            Privacy Policy
+          </h1>
+
+          <p className="text-sm text-gray-500 mb-8">
+            <strong>Effective Date:</strong> 1 January 2025
           </p>
-        </section>
 
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">1. Information We Collect</h2>
-          <ul className="list-disc list-inside space-y-1">
-            <li><strong>Personal Information:</strong> Name, email, phone number, shipping and billing address, and payment details.</li>
-            <li><strong>Technical Information:</strong> IP address, browser type, operating system, and usage data via cookies.</li>
-            <li><strong>Order Details:</strong> Products viewed, added to cart, and purchased.</li>
-          </ul>
-        </section>
+          {/* Intro */}
+          <section className="mb-8">
+            <p className="leading-relaxed">
+              Welcome to <strong>Gaualla Milk Dairy</strong> (“we,” “our,” or
+              “us”). Your privacy is important to us. This Privacy Policy
+              explains how we collect, use, share, and protect your personal
+              information when you visit or make a purchase from our website.
+            </p>
+          </section>
 
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">2. How We Use Your Information</h2>
-          <ul className="list-disc list-inside space-y-1">
-            <li>To process and fulfill your orders.</li>
-            <li>To communicate with you about purchases or promotions.</li>
-            <li>To improve our website and customer experience.</li>
-            <li>To comply with legal obligations.</li>
-          </ul>
-        </section>
+          {/* Sections */}
+          {[
+            {
+              title: "1. Information We Collect",
+              content: (
+                <ul className="list-disc list-inside space-y-2">
+                  <li>
+                    <strong>Personal Information:</strong> Name, email, phone
+                    number, billing & shipping address, and payment details.
+                  </li>
+                  <li>
+                    <strong>Technical Information:</strong> IP address, browser
+                    type, operating system, cookies, and usage data.
+                  </li>
+                  <li>
+                    <strong>Order Details:</strong> Products viewed, added to
+                    cart, and purchased.
+                  </li>
+                </ul>
+              ),
+            },
+            {
+              title: "2. How We Use Your Information",
+              content: (
+                <ul className="list-disc list-inside space-y-2">
+                  <li>To process and fulfill your orders.</li>
+                  <li>To communicate about purchases or promotions.</li>
+                  <li>To improve website performance and user experience.</li>
+                  <li>To comply with legal obligations.</li>
+                </ul>
+              ),
+            },
+            {
+              title: "3. Sharing Your Information",
+              content: (
+                <>
+                  <p className="mb-2">
+                    We do not sell your personal data. Information may be shared
+                    with:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Payment gateways (Razorpay, Paytm)</li>
+                    <li>Shipping and logistics partners</li>
+                    <li>Hosting and IT service providers</li>
+                    <li>Legal authorities if required by law</li>
+                  </ul>
+                </>
+              ),
+            },
+            {
+              title: "4. Cookies & Tracking",
+              content: (
+                <p>
+                  We use cookies to enhance browsing experience, analyze traffic,
+                  and remember user preferences. Disabling cookies may affect
+                  site functionality.
+                </p>
+              ),
+            },
+            {
+              title: "5. Data Security",
+              content: (
+                <p>
+                  We follow reasonable security practices to protect your data,
+                  but no online transmission method is 100% secure.
+                </p>
+              ),
+            },
+            {
+              title: "6. Your Rights",
+              content: (
+                <>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Access or correct your personal information</li>
+                    <li>Withdraw marketing consent</li>
+                    <li>Request deletion (subject to legal requirements)</li>
+                  </ul>
+                  <p className="mt-3">
+                    To exercise these rights, contact us at{" "}
+                    <a
+                      href="mailto:gauallamilkpvtltd@gmail.com"
+                      className="text-blue-600 hover:underline"
+                    >
+                      gauallamilkpvtltd@gmail.com
+                    </a>
+                  </p>
+                </>
+              ),
+            },
+            {
+              title: "7. Children’s Privacy",
+              content: (
+                <p>
+                  We do not knowingly collect personal information from children
+                  under the age of 18.
+                </p>
+              ),
+            },
+            {
+              title: "8. Third-Party Links",
+              content: (
+                <p>
+                  Our website may contain links to external websites. We are not
+                  responsible for their privacy practices or content.
+                </p>
+              ),
+            },
+            {
+              title: "9. Changes to This Policy",
+              content: (
+                <p>
+                  We may update this Privacy Policy from time to time. Updates
+                  become effective immediately upon posting.
+                </p>
+              ),
+            },
+          ].map((section, index) => (
+            <section key={index} className="mb-8">
+              <h2 className="text-xl font-semibold mb-3">
+                {section.title}
+              </h2>
+              <div className="leading-relaxed">{section.content}</div>
+            </section>
+          ))}
 
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">3. Sharing Your Information</h2>
-          <p>We do not sell your personal data. We may share it with:</p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Payment gateways (e.g., Razorpay, Paytm)</li>
-            <li>Shipping and logistics partners</li>
-            <li>Hosting and IT service providers</li>
-            <li>Authorities, if legally required</li>
-          </ul>
-        </section>
+          {/* Contact */}
+          <section className="border-t pt-6 mt-10">
+            <h2 className="text-xl font-semibold mb-3">10. Contact Us</h2>
+            <ul className="space-y-2 text-gray-700">
+              <li>
+                <strong>Email:</strong>{" "}
+                <a
+                  href="mailto:gauallamilkpvtltd@gmail.com"
+                  className="text-blue-600 hover:underline"
+                >
+                  gauallamilkpvtltd@gmail.com
+                </a>
+              </li>
+              <li>
+                <strong>Phone:</strong> +91-8378-000052
+              </li>
+              <li>
+                <strong>Address:</strong> Booth No 7, Pocket C, Wave Estate,
+                Sector 85, Mohali, 140306, India
+              </li>
+            </ul>
+          </section>
 
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">4. Cookies and Tracking</h2>
-          <p>We use cookies to enhance your browsing experience, analyze traffic, and remember preferences. You can disable cookies via browser settings, but it may affect functionality.</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">5. Data Security</h2>
-          <p>We use reasonable security practices to protect your data, but no internet method is 100% secure.</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">6. Your Rights</h2>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Access or correct your data</li>
-            <li>Withdraw marketing consent</li>
-            <li>Request deletion (subject to law)</li>
-          </ul>
-          <p className="mt-2">
-            To exercise your rights, email us at:{" "}
-            <a href="mailto:gauallamilkpvtltd@gmail.com" className="text-blue-600 underline">
-              gauallamilkpvtltd@gmail.com
-            </a>
-          </p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">7. Children’s Privacy</h2>
-          <p>We do not knowingly collect information from individuals under 18 years of age.</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">8. Third-Party Links</h2>
-          <p>Our website may contain links to external sites. We are not responsible for their privacy practices or content.</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">9. Changes to This Policy</h2>
-          <p>We may update this Privacy Policy from time to time. Please review it periodically. Changes are effective once posted here.</p>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-2">10. Contact Us</h2>
-          <p>If you have any questions, contact us at:</p>
-          <ul className="list-none space-y-1 mt-2">
-            <li><strong>Email:</strong> gauallamilkpvtltd@gmail.com</li>
-            <li><strong>Phone:</strong>+91-8378-000052</li>
-            <li><strong>Address:</strong> [Booth No 7, Pocket C, Wave Estate,
-              Sector 85, Mohali, 140306], India</li>
-          </ul>
-        </section>
+        </div>
       </main>
-
-
-
     </>
-  )
+  );
 }
