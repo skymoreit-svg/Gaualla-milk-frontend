@@ -1,26 +1,38 @@
-import React, { useEffect, useState, useCallback } from "react";
+"use client";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
+import { FaMapMarkerAlt, FaHome, FaBuilding, FaExclamationTriangle, FaSpinner } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
-import AyutramartData from "../AyutramartData";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
-import "swiper/css";
-import { FaRegHeart, FaStar } from "react-icons/fa6";
-import { IoMdCart } from "react-icons/io";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
-import { decareseQunty, increQunty, removeCart, setCartItems } from "../store/cartSlice";
+import { useDispatch } from "react-redux";
+import { setCartItems } from "../store/cartSlice";
 import axios from "axios";
 import { baseurl, imageurl } from "./utlis/apis";
 import { useRouter } from "next/navigation";
+import AddressForm from "./AddressForm";
+
+// Enable cookies in all requests
+axios.defaults.withCredentials = true;
 
 export default function MyCart({ cart, setCart }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [cartData, setCartData] = useState();
-  const [subTotal, setsubTotal] = useState()
+  const [cartData, setCartData] = useState([]);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  
+  // Address management states
+  const [showNewAddress, setShowNewAddress] = useState(false);
+  const [allAddress, setAllAddress] = useState([]);
+  const [defaultAddress, setDefaultAddress] = useState(null);
+  const [addressLoading, setAddressLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  // Order and payment states
+  const [selectedFrequency, setSelectedFrequency] = useState('one_time');
+  const [subscriptionDuration, setSubscriptionDuration] = useState(1);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const fetchCart = useCallback(async () => {
     try {
@@ -29,32 +41,26 @@ export default function MyCart({ cart, setCart }) {
       const data = await response.data;
       if (data.success) {
         const carts = data.carts || [];
-        setCartData(carts.length > 0 ? carts : "")
-        const totalamount = carts.reduce((acc, item) => acc + parseInt(item.total_price || 0), 0);
-        setsubTotal(totalamount)
-        
-        // Update Redux store with cart data (always dispatch, even if empty array)
+        setCartData(carts);
         dispatch(setCartItems(carts));
       } else {
-        setCartData("")
+        setCartData([]);
         dispatch(setCartItems([]));
       }
     } catch (error) {
       console.error("Error fetching cart:", error);
-      // On error, clear cart in Redux
+      setCartData([]);
       dispatch(setCartItems([]));
     } finally {
       setLoading(false);
     }
   }, [dispatch]);
 
-
   const removeItem = async (itemId) => {
     try {
       const response = await axios.delete(`${baseurl}/cart/deletecart/${itemId}`);
       const data = await response.data;
       if (data.success) {
-        // Fetch updated cart from server and update Redux
         fetchCart();
       } else {
         fetchCart();
@@ -65,252 +71,660 @@ export default function MyCart({ cart, setCart }) {
     }
   };
 
-  useEffect(() => {
-    // Fetch cart when component mounts
+ const handelcartquentity = async (increment, id) => {
+  // 1Optimistic UI update
+  setCartData((prev) =>
+    prev.map((item) => {
+      if (item.cart_id === id) {
+        const newQty = increment
+          ? item.quantity + 1
+          : Math.max(1, item.quantity - 1);
+
+        return {
+          ...item,
+          quantity: newQty,
+          total_price: newQty * item.cart_price,
+        };
+      }
+      return item;
+    })
+  );
+
+  // Update backend silently
+  try {
+    await axios.put(`${baseurl}/cart/updatecart/${id}`, {
+      increment,
+    });
+  } catch (error) {
+    console.error("Quantity update failed", error);
+    // optional: refetch cart on error
     fetchCart();
-  }, [fetchCart]);
+  }
+};
+
+  // Fetch addresses
+  const fetchaddress = useCallback(async () => {
+    setAddressLoading(true);
+    try {
+      const response = await axios.get(`${baseurl}/address/get`);
+      const data = await response.data;
+      if (data.success) {
+        setAllAddress(data.addresses || []);
+        const defaultAddr = data.addresses?.find(addr => addr.is_default === 1);
+        if (defaultAddr) {
+          setDefaultAddress(defaultAddr.id);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    } finally {
+      setAddressLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (cart) {
       fetchCart();
+      fetchaddress();
     }
-  }, [cart, fetchCart]);
+  }, [cart, fetchCart, fetchaddress]);
 
 
-  const handelcartquentity = async (bool, id) => {
+  // Moved useMemo to top level (before any return)
+  const { itemCount, derivedSubTotal } = useMemo(() => {
+    const items = Array.isArray(cartData) ? cartData : [];
+    const totals = items.reduce(
+      (acc, item) => {
+        const quantity = Number(item?.quantity ?? item?.qnty ?? 1);
+        const unitPrice = Number(item?.cart_price ?? item?.price ?? 0);
+        const lineTotal =
+          item?.total_price != null
+            ? Number(item.total_price)
+            : unitPrice * (Number.isFinite(quantity) && quantity > 0 ? quantity : 1);
+        acc.itemCount += quantity || 0;
+        acc.subTotal += Number(lineTotal) || 0;
+        return acc;
+      },
+      { itemCount: 0, subTotal: 0 }
+    );
+    return { itemCount: totals.itemCount, derivedSubTotal: totals.subTotal };
+  }, [cartData]);
 
-    const response = await axios.put(`${baseurl}/cart/updatecart/${id}`, { increment: bool });
-    const data = await response.data;
-    if (data.success) {
+  const deliveryCharge = 0;
+  const handlingCharge = 0;
+  
+  // Calculate total based on subscription duration
+  const totalToPay = useMemo(() => {
+    const duration = Number(subscriptionDuration || 1);
+    return derivedSubTotal * (Number.isFinite(duration) && duration > 0 ? duration : 1);
+  }, [derivedSubTotal, subscriptionDuration]);
+  
+  const grandTotal = totalToPay + deliveryCharge + handlingCharge;
+  const hasItems = Array.isArray(cartData) && cartData.length > 0;
 
-      fetchCart();
+  // Set default address
+  const handelDefault = async (id) => {
+    try {
+      const response = await axios.get(`${baseurl}/address/update/${id}`);
+      const data = await response.data;
+      if (data.success) {
+        fetchaddress();
+      }
+    } catch (error) {
+      console.error("Error setting default address:", error);
+    }
+  };
 
+  // Handle address form cancel
+  const handleCancelForm = () => {
+    setShowNewAddress(false);
+    fetchaddress();
+  };
+
+  // Load Razorpay SDK
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  // Handle place order with Razorpay
+  const handlePlaceOrder = async () => {
+    if (!defaultAddress) {
+      setError("Please select a delivery address");
+      return;
     }
 
-  }
+    if (!hasItems) {
+      setError("Your cart is empty");
+      return;
+    }
+
+    const res = await loadRazorpay();
+    if (!res) {
+      setError("Razorpay SDK failed to load. Check your internet connection.");
+      return;
+    }
+
+    const amountToPay = parseFloat(grandTotal).toFixed(2);
+    const amountInRupees = parseFloat(amountToPay);
+
+    try {
+      setIsProcessingPayment(true);
+      setError('');
+
+      // Get Razorpay Key from Backend
+      let razorpayKey;
+      try {
+        const keyResponse = await axios.get(`${baseurl}/order/key`);
+        if (keyResponse.data.success && keyResponse.data.key_id) {
+          razorpayKey = keyResponse.data.key_id;
+        } else {
+          throw new Error("Failed to get Razorpay key from backend");
+        }
+      } catch (keyError) {
+        console.warn("Could not fetch key from backend, using fallback:", keyError);
+        razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_RAm3ngY6JIbOzo";
+      }
+
+      // Create Order on Backend
+      const { data } = await axios.post(`${baseurl}/order/create`, {
+        amount: amountInRupees,
+      });
+
+      if (!data.success || !data.order || !data.order.id) {
+        setError("Failed to create Razorpay order: " + (data.message || "Unknown error"));
+        return;
+      }
+
+      // Setup Razorpay Options
+      const options = {
+        key: razorpayKey,
+        currency: "INR",
+        name: "Gaualla Milk Dairy",
+        description: "Order Payment",
+        order_id: data.order.id,
+        handler: async function (response) {
+          try {
+            setIsProcessingPayment(true);
+            setError('');
+            
+            // Create order with pending status (webhook will confirm payment)
+            const verifyRes = await axios.post(`${baseurl}/order/verify`, {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              address_id: defaultAddress,
+              total_amount: amountToPay,
+              type: selectedFrequency,
+              cart_items: (Array.isArray(cartData) ? cartData : []).map((item) => ({
+                product_id: item.product_id,
+                quantity: item.quantity,
+                price: item.cart_price,
+              })),
+            });
+
+            if (verifyRes.data.success && verifyRes.data.order_id) {
+              const orderId = verifyRes.data.order_id;
+              
+              // Show processing message
+              setError("⏳ Processing payment confirmation... Please wait.");
+              
+              // Poll for order status (webhook will update payment_status to 'paid')
+              let attempts = 0;
+              const maxAttempts = 30; // 30 seconds max wait
+              const pollInterval = 1000; // Check every 1 second
+              
+              const checkOrderStatus = async () => {
+                try {
+                  const statusRes = await axios.get(`${baseurl}/order/getsingleorder/${orderId}`);
+                  
+                  if (statusRes.data.success && statusRes.data.order) {
+                    const order = statusRes.data.order;
+                    
+                    if (order.payment_status === 'paid') {
+                      // Webhook confirmed payment - SUCCESS!
+                      alert("✅ Payment Successful! Your order has been confirmed.");
+                      fetchCart();
+                      setCart(false);
+                      router.push("/");
+                      return;
+                    } else if (order.payment_status === 'failed') {
+                      // Payment failed
+                      setError("❌ Payment failed. Please try again.");
+                      setIsProcessingPayment(false);
+                      return;
+                    }
+                  }
+                  
+                  // Continue polling if not confirmed yet
+                  attempts++;
+                  if (attempts < maxAttempts) {
+                    setTimeout(checkOrderStatus, pollInterval);
+                  } else {
+                    // Timeout - order might still be processing
+                    setError("⏳ Payment is being processed. You will receive a confirmation shortly. Order ID: " + orderId);
+                    setIsProcessingPayment(false);
+                    // Still clear cart and redirect (order exists, just waiting for webhook)
+                    setTimeout(() => {
+                      fetchCart();
+                      setCart(false);
+                      router.push("/");
+                    }, 2000);
+                  }
+                } catch (error) {
+                  console.error("Error checking order status:", error);
+                  attempts++;
+                  if (attempts < maxAttempts) {
+                    setTimeout(checkOrderStatus, pollInterval);
+                  } else {
+                    setError("⚠️ Unable to verify payment status. Please check your orders. Order ID: " + orderId);
+                    setIsProcessingPayment(false);
+                  }
+                }
+              };
+              
+              // Start polling after a short delay (give webhook time to arrive)
+              setTimeout(checkOrderStatus, 2000);
+            } else {
+              setError("Order creation failed: " + (verifyRes.data.message || "Unknown error"));
+              setIsProcessingPayment(false);
+            }
+          } catch (error) {
+            console.error("Payment verification error:", error);
+            setError("Payment verification failed. Please contact support with payment ID: " + response.razorpay_payment_id);
+            setIsProcessingPayment(false);
+          }
+        },
+        prefill: {
+          name: "Customer",
+          email: "customer@example.com",
+          contact: "9876543210",
+        },
+        notes: {
+          address: "Order address ID: " + defaultAddress,
+        },
+        theme: {
+          color: "#60BE74",
+        },
+        modal: {
+          ondismiss: function() {
+            setError("Payment was cancelled. Please try again.");
+          }
+        },
+        retry: {
+          enabled: true,
+          max_count: 3,
+        },
+      };
+
+      if (!window.Razorpay) {
+        setError("Razorpay SDK not loaded. Please refresh the page.");
+        return;
+      }
+
+      const rzp = new window.Razorpay(options);
+      
+      rzp.on('payment.failed', function (response) {
+        const errorMsg = response.error?.description || response.error?.reason || response.error?.code || "Unknown error";
+        setError(`Payment failed: ${errorMsg}`);
+        alert(`Payment failed: ${errorMsg}`);
+      });
+
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong while placing order");
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  // ────────────────────────────────────────────────
+  // Now safe to do early returns
+  // ────────────────────────────────────────────────
 
   if (loading) {
     return (
-      <div className={`${cart ? "translate-x-0" : "translate-x-full"} duration-400 transition-transform fixed inset-0 bg-black/50 z-[9999] flex justify-end`}>
-        <div className="bg-white overflow-y-auto h-full w-full md:w-[60%] lg:w-[50%] xl:w-[30%] p-5">
-          <div className="flex justify-center items-center h-full">
-            <p>Loading your cart...</p>
+      <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
+        <div className="flex justify-center items-center h-full">
+          <div className="text-center">
+            <FaSpinner className="animate-spin text-4xl text-[#60BE74] mx-auto mb-4" />
+            <p className="text-lg text-gray-600">Loading your cart...</p>
           </div>
         </div>
       </div>
     );
   }
 
-  if (!cartData) {
+  if (!cartData || cartData.length === 0) {
     return (
-      <div className={`${cart ? "translate-x-0" : "translate-x-full"} duration-400 transition-transform fixed inset-0 bg-black/50 z-[9999] flex justify-end`}>
-        <div className="bg-white overflow-y-auto h-full w-full md:w-[60%] lg:w-[50%] xl:w-[30%] ">
-          <div className="flex items-center justify-between p-5 text-lg xl:text-xl">
-            <h6 className="font-bold">Your Cart</h6>
-            <button onClick={() => setCart(false)} className="text-black cursor-pointer">
+      <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
+            <button onClick={() => setCart(false)} className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer">
               <RxCross2 />
             </button>
           </div>
 
-          <div className="text-center flex flex-col items-center py-10">
-            <h2 className="text-xl font-semibold">Cart is Empty</h2>
-            <p className="text-sm text-gray-500 mt-2">Looks like you haven't added anything to your cart yet.</p>
-            {/* <img src="https://cdn-icons-png.flaticon.com/128/4290/4290854.webp" alt="empty Cart" className="h-16 w-16 mt-4 lg:w-24 lg:h-24" /> */}
-            <div className="py-5">
-              <Link
-                href="/product?name=all"
-                onClick={() => setCart(false)}
-                className="mt-4 animate-bounce uppercase font-medium text-sm md:text-base text-white px-5 py-2.5 rounded-md bg-[#62371f] hover:bg-[#4a9347] transition-all duration-300 shadow-md" >
-                Continue Shopping
-              </Link>
-            </div>
+          <div className="text-center flex flex-col items-center py-20">
+            <h2 className="text-3xl font-semibold mb-4">Cart is Empty</h2>
+            <p className="text-lg text-gray-500 mb-8">Looks like you haven't added anything to your cart yet.</p>
+            <Link
+              href="/product?name=all"
+              onClick={() => setCart(false)}
+              className="uppercase font-medium text-base text-white px-8 py-3 rounded-md bg-[#60BE74] hover:bg-[#50b666] transition-all duration-300 shadow-md"
+            >
+              Continue Shopping
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
-
-
-
-
+  // Main render (cart has items) - Full screen experience
   return (
-    <div className={`${cart ? "translate-x-0" : "translate-x-full"} duration-400 transition-transform fixed inset-0 bg-black/50 z-[9999] flex justify-end`}>
-      <div className="bg-white overflow-y-auto h-full w-full md:w-[60%] lg:w-[50%] xl:w-[30%] ">
-        <div className="flex items-center justify-between p-5 text-lg xl:text-xl">
-          <h6 className="font-bold">Your Cart</h6>
-          <button onClick={() => setCart(false)} className="text-black cursor-pointer">
-            <RxCross2 />
-          </button>
+    <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-gray-50 z-[9999] overflow-y-auto`}>
+      <div className="min-h-screen">
+        {/* Header */}
+        <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Checkout</h1>
+              <button 
+                onClick={() => setCart(false)} 
+                className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <RxCross2 />
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="text-center py-2 bg-[#89eb7c2c]">
-          <h6>⏰ Hurry, Your cart is reserved for 05:17 minutes!</h6>
+        {/* Error Message */}
+        {error && (
+          <div className="container mx-auto px-4 py-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
+              <FaExclamationTriangle className="mr-2" />
+              <span className="flex-1">{error}</span>
+              <button
+                onClick={() => setError('')}
+                className="ml-4 text-red-800 hover:text-red-900 text-xl"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Promotional Banner */}
+        <div className="bg-[#89eb7c2c] text-center py-2">
+          <h6 className="text-sm md:text-base">⏰ Hurry, Your cart is reserved for 05:17 minutes!</h6>
         </div>
 
-        <div className="mt-4 flex items-center justify-center py-2 gap-x-2 text-wrap text-center bg-[#ebede57c] border-gray-400 border-t border-b">
-          Earn{" "}
-          <img src="/img/product/coin.webp" alt="coin" className="w-4 h-4" />
-          <span className="font-semibold text-base md:text-lg">50</span>
-          Gaualla Milk Dairy Coins on this order
+        <div className="bg-[#ebede57c] border-gray-400 border-t border-b py-2">
+          <div className="container mx-auto px-4 flex items-center justify-center gap-x-2 text-center">
+            <span>Earn</span>
+            <img src="/img/product/coin.webp" alt="coin" className="w-4 h-4" />
+            <span className="font-semibold text-base md:text-lg">50</span>
+            <span>Gaualla Milk Dairy Coins on this order</span>
+          </div>
         </div>
 
-        {cartData?.map((item, index) => (
-          <div key={index} className="content-section px-2">
-            <div className="mt-4 lg:mt-6 border border-gray-300 bg-[#ebede57c] p-4 rounded-lg shadow-sm flex flex-row md:flex-row items-start md:items-center justify-between gap-4">
-              <div className="">
-                <img
-                  src={`${imageurl}/${JSON.parse(item?.images)[0]}` || "/img/product/default-product.webp"}
-                  alt={item?.name}
-                  className="h-20 w-20 md:h-24 md:w-24 rounded object-cover"
-                />
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Left Column - Cart Items & Address */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Cart Items Section */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">
+                  Cart Items ({itemCount || 0})
+                </h3>
+                <div className="space-y-4">
+                  {cartData?.map((item, index) => (
+                    <div key={index} className="border border-gray-300 bg-[#ebede57c] p-4 rounded-lg shadow-sm flex flex-row items-start md:items-center justify-between gap-4">
+                      <div className="shrink-0">
+                        <img
+                          src={`${imageurl}/${JSON.parse(item?.images || '[]')[0]}` || "/img/product/default-product.webp"}
+                          alt={item?.name}
+                          className="h-20 w-20 md:h-24 md:w-24 rounded object-cover"
+                        />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <h5 className="text-lg md:text-xl font-semibold text-gray-800">
+                          {item?.name}
+                        </h5>
+                        <div className="flex justify-between items-center mt-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl font-bold text-green-600">₹{item?.total_price}</span>
+                          </div>
+                          <div className="flex items-center gap-3 bg-white px-2 rounded-2xl">
+                            <button
+                              onClick={() => handelcartquentity(false, item.cart_id)}
+                              className="rounded-2xl bg-[#e6f3eb76] text-gray-600 hover:text-green-500 transition border border-gray-400 p-1"
+                            >
+                              <FaMinus className="text-xs" />
+                            </button>
+                            <span className="text-lg font-medium">{item?.quantity}</span>
+                            <button
+                              onClick={() => handelcartquentity(true, item.cart_id)}
+                              className="rounded-2xl bg-[#e6f3eb76] text-gray-600 hover:text-green-500 transition border border-gray-400 p-1"
+                            >
+                              <FaPlus className="text-xs" />
+                            </button>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeItem(item.cart_id)}
+                          className="mt-2 text-red-500 text-sm flex items-center cursor-pointer hover:text-red-700"
+                        >
+                          <RxCross2 className="mr-1" /> Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex-1">
-                <h5 className="text-lg md:text-xl font-semibold text-gray-800">
-                  {item?.name}
-                </h5>
-                <p className="text-sm text-gray-600 mt-1">
-                  {/* {item.product.description.substring(0, 50)}... */}
-                </p>
-                <div className="flex justify-between mt-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl font-bold text-green-600">₹{item?.total_price}</span>
+              {/* Address Section */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
+                  <FaMapMarkerAlt className="mr-3 text-blue-500" />
+                  Delivery Address
+                </h3>
+
+                {!showNewAddress ? (
+                  <>
+                    <button
+                      onClick={() => setShowNewAddress(true)}
+                      className="mb-6 bg-[#60BE74] hover:bg-[#50b666] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
+                    >
+                      <FaPlus className="mr-2" /> Add New Address
+                    </button>
+
+                    {addressLoading ? (
+                      <div className="flex justify-center py-10">
+                        <FaSpinner className="animate-spin text-2xl text-blue-500" />
+                      </div>
+                    ) : (
+                      <div className="grid gap-4">
+                        {allAddress?.map((addr) => (
+                          <div
+                            key={addr.id}
+                            className={`p-4 rounded-2xl shadow-md border transition cursor-pointer
+                              ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
+                              ${defaultAddress === addr.id ? "ring-2 ring-[#60BE74]" : ""}
+                            `}
+                            onClick={() => setDefaultAddress(addr.id)}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2 text-gray-700">
+                                {addr.address_type === "home" ? (
+                                  <FaHome className="text-blue-500" />
+                                ) : (
+                                  <FaBuilding className="text-green-500" />
+                                )}
+                                <span className="font-medium capitalize">{addr.address_type}</span>
+                              </div>
+                              {addr.is_default === 1 ? (
+                                <MdOutlineStar className="text-yellow-500 text-xl" />
+                              ) : (
+                                <MdOutlineStarBorder 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handelDefault(addr.id);
+                                  }} 
+                                  className="text-gray-400 text-xl cursor-pointer hover:text-yellow-500" 
+                                />
+                              )}
+                            </div>
+
+                            <p className="mt-2 font-semibold text-gray-800">
+                              {addr.first_name} {addr.last_name}
+                            </p>
+                            <p className="text-gray-600 text-sm">{addr.street}, {addr.city}</p>
+                            <p className="text-gray-600 text-sm">{addr.state}, {addr.zip_code}</p>
+                            <p className="text-gray-600 text-sm">{addr.country}</p>
+                            <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {allAddress?.length === 0 && !addressLoading && (
+                      <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
+                        <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
+                        <p className="text-gray-500">No addresses saved yet.</p>
+                        <p className="text-gray-400 text-sm mt-1">Please add an address to continue with your order.</p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <AddressForm onCancel={handleCancelForm} />
+                )}
+              </div>
+            </div>
+
+            {/* Right Column - Order Summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 sticky top-24">
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">
+                  Order Summary
+                </h3>
+
+                <div className="mb-5 pb-4 border-b space-y-4 max-h-[320px] overflow-auto pr-1">
+                  {cartData.map((item) => (
+                    <div key={item.cart_id} className="flex items-center">
+                      <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden mr-4 shrink-0">
+                        <img
+                          src={`${imageurl}/${JSON.parse(item.images || '[]')[0]}` || "/img/placeholder-product.webp"}
+                          alt={item?.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = "/img/placeholder-product.webp";
+                          }}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-gray-800 truncate">{item?.name}</h4>
+                        <p className="text-gray-600 text-sm mt-1">Quantity: {item?.quantity}</p>
+                      </div>
+                      <div className="text-right ml-3">
+                        <p className="font-bold text-gray-800">
+                          ₹{parseFloat(item?.total_price ?? 0).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="space-y-3 pb-4 border-b mb-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="text-gray-800">₹{parseFloat(derivedSubTotal || 0).toFixed(2)}</span>
                   </div>
-                  <div className="flex items-center gap-3 bg-white px-2 rounded-2xl">
-                    <button
-                      onClick={() => handelcartquentity(false, item.cart_id)}
-                      className="rounded-2xl bg-[#e6f3eb76] text-gray-600 hover:text-green-500 transition border border-gray-400 p-1"
-                    >
-                      <FaMinus className="text-xs" />
-                    </button>
-                    <span className="text-lg font-medium">{item?.quantity}</span>
-                    <button
-                      onClick={() => handelcartquentity(true, item.cart_id)}
-                      className="rounded-2xl bg-[#e6f3eb76] text-gray-600 hover:text-green-500 transition border border-gray-400 p-1"
-                    >
-                      <FaPlus className="text-xs" />
-                    </button>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Shipping</span>
+                    <span className="text-green-600 font-medium">Free</span>
                   </div>
                 </div>
-                <div className=" flex my-2 justify-between">
-                  <button
-                    onClick={() => removeItem(item.cart_id)}
-                    className="mt-2 text-red-500 text-sm flex items-center cursor-pointer"
-                  >
-                    <RxCross2 className="mr-1" /> Remove
-                  </button>
-                  <button onClick={() => {
-                    localStorage.setItem("buyitem", item?.cart_id),
-                      router.push("/checkout"), setCart(false)
-                  }} className="p-1 cursor-pointer  px-3 font-semibold rounded-2xl bg-green-300 text-green-700">Buy Now</button>
+
+                {/* Subscription Options */}
+                {cartData.length > 1 ? (
+                  <div className="mb-6">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
+                      <span className="text-blue-700 font-medium">One-time purchase (multiple items)</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
+                    <div className="flex flex-col space-y-2">
+                      <button
+                        onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
+                          ? 'bg-red-100 text-red-700 border border-red-300'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      >
+                        One Time
+                      </button>
+                      <button
+                        onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
+                          ? 'bg-green-100 text-green-700 border border-green-300'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      >
+                        30 Days
+                      </button>
+                      <button
+                        onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
+                          ? 'bg-green-100 text-green-700 border border-green-300'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      >
+                        Alternative days
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-between mb-6">
+                  <span className="text-lg font-semibold text-gray-800">Total</span>
+                  <span className="text-xl font-bold text-gray-800">
+                    ₹{parseFloat(grandTotal || 0).toFixed(2)}
+                  </span>
                 </div>
+
+                <button
+                  onClick={handlePlaceOrder}
+                  disabled={!defaultAddress || isProcessingPayment || !hasItems}
+                  className="w-full bg-[#60BE74] hover:bg-[#50b666] disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center cursor-pointer"
+                >
+                  {isProcessingPayment ? (
+                    <>
+                      <FaSpinner className="animate-spin mr-2" />
+                      Processing...
+                    </>
+                  ) : !defaultAddress ? (
+                    'Select Address First'
+                  ) : (
+                    'Place Order'
+                  )}
+                </button>
               </div>
             </div>
           </div>
-        ))}
-
-        {/* For better result section */}
-        {/* <div className="p-5 bg-[#ebede57c] mt-4 rounded">
-          <h5 className="text-lg capitalize md:text-lg xl:text-xl font-semibold">
-            Add for Better Benefits
-          </h5>
-          <p className="text-base md:text-lg">
-            Combine with this item to achieve better results faster.
-          </p>
-
-          <div className="products mt-2 gap-x-2">
-            <Swiper
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              loop={true}
-              modules={[Autoplay]}
-              className="mySwiper"
-              breakpoints={{
-                0: { slidesPerView: 2, spaceBetween: 10 },
-                768: { slidesPerView: 2, spaceBetween: 15 },
-                1024: { slidesPerView: 2, spaceBetween: 20 },
-                1280: { slidesPerView: 2, spaceBetween: 20 },
-              }}
-            >
-              {AyutramartData.map((product, index) => {
-                const {
-                  img,
-                  title,
-                  imgHover,
-                  heading,
-                  description,
-                  price,
-                  rating,
-                  discount,
-                } = product;
-                return (
-                  <SwiperSlide key={index}>
-                    <div className="card shadow-md hover:shadow-lg transition-shadow h-[270px] duration-300 rounded-md overflow-hidden bg-white">
-                      <div className="relative">
-                        <span className="absolute top-3 left-3 z-10 bg-green-500 text-white text-[10px] font-semibold py-[2px] px-2 rounded-full">
-                          -{discount}%
-                        </span>
-                        <img
-                          src={img}
-                          alt={heading}
-                          className="w-full h-[130px] object-cover transition-opacity duration-300 group-hover:opacity-0"
-                        />
-                      </div>
-                      <div className="p-3 space-y-1">
-                        <p className="font-medium text-lg lg:text-xl text-gray-800">
-                          {heading}
-                        </p>
-                        <hr className="text-gray-200" />
-                        <div className="flex justify-between items-center">
-                          <div className="flex text-nowrap items-center gap-x-1 text-sm font-semibold text-gray-700">
-                            <span>₹ {price}</span>
-                            <span className="line-through font-normal text-xs text-gray-500">
-                              ₹ {parseInt(price) + 50}
-                            </span>
-                          </div>
-                          <div className="flex lg:hidden text-yellow-400 text-xs gap-x-[2px]">
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                          </div>
-                        </div>
-                        <Link
-                          href={`/product/${title
-                            .toLowerCase()
-                            .replace(/,/g, "")
-                            .split(" ")
-                            .join("-")}`}
-                          className="text-white text-xs w-full py-1.5 text-center flex items-center justify-center rounded-md bg-[#62371f] hover:bg-[#69a14fe7] transition duration-300"
-                        >
-                          <IoMdCart className="mr-1 text-sm" />
-                          <span>Added</span>
-                        </Link>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
-        </div> */}
-
-        <div className="bg-white p-4 rounded-md shadow-sm">
-          {/* Subtotal Section */}
-          <div className="flex items-center justify-between bg-[#f4f6e8] border-y border-gray-300 px-3 py-3 rounded-md">
-            <h5 className="font-semibold text-base md:text-lg text-gray-800">
-              Sub Total
-            </h5>
-            <h6 className="font-bold text-lg md:text-xl text-gray-900">
-              ₹{subTotal}
-            </h6>
-          </div>
-
-
         </div>
       </div>
     </div>
