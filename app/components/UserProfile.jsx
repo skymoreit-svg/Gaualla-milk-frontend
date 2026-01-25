@@ -6,14 +6,23 @@ import { MdLogout } from "react-icons/md";
 import { LuPackage } from "react-icons/lu";
 
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../store/userSlice";
+import { setCartItems } from "../store/cartSlice";
+import axios from "axios";
+import { baseurl } from "./utlis/apis";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import MyCart from "./MyCart";
+
+// Enable cookies in all requests
+axios.defaults.withCredentials = true;
 
 export default function UserProfile() {
   const { info, isLoading, isError, errorMessage } = useSelector(
     (state) => state.user
   );
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const [currentTab, setCurrentTab] = useState("My Profile");
@@ -21,6 +30,48 @@ export default function UserProfile() {
 
   const [cart, setCart] = useState(false)
   const user = info?.user || {};
+
+  // Handle user logout
+  const handleLogout = async () => {
+    try {
+      // Call logout API
+      await axios.get(`${baseurl}/logout`, {
+        withCredentials: true
+      });
+
+      // Clear Redux state
+      dispatch(logoutUser());
+      dispatch(setCartItems([])); // Clear cart items
+
+      // Clear any localStorage items
+      localStorage.removeItem("buyitem");
+      localStorage.removeItem("buyitems");
+      localStorage.removeItem("rememberedEmail");
+
+      toast.success("Logged out successfully!");
+      
+      // Redirect to home page
+      router.push("/");
+      
+      // Force page reload to clear all state
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Even if API call fails, clear local state
+      dispatch(logoutUser());
+      dispatch(setCartItems([]));
+      localStorage.removeItem("buyitem");
+      localStorage.removeItem("buyitems");
+      localStorage.removeItem("rememberedEmail");
+      toast.error("Logout had issues, but you've been logged out locally");
+      router.push("/");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
+    }
+  };
 
   useEffect(() => {
     //   if (!info?.success) {
@@ -133,7 +184,7 @@ export default function UserProfile() {
                 <span className="text-sm">Cart</span>
               </button>
               <button
-
+                onClick={handleLogout}
                 className={`flex items-center gap-3 px-4 py-3 text-gray-700 transition  hover:text-blue-600 border-b border-gray-200 last:border-b-0
       `}
               >
