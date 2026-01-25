@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaRegClock } from "react-icons/fa6";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import { API_ENDPOINTS } from "@/app/config/constants";
 
 export default function BlogCardsGrid() {
     const [blogs, setBlogs] = useState([]);
@@ -13,9 +14,7 @@ export default function BlogCardsGrid() {
     const [visibleCount, setVisibleCount] = useState(BLOGS_LIMIT);
 
     useEffect(() => {
-        const apiBase =
-            process.env.NEXT_PUBLIC_API_URL || "https://api.gauallamilk.com";
-        const url = `${apiBase}/admin/blog/getall`;
+        const url = `${API_ENDPOINTS.ADMIN_BASE}/blog/getall`;
 
         (async () => {
             try {

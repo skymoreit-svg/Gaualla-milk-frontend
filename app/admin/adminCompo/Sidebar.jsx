@@ -11,6 +11,7 @@ import { BiCategory } from "react-icons/bi";
 import { PiFlagBannerFill } from "react-icons/pi";
 import { LuPackage } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { FaCreditCard } from "react-icons/fa";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -124,6 +125,12 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/payments")}`}>
+                <Link href="/admin/payments" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaCreditCard /> <span>Payments</span>
+                </Link>
+              </li>
+
               <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
                 <Link href="/admin/user" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
                   <FaUser /> <span>Users</span>
@@ -183,6 +190,12 @@ export default function Sidebar() {
             <li className={`p-2 text-white rounded-md ${isActive("/admin/orders")}`}>
               <Link href="/admin/orders" className="flex items-center gap-x-4">
                 <LuPackage /> <span>Orders</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/payments")}`}>
+              <Link href="/admin/payments" className="flex items-center gap-x-4">
+                <FaCreditCard /> <span>Payments</span>
               </Link>
             </li>
 

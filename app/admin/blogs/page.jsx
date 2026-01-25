@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { API_ENDPOINTS } from "@/app/config/constants";
 
 // Dynamic import for client-side only
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
@@ -26,8 +27,7 @@ export default function AdminBlogEditor() {
 
     setSaving(true);
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9002";
-      const res = await fetch(`${apiBase}/admin/blog/create`, {
+      const res = await fetch(`${API_ENDPOINTS.ADMIN_BASE}/blog/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, author, tag, readTime, content }),

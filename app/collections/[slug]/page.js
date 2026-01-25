@@ -19,7 +19,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function CollectionPage({ params: { slug } }) {
+export default async function CollectionPage({ params }) {
+  const { slug } = await params;
   const collection = serviceList.find(
     (service) => service.link === `/collections/${slug}`
   );

@@ -215,36 +215,48 @@ export default function ProductAyurvedCard({ product }) {
           <hr className="text-gray-300" />
 
           {/* Price + Rating */}
-          <div className="block lg:flex justify-between mt-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-1 text-lg font-semibold text-gray-700">
-                <span className="text-xl">₹{price}</span>
-                {old_price && (
-                  <span className="line-through font-normal text-base text-gray-700">
-                    ₹{old_price}
-                  </span>
-                )}
-              </div>
+          <div className="flex flex-col gap-1 lg:flex-row lg:items-center lg:justify-between mt-auto">
+            {/* Prices */}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-2">
+              <span className="text-sm sm:text-base lg:text-xl font-semibold text-gray-800">
+                ₹{price}
+              </span>
+
+              {old_price && (
+                <span className="text-[10px] sm:text-xs lg:text-base 
+                       line-through text-gray-400
+                       lg:inline block">
+                  ₹{old_price}
+                </span>
+              )}
             </div>
-            <div className="flex text-yellow-400 items-center gap-x-1">
+
+            {/* Rating */}
+            <div className="flex text-yellow-400 text-xs sm:text-sm lg:text-base">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} />
               ))}
             </div>
           </div>
 
+
+
           {/* Buttons */}
-          <div className="flex gap-x-4 items-center mt-3">
+          <div className="flex items-center gap-2 mt-2">
             <button
               onClick={() => handleWishListToogle(product)}
-              className="cursor-pointer border p-1 lg:p-1.5 font-bold rounded lg:relative absolute lg:top-0 top-2 lg:right-0 right-2 bg-white"
+              className="border p-1 rounded bg-white absolute top-2 right-2 lg:static"
             >
-              {added ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+              {added ? (
+                <FaHeart className="text-red-500" />
+              ) : (
+                <FaRegHeart />
+              )}
             </button>
 
-            <p className="font-semibold text-xs lg:text:base text-white w-full py-2 text-center flex items-center justify-center rounded-md border border-gray-200 bg-[#62371f] hover:bg-[#69a14fe7] transition duration-300">
+            <p className="text-xs sm:text-sm lg:text-base text-white w-full py-2 flex items-center justify-center rounded-md bg-[#62371f] hover:bg-[#69a14fe7] transition">
               <IoMdCart className="mr-1" />
-              <span>View product</span>
+              View product
             </p>
           </div>
         </div>

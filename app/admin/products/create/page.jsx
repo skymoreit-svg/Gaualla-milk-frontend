@@ -4,6 +4,9 @@ import axios from "axios";
 import slugify from "slugify";
 import Link from "next/link";
 import { adminurl } from "../../adminCompo/adminapis";
+
+// Enable credentials for all admin requests
+axios.defaults.withCredentials = true;
 import { FaPlus, FaPlusCircle,FaTag,FaSignature,FaLink,FaAlignLeft,FaDollarSign,FaRegMoneyBillAlt,FaBoxes,FaWeight,FaInfoCircle,FaExclamationCircle ,FaImages,FaUpload} from "react-icons/fa";
 import { ArrowLeft } from "lucide-react";
 
@@ -100,6 +103,7 @@ if (!form.stock) {
 
       const res = await axios.post(`${adminurl}/product/create`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true
       });
 
       if (res.data.success) {
@@ -159,7 +163,7 @@ if (!form.stock) {
 >
   <option value="">Select Category</option>
   {categories.map((cat) => (
-    <option key={cat.id} value={cat.id}>
+    <option key={cat.id} value={String(cat.id)}>
       {cat.name}
     </option>
   ))}
