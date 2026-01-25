@@ -25,6 +25,7 @@ const AddressForm = ({onCancel}) => {
 
   const [editingAddress, setEditingAddress] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
  const [formData, setFormData] = useState({ first_name: "",
     last_name: "",
@@ -48,11 +49,25 @@ const AddressForm = ({onCancel}) => {
 
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, type, checked } = e.target;
+    
+    // Handle checkbox separately
+    if (type === 'checkbox') {
+      setFormData(prev => ({
+        ...prev,
+        [name]: checked ? 1 : 0
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    
+    // Clear error when user types
+    if (error) {
+      setError('');
+    }
   };
 
 
@@ -66,44 +81,52 @@ const AddressForm = ({onCancel}) => {
  const handleAddressSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // setError('');
+    setError('');
 
     try {
+      // Prepare data for API - ensure is_default is properly formatted
+      const submitData = {
+        ...formData,
+        is_default: formData.is_default === 1 || formData.is_default === true ? 1 : 0
+      };
+
       let response;
       if (editingAddress) {
-        response = await axios.put(`${baseurl}/address/${editingAddress.id}`,formData );
+        response = await axios.put(`${baseurl}/address/${editingAddress.id}`, submitData, {
+          withCredentials: true
+        });
       } else {
-        response = await axios.post(`${baseurl}/address/create`,formData,{
-            withCredentials:true
-        } );
+        response = await axios.post(`${baseurl}/address/create`, submitData, {
+          withCredentials: true
+        });
       }
 
       const data = response.data;
       if (data.success) {
-        // setShowNewAddress(false);
-        // setEditingAddress(null);
-        setFormData({ first_name: "",
-    last_name: "",
-    gender: "",
-    email: "",
-    phone: "",
-    street: "",
-    landmark: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    country: "India",
-    address_type: "home",
-    is_default: 0,
-});
-onCancel()
-        // fetchaddress();
+        // Reset form
+        setFormData({ 
+          first_name: "",
+          last_name: "",
+          gender: "",
+          email: "",
+          phone: "",
+          street: "",
+          landmark: "",
+          city: "",
+          state: "",
+          zip_code: "",
+          country: "India",
+          address_type: "home",
+          is_default: 0,
+        });
+        setEditingAddress(null);
+        onCancel();
       } else {
         setError(data.message || 'Failed to save address');
       }
     } catch (error) {
       console.error("Error saving address:", error);
-      setError('An error occurred while saving the address. Please try again.');
+      setError(error.response?.data?.message || 'An error occurred while saving the address. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -307,13 +330,20 @@ onCancel()
               <input
                 type="checkbox"
                 name="is_default"
-                checked={formData.is_default === 1}
+                checked={formData.is_default === 1 || formData.is_default === true}
                 onChange={handleChange}
-                className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 disabled={isSubmitting}
               />
               <label className="ml-2 text-gray-700">Set as default address</label>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
     
             {/* Submit + Cancel */}
             <div className="flex justify-between pt-4">
