@@ -1,95 +1,149 @@
 "use client";
-import React, { useMemo, useState } from "react";
-import { Search, Eye, ChevronDown } from "lucide-react";
+import React, { useMemo, useState, useEffect } from "react";
+import { Search, Eye, ChevronDown, RefreshCw } from "lucide-react";
+import axios from "axios";
+import { adminurl } from "../adminCompo/adminapis";
+import Link from "next/link";
+import toast from "react-hot-toast";
+
+// Enable credentials
+axios.defaults.withCredentials = true;
 
 const OrdersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all");
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Mock orders data
-  const mockOrders = [
-    // {
-    //   id: "QD1763968517352001",
-    //   customer: { name: "Shiyam Kumar", phone: "9122053667" },
-    //   items: "1 item(s)",
-    //   amount: "₹249.00",
-    //   status: "out for_delivery",
-    //   payment: "pending",
-    //   date: "24 Nov 2025, 12:45 pm",
-    // },
-    // {
-    //   id: "QD1763968517352002",
-    //   customer: { name: "Rahul Singh", phone: "9876543210" },
-    //   items: "2 item(s)",
-    //   amount: "₹500.00",
-    //   status: "completed",
-    //   payment: "paid",
-    //   date: "23 Nov 2025, 10:30 am",
-    // },
-    // {
-    //   id: "QD1763968517352003",
-    //   customer: { name: "Priya Sharma", phone: "9123456789" },
-    //   items: "3 item(s)",
-    //   amount: "₹750.00",
-    //   status: "pending",
-    //   payment: "pending",
-    //   date: "22 Nov 2025, 02:15 pm",
-    // },
-    // {
-    //   id: "QD1763968517352004",
-    //   customer: { name: "Amit Patel", phone: "9988776655" },
-    //   items: "1 item(s)",
-    //   amount: "₹199.00",
-    //   status: "out for_delivery",
-    //   payment: "paid",
-    //   date: "21 Nov 2025, 05:00 pm",
-    // },
-    // {
-    //   id: "QD1763968517352005",
-    //   customer: { name: "Neha Gupta", phone: "9111222333" },
-    //   items: "4 item(s)",
-    //   amount: "₹1200.00",
-    //   status: "completed",
-    //   payment: "paid",
-    //   date: "20 Nov 2025, 08:45 am",
-    // },
-  ];
+  useEffect(() => {
+    fetchOrders();
+  }, [statusFilter, paymentFilter, page]);
+
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: "20",
+      });
+      if (statusFilter !== "all") params.append("status", statusFilter);
+      if (paymentFilter !== "all") params.append("payment_status", paymentFilter);
+      if (searchTerm.trim()) params.append("search", searchTerm.trim());
+
+      const response = await axios.get(`${adminurl}/orders?${params.toString()}`, {
+        withCredentials: true
+      });
+
+      if (response.data.success) {
+        setOrders(response.data.orders || []);
+        setTotalPages(response.data.pagination?.totalPages || 1);
+      } else {
+        setError("Failed to fetch orders");
+      }
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError("Failed to load orders. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = () => {
+    setPage(1);
+    fetchOrders();
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2,
+    }).format(amount);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   const filteredOrders = useMemo(() => {
-    return mockOrders.filter((order) => {
-      const search = searchTerm.trim().toLowerCase();
-      const matchesSearch =
-        order.id.toLowerCase().includes(search) ||
-        order.customer.name.toLowerCase().includes(search) ||
-        order.customer.phone.includes(search);
-      const matchesStatus = statusFilter === "all" || order.status === statusFilter;
-      const matchesPayment = paymentFilter === "all" || order.payment === paymentFilter;
-      return matchesSearch && matchesStatus && matchesPayment;
+    if (!searchTerm.trim()) return orders;
+    const search = searchTerm.trim().toLowerCase();
+    return orders.filter((order) => {
+      const orderId = String(order.id || "").toLowerCase();
+      const userName = (order.user_name || "").toLowerCase();
+      const userEmail = (order.user_email || "").toLowerCase();
+      const userPhone = (order.user_phone || "").toLowerCase();
+      const street = (order.street || "").toLowerCase();
+      const city = (order.city || "").toLowerCase();
+      
+      return (
+        orderId.includes(search) ||
+        userName.includes(search) ||
+        userEmail.includes(search) ||
+        userPhone.includes(search) ||
+        street.includes(search) ||
+        city.includes(search)
+      );
     });
-  }, [searchTerm, statusFilter, paymentFilter]);
+  }, [orders, searchTerm]);
 
   const getStatusColor = (status) => {
-    const s = status.toLowerCase();
+    const s = (status || "").toLowerCase();
     if (s.includes("completed")) return "bg-green-100 text-green-700";
-    if (s.includes("out")) return "bg-blue-100 text-blue-700";
+    if (s.includes("out") || s.includes("delivery")) return "bg-blue-100 text-blue-700";
+    if (s.includes("processing")) return "bg-purple-100 text-purple-700";
     if (s.includes("pending")) return "bg-yellow-100 text-yellow-700";
+    if (s.includes("cancelled")) return "bg-red-100 text-red-700";
     return "bg-gray-100 text-gray-700";
   };
 
   const getPaymentColor = (payment) => {
-    const p = payment.toLowerCase();
+    const p = (payment || "").toLowerCase();
     if (p.includes("paid")) return "bg-green-100 text-green-700";
     if (p.includes("pending")) return "bg-yellow-100 text-yellow-700";
+    if (p.includes("failed")) return "bg-red-100 text-red-700";
+    if (p.includes("refunded")) return "bg-orange-100 text-orange-700";
     return "bg-gray-100 text-gray-700";
   };
+
+  if (loading && orders.length === 0) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-600">Loading orders...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
-        <p className="text-gray-600 mt-1">Manage and track all orders</p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
+          <p className="text-gray-600 mt-1">Manage and track all orders</p>
+        </div>
+        <button
+          onClick={fetchOrders}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Refresh
+        </button>
       </div>
 
       {/* Search & Filters Bar */}
@@ -100,9 +154,10 @@ const OrdersPage = () => {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search by order number or address..."
+              placeholder="Search by order number, customer name, email, phone, or address..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="w-full pl-12 pr-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -110,27 +165,44 @@ const OrdersPage = () => {
           {/* Status Filter */}
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
             className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
             <option value="out for_delivery">Out For Delivery</option>
             <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
           </select>
 
           {/* Payment Status Filter */}
           <select
             value={paymentFilter}
-            onChange={(e) => setPaymentFilter(e.target.value)}
+            onChange={(e) => {
+              setPaymentFilter(e.target.value);
+              setPage(1);
+            }}
             className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           >
             <option value="all">All Payment Status</option>
             <option value="paid">Paid</option>
             <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+            <option value="refunded">Refunded</option>
           </select>
         </div>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      )}
 
       {/* Orders Table */}
       <div className="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
@@ -151,42 +223,45 @@ const OrdersPage = () => {
             {filteredOrders.length === 0 ? (
               <tr>
                 <td colSpan={8} className="text-center py-12 text-gray-500">
-                  No orders available right now
+                  {loading ? "Loading orders..." : "No orders found"}
                 </td>
               </tr>
             ) : (
               filteredOrders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{order.id}</td>
+                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">#{order.id}</td>
                   <td className="px-6 py-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{order.customer.name}</p>
-                      <p className="text-xs text-gray-500">{order.customer.phone}</p>
+                      <p className="text-sm font-medium text-gray-900">{order.user_name || "N/A"}</p>
+                      <p className="text-xs text-gray-500">{order.user_phone || order.user_email || ""}</p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{order.items}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{order.amount}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {order.item_count || 0} item{(order.item_count || 0) !== 1 ? "s" : ""}
+                  </td>
+                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    {formatCurrency(parseFloat(order.total_amount || 0))}
+                  </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
-                      {order.status}
+                      {order.status || "pending"}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${getPaymentColor(order.payment)}`}>
-                      {order.payment}
+                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${getPaymentColor(order.payment_status)}`}>
+                      {order.payment_status || "pending"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{order.date}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{formatDate(order.created_at)}</td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <button title="View" className="text-blue-600 hover:text-blue-800 transition">
-                        <Eye className="w-5 h-5" />
-                      </button>
-                      <button className="flex items-center justify-between gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm font-medium text-gray-900 w-40">
-                        <span>{order.status}</span>
-                        <ChevronDown className="w-5 h-4 text-gray-600 flex-shrink-0" />
-                      </button>
-                    </div>
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="text-blue-600 hover:text-blue-800 transition inline-flex items-center gap-1"
+                      title="View Details"
+                    >
+                      <Eye className="w-5 h-5" />
+                      <span className="text-sm">View</span>
+                    </Link>
                   </td>
                 </tr>
               ))
@@ -194,6 +269,29 @@ const OrdersPage = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-6 flex justify-center items-center gap-2">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 text-gray-700">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

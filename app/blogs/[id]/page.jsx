@@ -86,14 +86,13 @@ function formatDate(dateStr) {
 }
 
 export default async function Page({ params }) {
-  const { id } = params || {};
-  const apiBase =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:9002";
+  const { id } = await params;
+  const { API_ENDPOINTS } = await import('@/app/config/constants');
 
   let blog = null;
   try {
     const res = await fetch(
-      `${apiBase}/admin/blog/get/${id}`,
+      `${API_ENDPOINTS.ADMIN_BASE}/blog/get/${id}`,
       { cache: "no-store" }
     );
     const data = await res.json();

@@ -17,6 +17,7 @@ import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 // ✅ Enable cookies in all requests
 axios.defaults.withCredentials = true;
@@ -273,17 +274,49 @@ export default function CheckOut() {
             });
 
             if (verifyRes.data.success) {
-              alert("Payment Successful!");
+              const orderId = verifyRes.data.order_id;
+              toast.success("✅ Payment Successful! Redirecting to your orders...");
+              
+              // Clear all cart items from backend
+              try {
+                await axios.delete(`${baseurl}/cart/clearall`, {
+                  withCredentials: true
+                });
+                console.log("✅ Cart cleared successfully");
+              } catch (clearError) {
+                console.error("Error clearing cart:", clearError);
+                // Non-critical error, continue anyway
+              }
+              
               // Clear cart/localStorage if needed
               localStorage.removeItem("buyitem");
               localStorage.removeItem("buyitems");
-              router.push("/");
+              // Redirect to orders page
+              setTimeout(() => {
+                router.push("/orders");
+              }, 1500);
             } else {
-              alert("Payment verification failed: " + (verifyRes.data.message || "Unknown error"));
+              const orderId = verifyRes.data?.order_id;
+              if (orderId) {
+                toast.error("Payment verification had issues. Please check your orders page.");
+                setTimeout(() => {
+                  router.push("/orders");
+                }, 2000);
+              } else {
+                toast.error("Payment verification failed: " + (verifyRes.data.message || "Unknown error"));
+              }
             }
           } catch (error) {
             console.error("Payment verification error:", error);
-            alert("Payment verification failed. Please contact support with payment ID: " + response.razorpay_payment_id);
+            const orderId = error.response?.data?.order_id;
+            if (orderId) {
+              toast.error("Payment verification failed. Please check your orders page or contact support.");
+              setTimeout(() => {
+                router.push("/orders");
+              }, 2000);
+            } else {
+              toast.error("Payment verification failed. Please contact support with Payment ID: " + response.razorpay_payment_id);
+            }
           }
         },
         prefill: {

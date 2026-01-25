@@ -9,6 +9,9 @@ import { adminurl, adminimg } from "../adminCompo/adminapis";
 import toast from "react-hot-toast";
 import DeletePopup from "../../components/DeletePopup";
 
+// Enable credentials for all admin requests
+axios.defaults.withCredentials = true;
+
 
 export default function ProductsPage() {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +37,9 @@ export default function ProductsPage() {
 		try {
 			setLoading(true);
 			setError(null);
-			const response = await axios.get(`${adminurl}/product`);
+			const response = await axios.get(`${adminurl}/product`, {
+				withCredentials: true
+			});
 			const data = response.data;
 			if (data.success) {
 				setProducts(data.product);
@@ -51,7 +56,9 @@ export default function ProductsPage() {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get(`${adminurl}/category`);
+			const response = await axios.get(`${adminurl}/category`, {
+				withCredentials: true
+			});
 			const data = response.data;
 			if (data.success) {
 				setCategories(data.category);
@@ -67,7 +74,9 @@ export default function ProductsPage() {
 		const toastId = toast.loading("Deleting...");
 
 		try {
-			const response = await axios.delete(`${adminurl}/product/${deleteId}`);
+			const response = await axios.delete(`${adminurl}/product/${deleteId}`, {
+				withCredentials: true
+			});
 			if (response.data.success) {
 				fetchProducts(); // Refresh products
 				toast.success("Product deleted successfully! 🗑️", { id: toastId });

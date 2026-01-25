@@ -78,7 +78,9 @@ const ProductDetails = ({ slug }) => {
   // };
 
   const handeladdtocart = async (product_id, price) => {
-    if (!userLogin) {
+    // Check both local state and Redux state for authentication
+    const isAuthenticated = userLogin || (info?.success === true);
+    if (!isAuthenticated) {
       route.push("/login");
       return;
     }
@@ -120,10 +122,13 @@ const ProductDetails = ({ slug }) => {
   }, []);
 
   useEffect(() => {
+    // Update userLogin state when user info changes
     if (!isLoading && info?.success) {
       setUserLogin(true);
+    } else if (!isLoading && !info?.success) {
+      setUserLogin(false);
     }
-  }, [isLoading]);
+  }, [isLoading, info]);
 
   const Skeleton = ({ className = "" }) => (
     <div className={`animate-pulse rounded-md bg-gray-200/80 ${className}`} />

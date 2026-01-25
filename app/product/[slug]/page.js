@@ -10,7 +10,8 @@ export const generateStaticParams = async () => {
   }));
 };
 
-export default function Page({ params: { slug } }) {
+export default async function Page({ params }) {
+  const { slug } = await params;
   // const singleProduct = AyutramartProduct.find((product) => product.slug === slug);
 
   // if (!singleProduct) {

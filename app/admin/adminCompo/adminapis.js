@@ -1,10 +1,20 @@
-// Admin API Configuration
-// Use environment variable NEXT_PUBLIC_ADMIN_API_URL or fallback to localhost
-const ADMIN_API_BASE = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://api.gauallamilk.com';
+/**
+ * Admin API Configuration
+ * 
+ * This file re-exports admin URLs from the centralized config.
+ * All URLs are now managed in: app/config/constants.js
+ * 
+ * @deprecated - Consider importing directly from '@/app/config/constants' for new code
+ */
 
-// export const adminurl = `${ADMIN_API_BASE}/admin`;
-// export const adminimg = ADMIN_API_BASE;
-
-// For backward compatibility - you can also set these directly:
-export const adminurl = `http://localhost:9002/admin`
-export const adminimg = `http://localhost:9002`
+// Re-export from centralized config
+export {
+  adminurl,
+  adminimg,
+  API_BASE_URL,
+  IMAGE_BASE_URL,
+  API_ENDPOINTS,
+  IMAGE_PATHS,
+  getImageUrl,
+  getUploadImageUrl,
+} from '../../config/constants';

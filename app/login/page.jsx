@@ -6,9 +6,12 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { baseurl } from "../components/utlis/apis";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { GetUser } from "../store/userSlice";
 
 const LoginPage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -75,7 +78,13 @@ const LoginPage = () => {
           localStorage.removeItem("rememberedEmail");
         }
 
-        router.push("/"); // redirect after login
+        // Refresh user state immediately after login
+        dispatch(GetUser());
+
+        // Small delay to ensure state is updated before redirect
+        setTimeout(() => {
+          router.push("/"); // redirect after login
+        }, 100);
       } else {
         toast.error(data.message || "Login failed. Please try again.");
       }

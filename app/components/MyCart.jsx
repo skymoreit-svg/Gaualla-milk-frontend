@@ -11,6 +11,7 @@ import axios from "axios";
 import { baseurl, imageurl } from "./utlis/apis";
 import { useRouter } from "next/navigation";
 import AddressForm from "./AddressForm";
+import toast from "react-hot-toast";
 
 // Enable cookies in all requests
 axios.defaults.withCredentials = true;
@@ -37,6 +38,9 @@ export default function MyCart({ cart, setCart }) {
   const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
+      // Reset payment processing state when fetching cart (new items added, cart refreshed)
+      setIsProcessingPayment(false);
+      setError('');
       const response = await axios.get(`${baseurl}/cart/cartallcart`);
       const data = await response.data;
       if (data.success) {
@@ -51,6 +55,8 @@ export default function MyCart({ cart, setCart }) {
       console.error("Error fetching cart:", error);
       setCartData([]);
       dispatch(setCartItems([]));
+      // Reset payment state on error too
+      setIsProcessingPayment(false);
     } finally {
       setLoading(false);
     }
@@ -124,6 +130,9 @@ export default function MyCart({ cart, setCart }) {
 
   useEffect(() => {
     if (cart) {
+      // Reset payment processing state when cart drawer opens
+      setIsProcessingPayment(false);
+      setError('');
       fetchCart();
       fetchaddress();
     }
@@ -242,6 +251,7 @@ export default function MyCart({ cart, setCart }) {
 
       if (!data.success || !data.order || !data.order.id) {
         setError("Failed to create Razorpay order: " + (data.message || "Unknown error"));
+        setIsProcessingPayment(false);
         return;
       }
 
@@ -275,7 +285,19 @@ export default function MyCart({ cart, setCart }) {
             if (verifyRes.data.success && verifyRes.data.order_id) {
               const orderId = verifyRes.data.order_id;
               
-              // Show processing message
+              // Clear cart items immediately after order creation
+              try {
+                await axios.delete(`${baseurl}/cart/clearall`, {
+                  withCredentials: true
+                });
+                console.log("✅ Cart cleared after order creation");
+              } catch (clearError) {
+                console.error("Error clearing cart:", clearError);
+                // Non-critical error, continue anyway
+              }
+              
+              // Show success message immediately
+              toast.success("✅ Payment received! Confirming order...");
               setError("⏳ Processing payment confirmation... Please wait.");
               
               // Poll for order status (webhook will update payment_status to 'paid')
@@ -292,10 +314,23 @@ export default function MyCart({ cart, setCart }) {
                     
                     if (order.payment_status === 'paid') {
                       // Webhook confirmed payment - SUCCESS!
-                      alert("✅ Payment Successful! Your order has been confirmed.");
+                      toast.success("✅ Payment Successful! Your order has been confirmed.");
+                      // Clear all cart items from backend
+                      try {
+                        await axios.delete(`${baseurl}/cart/clearall`, {
+                          withCredentials: true
+                        });
+                        console.log("✅ Cart cleared successfully");
+                      } catch (clearError) {
+                        console.error("Error clearing cart:", clearError);
+                        // Non-critical error, continue anyway
+                      }
                       fetchCart();
                       setCart(false);
-                      router.push("/");
+                      // Redirect to orders page
+                      setTimeout(() => {
+                        router.push("/orders");
+                      }, 1000);
                       return;
                     } else if (order.payment_status === 'failed') {
                       // Payment failed
@@ -311,13 +346,13 @@ export default function MyCart({ cart, setCart }) {
                     setTimeout(checkOrderStatus, pollInterval);
                   } else {
                     // Timeout - order might still be processing
-                    setError("⏳ Payment is being processed. You will receive a confirmation shortly. Order ID: " + orderId);
+                    toast.success("⏳ Payment is being processed. You will receive a confirmation shortly.");
                     setIsProcessingPayment(false);
-                    // Still clear cart and redirect (order exists, just waiting for webhook)
+                    // Still clear cart and redirect to orders page (order exists, just waiting for webhook)
                     setTimeout(() => {
                       fetchCart();
                       setCart(false);
-                      router.push("/");
+                      router.push("/orders");
                     }, 2000);
                   }
                 } catch (error) {
@@ -326,8 +361,14 @@ export default function MyCart({ cart, setCart }) {
                   if (attempts < maxAttempts) {
                     setTimeout(checkOrderStatus, pollInterval);
                   } else {
-                    setError("⚠️ Unable to verify payment status. Please check your orders. Order ID: " + orderId);
+                    toast.success("✅ Order created! Please check your orders page for status.");
                     setIsProcessingPayment(false);
+                    // Redirect to orders page even if status check failed
+                    setTimeout(() => {
+                      fetchCart();
+                      setCart(false);
+                      router.push("/orders");
+                    }, 2000);
                   }
                 }
               };
@@ -368,6 +409,7 @@ export default function MyCart({ cart, setCart }) {
 
       if (!window.Razorpay) {
         setError("Razorpay SDK not loaded. Please refresh the page.");
+        setIsProcessingPayment(false);
         return;
       }
 
@@ -376,6 +418,7 @@ export default function MyCart({ cart, setCart }) {
       rzp.on('payment.failed', function (response) {
         const errorMsg = response.error?.description || response.error?.reason || response.error?.code || "Unknown error";
         setError(`Payment failed: ${errorMsg}`);
+        setIsProcessingPayment(false);
         alert(`Payment failed: ${errorMsg}`);
       });
 
@@ -467,19 +510,6 @@ export default function MyCart({ cart, setCart }) {
           </div>
         )}
 
-        {/* Promotional Banner */}
-        <div className="bg-[#89eb7c2c] text-center py-2">
-          <h6 className="text-sm md:text-base">⏰ Hurry, Your cart is reserved for 05:17 minutes!</h6>
-        </div>
-
-        <div className="bg-[#ebede57c] border-gray-400 border-t border-b py-2">
-          <div className="container mx-auto px-4 flex items-center justify-center gap-x-2 text-center">
-            <span>Earn</span>
-            <img src="/img/product/coin.webp" alt="coin" className="w-4 h-4" />
-            <span className="font-semibold text-base md:text-lg">50</span>
-            <span>Gaualla Milk Dairy Coins on this order</span>
-          </div>
-        </div>
 
         <div className="container mx-auto px-4 py-8">
           <div className="grid lg:grid-cols-3 gap-8">

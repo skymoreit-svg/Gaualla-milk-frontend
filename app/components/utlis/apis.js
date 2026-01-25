@@ -1,15 +1,22 @@
-export const baseurl='http://localhost:9002/api/user';
-export const imageurl='http://localhost:9002/uploads';
-export const imageurl2='http://localhost:9002';
+/**
+ * API Configuration
+ * 
+ * This file re-exports URLs from the centralized config.
+ * All URLs are now managed in: app/config/constants.js
+ * 
+ * @deprecated - Consider importing directly from '@/app/config/constants' for new code
+ */
 
-
-
-
-// export const baseurl = 'https://api.gauallamilk.com/api/user';
-// export const imageurl = 'https://api.gauallamilk.com/uploads';
-// export const imageurl2 = 'https://api.gauallamilk.com';
-
-// Import adminurl from adminapis instead of duplicating
-// For components that need adminurl, import from: app/admin/adminCompo/adminapis
-// This ensures a single source of truth for admin API URL
-export { adminurl } from '../../admin/adminCompo/adminapis';
+// Re-export from centralized config
+export {
+  baseurl,
+  imageurl,
+  imageurl2,
+  adminurl,
+  API_BASE_URL,
+  IMAGE_BASE_URL,
+  API_ENDPOINTS,
+  IMAGE_PATHS,
+  getImageUrl,
+  getUploadImageUrl,
+} from '../../config/constants';

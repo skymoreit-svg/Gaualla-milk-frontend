@@ -100,6 +100,14 @@ export default function MyNav() {
                   <Link href={elm.link} onClick={() => setSideBar(false)}>{elm.title}</Link>
                 </li>
               ))}
+              {userLogin && (
+                <li className="border-b border-gray-300 py-2">
+                  <Link href="/user/profile" onClick={() => setSideBar(false)} className="flex items-center gap-x-2">
+                    <RiUserLine className="text-lg" />
+                    My Profile
+                  </Link>
+                </li>
+              )}
               <div className=" mt-4 flex flex-col gap-y-2 text-lg text-gray-800 hover:text-gray-800 transition-colors duration-200 ">
                 <a href="tel: +91-8378-000052" className="flex items-center gap-x-2  hover:text-gray-800">
                   <MdOutlineLocalPhone className="text-lg" />
@@ -248,14 +256,21 @@ export default function MyNav() {
           )}
 
           {userLogin && !adminLogin && (
-            <li className="">
-              <button onClick={() => dispatch(openCartDrawer())} className="w-8 h-8 relative flex justify-center items-center rounded-full bg-[#b2e18c30] border border-[#62371f] cursor-pointer">
-                <BsCartPlus className="text-[#62371f]" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                  {cartCount}
-                </span>
-              </button>
-            </li>
+            <>
+              <li className="">
+                <Link href="/user/profile" className="w-8 h-8 flex justify-center items-center rounded-full border border-gray-400 hover:bg-[#F3F4F7] cursor-pointer">
+                  <RiUserLine className="text-gray-600" />
+                </Link>
+              </li>
+              <li className="">
+                <button onClick={() => dispatch(openCartDrawer())} className="w-8 h-8 relative flex justify-center items-center rounded-full bg-[#b2e18c30] border border-[#62371f] cursor-pointer">
+                  <BsCartPlus className="text-[#62371f]" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                </button>
+              </li>
+            </>
           )}
 
           <li className="xl:hidden">

@@ -10,6 +10,9 @@ import { useRouter, useParams } from "next/navigation";
 
 import toast from "react-hot-toast";
 
+// Enable credentials for all admin requests
+axios.defaults.withCredentials = true;
+
 const EditProductPage = () => {
   const router = useRouter();
   const params = useParams();
@@ -35,7 +38,9 @@ const EditProductPage = () => {
   // Fetch categories
   const getCategories = async () => {
     try {
-      const response = await axios.get(`${adminurl}/category`);
+      const response = await axios.get(`${adminurl}/category`, {
+        withCredentials: true
+      });
       const data = response.data;
       if (data.success) setCategories(data.category);
     } catch (e) {
@@ -46,35 +51,44 @@ const EditProductPage = () => {
   // Fetch single product
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`${adminurl}/product/product/${productId}`);
+      const response = await axios.get(`${adminurl}/product/id/${productId}`, {
+        withCredentials: true
+      });
       const data = response.data;
-      if (data.success) {
+      if (data.success && data.product) {
         const product = data.product;
+        console.log("Fetched product data:", product); // Debug log
         setForm({
-          category_id: product.category_id || "",
+          category_id: product.category_id ? String(product.category_id) : "",
           name: product.name || "",
           slug: product.slug || "",
           description: product.description || "",
-          price: product.price || "",
-          old_price: product.old_price || "",
-          stock: product.stock || "",
+          price: product.price ? String(product.price) : "",
+          old_price: product.old_price ? String(product.old_price) : "",
+          stock: product.stock ? String(product.stock) : "",
           unit_quantity: product.unit_quantity || "",
           details: product.details || "",
           images: null, // Will be handled separately for editing
-          one_time: product.one_time === 1,
+          one_time: product.one_time === 1 || product.one_time === "1" || product.one_time === true,
         });
+      } else {
+        toast.error("Product not found");
+        router.push("/admin/products");
       }
       setLoading(false);
     } catch (error) {
       console.error("Error fetching product:", error);
+      toast.error(error.response?.data?.message || "Failed to load product");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getCategories();
-    fetchProduct();
-  }, []);
+    if (productId) {
+      getCategories();
+      fetchProduct();
+    }
+  }, [productId]);
 
   // Auto-slugify when name changes
   useEffect(() => {
@@ -140,6 +154,7 @@ if (!form.stock) {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true
         }
       );
 
@@ -199,7 +214,7 @@ if (!form.stock) {
               >
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
+                  <option key={cat.id} value={String(cat.id)}>
                     {cat.name}
                   </option>
                 ))}

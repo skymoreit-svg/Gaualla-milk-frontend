@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CompleteProfileForm from "./CompleteProfileForm";
-import { FaBox, FaOpencart } from "react-icons/fa";
+import { FaBox, FaOpencart, FaShoppingBag } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
+import { LuPackage } from "react-icons/lu";
 
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -34,15 +35,16 @@ export default function UserProfile() {
 
 
   const tablles = [
-  
     {
-      title: "wishlist",
+      title: "Orders",
+      icon: <LuPackage />,
+      link: "/orders"
+    },
+    {
+      title: "Wishlist",
       icon: <FaBox />,
       link: "/wishlist"
     },
-
-
-
   ]
 
 
