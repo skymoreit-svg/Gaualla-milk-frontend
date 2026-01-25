@@ -5,12 +5,17 @@ import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash } from 'react-ic
 import { baseurl } from '../components/utlis/apis';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { GetUser } from '../store/userSlice';
+import toast from 'react-hot-toast';
 
-// axios.defaults.withCredentials=true;
+// Enable cookies in all requests
+axios.defaults.withCredentials = true;
 
 
 const SignUpPage = () => {
-    const route= useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -97,21 +102,38 @@ const [loader,setLoader]=useState(false)
   };
 
   const handleSubmit = async(e) => {
-setLoader(true)
+    setLoader(true);
     e.preventDefault();
-    if (validateForm()) {
-        const response = await axios.post(`${baseurl}/signup`,formData,{
-          withCredentials: true, 
-        })
-    const data= await response.data;
-   
-    if(data.success){
-route.push("/")
-    }else{
-
+    if (!validateForm()) {
+      setLoader(false);
+      return;
     }
- }
-        setLoader(false)
+
+    try {
+      const response = await axios.post(`${baseurl}/signup`, formData, {
+        withCredentials: true, 
+      });
+      const data = await response.data;
+   
+      if(data.success){
+        toast.success("Account created successfully!");
+        
+        // Refresh user state immediately after signup
+        dispatch(GetUser());
+        
+        // Small delay to ensure state is updated before redirect
+        setTimeout(() => {
+          router.push("/");
+        }, 100);
+      } else {
+        toast.error(data.message || "Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      toast.error(error.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoader(false);
+    }
   };
 
   return (

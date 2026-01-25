@@ -46,9 +46,11 @@ export default function MyNav() {
     if (!isLoading) {
       if (info?.success) {
         setUserLogin(true);
+      } else {
+        setUserLogin(false);
       }
     }
-  }, [isLoading]);
+  }, [isLoading, info]);
 
   // Detect admin login
   useEffect(() => {
