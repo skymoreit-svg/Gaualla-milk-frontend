@@ -167,7 +167,7 @@ const FavouriteProducts = () => {
 
   return (
     <div className="mt-20">
-      <div className="mx-5 lg:mx-28">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-7xl">
         {/* Tabs */}
         <div className="flex justify-between">
           <h6 className="text-center text-lg lg:text-4xl mb-3">Our all time Favourites</h6>
@@ -188,7 +188,7 @@ const FavouriteProducts = () => {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
@@ -213,16 +213,16 @@ const FavouriteProducts = () => {
 
                 <hr className="text-gray-300" />
 
-                <div className="flex justify-between">
-                  <div className="flex items-center gap-x-1 text-lg font-semibold text-gray-700">
-                    <span className="text-xl">₹ {product.price}</span>
-                    <span className="line-through font-normal text-base text-gray-700">
+                <div className="flex flex-col gap-1.5 sm:gap-2 min-w-0">
+                  <div className="flex items-center gap-x-1 text-sm sm:text-base lg:text-lg font-semibold text-gray-700 flex-shrink-0 min-w-0">
+                    <span className="text-base sm:text-lg lg:text-xl whitespace-nowrap">₹ {product.price}</span>
+                    <span className="line-through font-normal text-xs sm:text-sm lg:text-base text-gray-700 whitespace-nowrap">
                       ₹ {product.price + 50}
                     </span>
                   </div>
-                  <div className="flex text-yellow-400 items-center gap-x-1">
+                  <div className="flex text-yellow-400 items-center gap-x-0.5 flex-shrink-0">
                     {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} />
+                      <FaStar key={i} className="flex-shrink-0 w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
                     ))}
                   </div>
                 </div>

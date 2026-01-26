@@ -45,7 +45,7 @@ export default function FAQSection() {
   return (
     <section className="w-full bg-[#F3F1EC] py-16 lg:py-24">
       {/* Heading */}
-      <div className="text-center mb-14 px-6">
+      <div className="text-center mb-10 lg:mb-14 px-4 sm:px-6">
         <p className="text-lg md:text-xl text-gray-900 tracking-wide">
           Explore
         </p>
@@ -54,18 +54,18 @@ export default function FAQSection() {
         </h2>
       </div>
 
-      <div className="container mx-auto px-6 md:px-12 xl:px-32 flex flex-col md:flex-row gap-12 items-center">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-7xl flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
         {/* Image */}
-        <div className="w-full md:w-1/3">
+        <div className="w-full md:w-2/5 lg:w-2/5">
           <img
             src="/img/fa1.webp"
             alt="Gaualla Milk"
-            className="rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-auto rounded-xl shadow-lg hover:scale-105 transition-transform duration-300 object-cover"
           />
         </div>
 
         {/* FAQ */}
-        <div className="w-full md:w-2/3 space-y-4">
+        <div className="w-full md:w-3/5 lg:w-3/5 space-y-4">
           {faqs.map((elm, index) => (
             <div
               key={index}

@@ -40,7 +40,7 @@ export default function ProductAyurved() {
 
     return (
         <div className="relative categories bg-[#F3F1EC] py-10 lg:pt-16">
-            <div className="w-full relative z-10 container mx-auto px-5 md:px-12 xl:px-32">
+            <div className="w-full relative z-10 container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 max-w-7xl">
                 <div className="block lg:flex justify-between items-center mb-6">
                     <h6 className="text-center text-xl lg:text-4xl">Our all time Favourites</h6>
                     {/* <div className="flex justify-center space-x-2 lg:space-x-4 mt-2 lg:mt-0">
@@ -61,7 +61,7 @@ export default function ProductAyurved() {
                 </div>
 
                 {productData.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-2 lg:gap-y-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
                         {productData.map((product) => (
                             <ProductAyurvedCard 
                                 key={product.id} 

@@ -172,7 +172,7 @@ export default function ProductAyurvedCard({ product }) {
     <>
       <Link
         href={`/product/${slug}`}
-        className="card group shadow-lg relative hover:shadow-xl transition-shadow bg-white duration-300 rounded-lg overflow-hidden  h-full min-h-[150px] lg:min-h-[520px] flex flex-col"
+        className="card group shadow-lg relative hover:shadow-xl transition-shadow bg-white duration-300 rounded-lg overflow-hidden h-full min-h-[280px] sm:min-h-[320px] lg:min-h-[520px] flex flex-col w-full"
       >
         {/* Image Section */}
         <div className="relative ">
@@ -184,18 +184,19 @@ export default function ProductAyurvedCard({ product }) {
           <img
             src={`${imageurl}/${images?.[0]}`}
             alt={name}
-            className="w-full hover:scale-105 h-[120px] lg:h-[250px] object-contain transition-opacity duration-600 pt-2"
+            className="w-full hover:scale-105 h-[140px] sm:h-[160px] md:h-[200px] lg:h-[280px] xl:h-[300px] object-contain transition-opacity duration-600 pt-2"
           />
         </div>
 
         {/* Content Section */}
-        <div className="p-4 space-y-2 bg-white flex flex-col flex-grow">
-          <div className="flex justify-between">
-            <p className="font-semibold text-sm lg:text-lg text-gray-800">{name}</p>
+        <div className="p-3 sm:p-4 space-y-2 bg-white flex flex-col flex-grow min-w-0">
+          <div className="flex justify-between min-w-0">
+            <p className="font-semibold text-sm lg:text-lg text-gray-800 truncate pr-2">{name}</p>
           </div>
 
-          <div className="text-gray-600 text-base leading-relaxed hidden lg:block">
+          <div className="text-gray-600 text-xs sm:text-sm lg:text-base leading-relaxed hidden lg:block min-w-0">
             <div
+              className="line-clamp-2"
               dangerouslySetInnerHTML={{
                 __html: isDescriptionExpanded
                   ? description
@@ -204,37 +205,38 @@ export default function ProductAyurvedCard({ product }) {
             />
             {description?.length > 50 && (
               <button
-                className="text-blue-500 ml-1"
-                onClick={() => setDescriptionExpanded(!isDescriptionExpanded)}
+                className="text-blue-500 ml-1 text-xs"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDescriptionExpanded(!isDescriptionExpanded);
+                }}
               >
                 {isDescriptionExpanded ? "Show less" : "Read more"}
               </button>
             )}
           </div>
 
-          <hr className="text-gray-300" />
+          <hr className="text-gray-300 my-1" />
 
           {/* Price + Rating */}
-          <div className="flex flex-col gap-1 lg:flex-row lg:items-center lg:justify-between mt-auto">
+          <div className="flex flex-col gap-1.5 sm:gap-2 mt-auto min-w-0">
             {/* Prices */}
-            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-2">
-              <span className="text-sm sm:text-base lg:text-xl font-semibold text-gray-800">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 flex-shrink-0 min-w-0">
+              <span className="text-xs sm:text-sm lg:text-lg xl:text-xl font-semibold text-gray-800 whitespace-nowrap">
                 ₹{price}
               </span>
 
               {old_price && (
-                <span className="text-[10px] sm:text-xs lg:text-base 
-                       line-through text-gray-400
-                       lg:inline block">
+                <span className="text-[10px] sm:text-xs lg:text-sm line-through text-gray-400 whitespace-nowrap">
                   ₹{old_price}
                 </span>
               )}
             </div>
 
             {/* Rating */}
-            <div className="flex text-yellow-400 text-xs sm:text-sm lg:text-base">
+            <div className="flex text-yellow-400 text-[10px] sm:text-xs lg:text-sm items-center gap-0.5 flex-shrink-0">
               {[...Array(5)].map((_, i) => (
-                <FaStar key={i} />
+                <FaStar key={i} className="flex-shrink-0 w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
               ))}
             </div>
           </div>
@@ -242,21 +244,24 @@ export default function ProductAyurvedCard({ product }) {
 
 
           {/* Buttons */}
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2 mt-2 sm:mt-3">
             <button
-              onClick={() => handleWishListToogle(product)}
-              className="border p-1 rounded bg-white absolute top-2 right-2 lg:static"
+              onClick={(e) => {
+                e.preventDefault();
+                handleWishListToogle(product);
+              }}
+              className="border p-1.5 sm:p-2 rounded bg-white absolute top-2 right-2 lg:static z-10 flex-shrink-0 hover:bg-gray-50 transition"
             >
               {added ? (
-                <FaHeart className="text-red-500" />
+                <FaHeart className="text-red-500 text-xs sm:text-sm" />
               ) : (
-                <FaRegHeart />
+                <FaRegHeart className="text-xs sm:text-sm" />
               )}
             </button>
 
-            <p className="text-xs sm:text-sm lg:text-base text-white w-full py-2 flex items-center justify-center rounded-md bg-[#62371f] hover:bg-[#69a14fe7] transition">
-              <IoMdCart className="mr-1" />
-              View product
+            <p className="text-xs sm:text-sm lg:text-base text-white w-full py-2 sm:py-2.5 flex items-center justify-center rounded-md bg-[#62371f] hover:bg-[#69a14fe7] transition min-w-0">
+              <IoMdCart className="mr-1 flex-shrink-0" />
+              <span className="truncate">View product</span>
             </p>
           </div>
         </div>
