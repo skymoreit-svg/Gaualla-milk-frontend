@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { 
+import {
   ArrowLeft,
-  Package, 
-  CheckCircle, 
-  Clock, 
-  XCircle, 
+  Package,
+  CheckCircle,
+  Clock,
+  XCircle,
   Truck,
   Phone,
   Mail,
@@ -203,8 +203,9 @@ const OrderDetailPage = () => {
                     <Phone className="w-5 h-5" />
                     <div>
                       <p className="text-sm text-orange-100">Phone</p>
-                      <a href="tel:+919876543210" className="text-lg font-semibold hover:underline">
-                        +91 98765 43210
+                      <a href="tel:+91 8378-000052
+" className="text-lg font-semibold hover:underline">
+                        +91 8378-000052
                       </a>
                     </div>
                   </div>
@@ -212,8 +213,8 @@ const OrderDetailPage = () => {
                     <Mail className="w-5 h-5" />
                     <div>
                       <p className="text-sm text-orange-100">Email</p>
-                      <a href="mailto:support@gauallamilk.com" className="text-lg font-semibold hover:underline">
-                        support@gauallamilk.com
+                      <a href="mailto:gauallamilkpvtltd@gmail.com" className="text-lg font-semibold hover:underline">
+                        gauallamilkpvtltd@gmail.com
                       </a>
                     </div>
                   </div>
@@ -328,14 +329,16 @@ const OrderDetailPage = () => {
               <div className="space-y-3 text-sm">
                 <div>
                   <p className="text-blue-100 mb-1">Phone Support</p>
-                  <a href="tel:+919876543210" className="text-lg font-semibold hover:underline block">
-                    +91 98765 43210
+                  <a href="tel:+91 8378-000052
+" className="text-lg font-semibold hover:underline block">
+                    +91 8378-000052
+
                   </a>
                 </div>
                 <div>
                   <p className="text-blue-100 mb-1">Email Support</p>
-                  <a href="mailto:support@gauallamilk.com" className="text-lg font-semibold hover:underline block">
-                    support@gauallamilk.com
+                  <a href="mailto:gauallamilkpvtltd@gmail.com" className="text-lg font-semibold hover:underline block">
+                    gauallamilkpvtltd@gmail.com
                   </a>
                 </div>
                 <div className="pt-3 border-t border-white/20">

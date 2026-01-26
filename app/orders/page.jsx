@@ -155,8 +155,9 @@ const OrdersPage = () => {
               </div>
               <div>
                 <p className="text-sm text-blue-100">Phone</p>
-                <a href="tel:+919876543210" className="text-lg font-semibold hover:underline">
-                  +91 98765 43210
+                <a href="tel:+91 8378-000052
+" className="text-lg font-semibold hover:underline">
+                  +91 8378-000052
                 </a>
               </div>
             </div>
@@ -166,8 +167,8 @@ const OrdersPage = () => {
               </div>
               <div>
                 <p className="text-sm text-blue-100">Email</p>
-                <a href="mailto:support@gauallamilk.com" className="text-lg font-semibold hover:underline">
-                  support@gauallamilk.com
+                <a href="mailto:gauallamilkpvtltd@gmail.com" className="text-lg font-semibold hover:underline">
+                  gauallamilkpvtltd@gmail.com
                 </a>
               </div>
             </div>
