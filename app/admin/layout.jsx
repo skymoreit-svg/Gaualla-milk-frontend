@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./adminCompo/Sidebar";
 import { useRouter, usePathname } from "next/navigation";
 import { adminurl } from "./adminCompo/adminapis";
+import { Toaster } from "react-hot-toast";
 
 export default function Layout({ children }) {
   const router = useRouter();
@@ -12,12 +13,11 @@ export default function Layout({ children }) {
 
   // Normalize pathname to handle trailing slashes and case
   const normalizedPath = pathname?.replace(/\/$/, "").toLowerCase() || "";
-  // Check for both /admin and /admin/login (case-insensitive)
-  const isLoginPage = normalizedPath === "/admin" || normalizedPath === "/admin/login";
+  const isLoginPage =
+    normalizedPath === "/admin" || normalizedPath === "/admin/login";
 
   useEffect(() => {
     const checkAuth = async () => {
-      // Don't run auth check on login page
       if (isLoginPage) {
         setAllowed(true);
         setLoading(false);
@@ -32,27 +32,32 @@ export default function Layout({ children }) {
         const data = await res.json();
 
         if (!res.ok || !data.success) {
-          // Only redirect if not already on login page to prevent loops
-          if (normalizedPath !== "/admin" && normalizedPath !== "/admin/login") {
+          if (
+            normalizedPath !== "/admin" &&
+            normalizedPath !== "/admin/login"
+          ) {
             router.push("/admin");
           }
           setAllowed(false);
           return;
         }
 
-        // If authenticated and on login page, redirect to dashboard
-        if (normalizedPath === "/admin" || normalizedPath === "/admin/login") {
+        if (
+          normalizedPath === "/admin" ||
+          normalizedPath === "/admin/login"
+        ) {
           router.push("/admin/dashboard");
           setAllowed(false);
           return;
         }
 
-        // Authenticated and on protected page - allow access
         setAllowed(true);
       } catch (err) {
         console.error("Auth check error:", err);
-        // Only redirect if not already on login page
-        if (normalizedPath !== "/admin" && normalizedPath !== "/admin/login") {
+        if (
+          normalizedPath !== "/admin" &&
+          normalizedPath !== "/admin/login"
+        ) {
           router.push("/admin");
         }
       } finally {
@@ -63,12 +68,17 @@ export default function Layout({ children }) {
     checkAuth();
   }, [pathname, router, isLoginPage, normalizedPath]);
 
-  // For login page, show immediately (no sidebar)
+  // Login page → no sidebar
   if (isLoginPage) {
-    return <>{children}</>;
+    return (
+      <>
+        {children}
+        <Toaster position="top-right" />
+      </>
+    );
   }
 
-  // Show loading state while checking auth for other pages
+  // Loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -76,11 +86,11 @@ export default function Layout({ children }) {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
+        <Toaster position="top-right" />
       </div>
     );
   }
 
-  // Prevent page flicker for protected pages
   if (!allowed) return null;
 
   return (
@@ -89,6 +99,9 @@ export default function Layout({ children }) {
       <div className="w-full h-screen overflow-auto pt-12 md:pt-0">
         {children}
       </div>
+
+      {/* Toast container (ONE TIME for admin) */}
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }
