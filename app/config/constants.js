@@ -75,3 +75,7 @@ export const getUploadImageUrl = (imagePath) => {
   const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
   return `${IMAGE_PATHS.UPLOADS}/${cleanPath}`;
 };
+
+
+// Add this at the bottom or top
+export const GOOGLE_MAPS_KEY = "AIzaSyDUns7-K4KmSoWv5zsQnqzbQ814yCMWZpo";

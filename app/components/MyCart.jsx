@@ -12,6 +12,7 @@ import { baseurl, imageurl } from "./utlis/apis";
 import { useRouter } from "next/navigation";
 import AddressForm from "./AddressForm";
 import toast from "react-hot-toast";
+import MapModal from "./MapModal";
 
 // Enable cookies in all requests
 axios.defaults.withCredentials = true;
@@ -22,18 +23,27 @@ export default function MyCart({ cart, setCart }) {
   const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  
+
   // Address management states
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [allAddress, setAllAddress] = useState([]);
   const [defaultAddress, setDefaultAddress] = useState(null);
   const [addressLoading, setAddressLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   // Order and payment states
   const [selectedFrequency, setSelectedFrequency] = useState('one_time');
   const [subscriptionDuration, setSubscriptionDuration] = useState(1);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+
+
+  // Map modal states
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [mapLocation, setMapLocation] = useState(null);
+
+
+
 
   const fetchCart = useCallback(async () => {
     try {
@@ -77,36 +87,36 @@ export default function MyCart({ cart, setCart }) {
     }
   };
 
- const handelcartquentity = async (increment, id) => {
-  // 1Optimistic UI update
-  setCartData((prev) =>
-    prev.map((item) => {
-      if (item.cart_id === id) {
-        const newQty = increment
-          ? item.quantity + 1
-          : Math.max(1, item.quantity - 1);
+  const handelcartquentity = async (increment, id) => {
+    // 1Optimistic UI update
+    setCartData((prev) =>
+      prev.map((item) => {
+        if (item.cart_id === id) {
+          const newQty = increment
+            ? item.quantity + 1
+            : Math.max(1, item.quantity - 1);
 
-        return {
-          ...item,
-          quantity: newQty,
-          total_price: newQty * item.cart_price,
-        };
-      }
-      return item;
-    })
-  );
+          return {
+            ...item,
+            quantity: newQty,
+            total_price: newQty * item.cart_price,
+          };
+        }
+        return item;
+      })
+    );
 
-  // Update backend silently
-  try {
-    await axios.put(`${baseurl}/cart/updatecart/${id}`, {
-      increment,
-    });
-  } catch (error) {
-    console.error("Quantity update failed", error);
-    // optional: refetch cart on error
-    fetchCart();
-  }
-};
+    // Update backend silently
+    try {
+      await axios.put(`${baseurl}/cart/updatecart/${id}`, {
+        increment,
+      });
+    } catch (error) {
+      console.error("Quantity update failed", error);
+      // optional: refetch cart on error
+      fetchCart();
+    }
+  };
 
   // Fetch addresses
   const fetchaddress = useCallback(async () => {
@@ -161,13 +171,13 @@ export default function MyCart({ cart, setCart }) {
 
   const deliveryCharge = 0;
   const handlingCharge = 0;
-  
+
   // Calculate total based on subscription duration
   const totalToPay = useMemo(() => {
     const duration = Number(subscriptionDuration || 1);
     return derivedSubTotal * (Number.isFinite(duration) && duration > 0 ? duration : 1);
   }, [derivedSubTotal, subscriptionDuration]);
-  
+
   const grandTotal = totalToPay + deliveryCharge + handlingCharge;
   const hasItems = Array.isArray(cartData) && cartData.length > 0;
 
@@ -266,7 +276,7 @@ export default function MyCart({ cart, setCart }) {
           try {
             setIsProcessingPayment(true);
             setError('');
-            
+
             // Create order with pending status (webhook will confirm payment)
             const verifyRes = await axios.post(`${baseurl}/order/verify`, {
               razorpay_order_id: response.razorpay_order_id,
@@ -284,7 +294,7 @@ export default function MyCart({ cart, setCart }) {
 
             if (verifyRes.data.success && verifyRes.data.order_id) {
               const orderId = verifyRes.data.order_id;
-              
+
               // Clear cart items immediately after order creation
               try {
                 await axios.delete(`${baseurl}/cart/clearall`, {
@@ -295,23 +305,23 @@ export default function MyCart({ cart, setCart }) {
                 console.error("Error clearing cart:", clearError);
                 // Non-critical error, continue anyway
               }
-              
+
               // Show success message immediately
               toast.success("✅ Payment received! Confirming order...");
               setError("⏳ Processing payment confirmation... Please wait.");
-              
+
               // Poll for order status (webhook will update payment_status to 'paid')
               let attempts = 0;
               const maxAttempts = 30; // 30 seconds max wait
               const pollInterval = 1000; // Check every 1 second
-              
+
               const checkOrderStatus = async () => {
                 try {
                   const statusRes = await axios.get(`${baseurl}/order/getsingleorder/${orderId}`);
-                  
+
                   if (statusRes.data.success && statusRes.data.order) {
                     const order = statusRes.data.order;
-                    
+
                     if (order.payment_status === 'paid') {
                       // Webhook confirmed payment - SUCCESS!
                       toast.success("✅ Payment Successful! Your order has been confirmed.");
@@ -339,7 +349,7 @@ export default function MyCart({ cart, setCart }) {
                       return;
                     }
                   }
-                  
+
                   // Continue polling if not confirmed yet
                   attempts++;
                   if (attempts < maxAttempts) {
@@ -372,7 +382,7 @@ export default function MyCart({ cart, setCart }) {
                   }
                 }
               };
-              
+
               // Start polling after a short delay (give webhook time to arrive)
               setTimeout(checkOrderStatus, 2000);
             } else {
@@ -397,7 +407,7 @@ export default function MyCart({ cart, setCart }) {
           color: "#60BE74",
         },
         modal: {
-          ondismiss: function() {
+          ondismiss: function () {
             setError("Payment was cancelled. Please try again.");
           }
         },
@@ -414,7 +424,7 @@ export default function MyCart({ cart, setCart }) {
       }
 
       const rzp = new window.Razorpay(options);
-      
+
       rzp.on('payment.failed', function (response) {
         const errorMsg = response.error?.description || response.error?.reason || response.error?.code || "Unknown error";
         setError(`Payment failed: ${errorMsg}`);
@@ -484,8 +494,8 @@ export default function MyCart({ cart, setCart }) {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Checkout</h1>
-              <button 
-                onClick={() => setCart(false)} 
+              <button
+                onClick={() => setCart(false)}
                 className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <RxCross2 />
@@ -569,9 +579,39 @@ export default function MyCart({ cart, setCart }) {
 
               {/* Address Section */}
               <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
-                  <FaMapMarkerAlt className="mr-3 text-blue-500" />
-                  Delivery Address
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FaMapMarkerAlt className="mr-3 text-blue-500" />
+                    Delivery Address
+                  </div>
+
+                  {/* Map button inside header */}
+                  {!showNewAddress && allAddress.length > 0 && (
+                    <button
+                      onClick={() => {
+                        if (!navigator.geolocation) {
+                          alert("Geolocation is not supported by your browser");
+                          return;
+                        }
+
+                        navigator.geolocation.getCurrentPosition(
+                          (position) => {
+                            setMapLocation({
+                              lat: position.coords.latitude,
+                              lng: position.coords.longitude,
+                            });
+                            setShowMapModal(true);
+                          },
+                          () => {
+                            alert("Please allow location access to use map");
+                          }
+                        );
+                      }}
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-4 rounded-lg text-sm flex items-center shadow-md"
+                    >
+                      📍 Set on Map
+                    </button>
+                  )}
                 </h3>
 
                 {!showNewAddress ? (
@@ -593,9 +633,8 @@ export default function MyCart({ cart, setCart }) {
                           <div
                             key={addr.id}
                             className={`p-4 rounded-2xl shadow-md border transition cursor-pointer
-                              ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
-                              ${defaultAddress === addr.id ? "ring-2 ring-[#60BE74]" : ""}
-                            `}
+                ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
+                ${defaultAddress === addr.id ? "ring-2 ring-[#60BE74]" : ""}`}
                             onClick={() => setDefaultAddress(addr.id)}
                           >
                             <div className="flex items-center justify-between">
@@ -610,12 +649,12 @@ export default function MyCart({ cart, setCart }) {
                               {addr.is_default === 1 ? (
                                 <MdOutlineStar className="text-yellow-500 text-xl" />
                               ) : (
-                                <MdOutlineStarBorder 
+                                <MdOutlineStarBorder
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handelDefault(addr.id);
-                                  }} 
-                                  className="text-gray-400 text-xl cursor-pointer hover:text-yellow-500" 
+                                  }}
+                                  className="text-gray-400 text-xl cursor-pointer hover:text-yellow-500"
                                 />
                               )}
                             </div>
@@ -623,8 +662,12 @@ export default function MyCart({ cart, setCart }) {
                             <p className="mt-2 font-semibold text-gray-800">
                               {addr.first_name} {addr.last_name}
                             </p>
-                            <p className="text-gray-600 text-sm">{addr.street}, {addr.city}</p>
-                            <p className="text-gray-600 text-sm">{addr.state}, {addr.zip_code}</p>
+                            <p className="text-gray-600 text-sm">
+                              {addr.street}, {addr.city}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                              {addr.state}, {addr.zip_code}
+                            </p>
                             <p className="text-gray-600 text-sm">{addr.country}</p>
                             <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
                           </div>
@@ -636,15 +679,35 @@ export default function MyCart({ cart, setCart }) {
                       <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
                         <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
                         <p className="text-gray-500">No addresses saved yet.</p>
-                        <p className="text-gray-400 text-sm mt-1">Please add an address to continue with your order.</p>
+                        <p className="text-gray-400 text-sm mt-1">
+                          Please add an address to continue with your order.
+                        </p>
                       </div>
                     )}
                   </>
                 ) : (
-                  <AddressForm onCancel={handleCancelForm} />
+                  <AddressForm
+                    onCancel={handleCancelForm}
+                    mapLocation={mapLocation}
+                  />
+                )}
+
+                {/* MAP MODAL */}
+                {showMapModal && (
+                  <MapModal
+                    initialLocation={mapLocation}
+                    onClose={() => setShowMapModal(false)}
+                    onConfirm={(location) => {
+                      setMapLocation(location); // Store complete location data
+                      setShowNewAddress(true);
+                      setShowMapModal(false);
+                    }}
+                  />
                 )}
               </div>
             </div>
+
+
 
             {/* Right Column - Order Summary */}
             <div className="lg:col-span-1">
