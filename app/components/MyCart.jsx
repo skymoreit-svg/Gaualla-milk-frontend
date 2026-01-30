@@ -42,6 +42,27 @@ export default function MyCart({ cart, setCart }) {
   const [showMapModal, setShowMapModal] = useState(false);
   const [mapLocation, setMapLocation] = useState(null);
 
+  
+
+  // Alternative days calendar states
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  // store selected dates as an array of Date objects
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [currentPickerMonth, setCurrentPickerMonth] = useState(new Date());
+  const [alternativeDaysDuration, setAlternativeDaysDuration] = useState(null);
+
+  // // Disable background scrolling when date picker modal is open
+  // useEffect(() => {
+  //   if (typeof window === 'undefined') return;
+  //   const originalOverflow = document.body.style.overflow;
+  //   if (showDatePicker) {
+  //     document.body.style.overflow = 'hidden';
+  //   }
+  //   return () => {
+  //     document.body.style.overflow = originalOverflow || '';
+  //   };
+  // }, [showDatePicker]);
+
 
 
 
@@ -172,11 +193,17 @@ export default function MyCart({ cart, setCart }) {
   const deliveryCharge = 0;
   const handlingCharge = 0;
 
-  // Calculate total based on subscription duration
+  // Calculate total to pay.
+  // If user selected custom dates in the calendar, those dates override other options
+  // and total is `singleDayPrice * selectedDates.length`.
   const totalToPay = useMemo(() => {
+    const singleDayPrice = Number(derivedSubTotal || 0);
+    if (Array.isArray(selectedDates) && selectedDates.length > 0) {
+      return singleDayPrice * selectedDates.length;
+    }
     const duration = Number(subscriptionDuration || 1);
-    return derivedSubTotal * (Number.isFinite(duration) && duration > 0 ? duration : 1);
-  }, [derivedSubTotal, subscriptionDuration]);
+    return singleDayPrice * (Number.isFinite(duration) && duration > 0 ? duration : 1);
+  }, [derivedSubTotal, subscriptionDuration, selectedDates.length]);
 
   const grandTotal = totalToPay + deliveryCharge + handlingCharge;
   const hasItems = Array.isArray(cartData) && cartData.length > 0;
@@ -285,6 +312,7 @@ export default function MyCart({ cart, setCart }) {
               address_id: defaultAddress,
               total_amount: amountToPay,
               type: selectedFrequency,
+               selectedDates: selectedFrequency === 'alternative' ? selectedDates : [], 
               cart_items: (Array.isArray(cartData) ? cartData : []).map((item) => ({
                 product_id: item.product_id,
                 quantity: item.quantity,
@@ -439,6 +467,57 @@ export default function MyCart({ cart, setCart }) {
     } finally {
       setIsProcessingPayment(false);
     }
+  };
+
+  // Handle date selection for alternative days (toggle individual dates)
+  const handleDateSelect = (date) => {
+    if (!date) return;
+    // keep existing behaviour: prevent selecting past dates
+    if (date < new Date(new Date().setHours(0,0,0,0))) return;
+
+    setSelectedDates((prev) => {
+      const exists = prev.some((d) => d.getTime() === date.getTime());
+      if (exists) {
+        return prev.filter((d) => d.getTime() !== date.getTime());
+      }
+      return [...prev, date];
+    });
+  };
+
+  const confirmDates = () => {
+    // simply close the modal and keep selected dates
+    setShowDatePicker(false);
+  };
+
+  const isDateSelected = (date) => {
+    if (!date) return false;
+    return selectedDates.some((d) => d.getTime() === date.getTime());
+  };
+
+  const getDaysInMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const generateCalendarDays = () => {
+    const days = [];
+    const daysInMonth = getDaysInMonth(currentPickerMonth);
+    const firstDay = getFirstDayOfMonth(currentPickerMonth);
+
+    // Empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+
+    // Days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth(), i));
+    }
+
+    return days;
   };
 
   // ────────────────────────────────────────────────
@@ -704,6 +783,109 @@ export default function MyCart({ cart, setCart }) {
                     }}
                   />
                 )}
+
+                {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS */}
+                {showDatePicker && (
+                  <div className="fixed inset-0 bg-white/60 backdrop-blur-xs flex items-center justify-center z-[9999] p-4">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-4">Select Alternative Days</h3>
+                      
+
+                      {/* Month/Year Navigation */}
+                      <div className="flex justify-between items-center mb-4">
+                        <button
+                          onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() - 1))}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                        >
+                          ← Prev
+                        </button>
+                        <span className="text-gray-800 font-semibold">
+                          {currentPickerMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                        </span>
+                        <button
+                          onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() + 1))}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                        >
+                          Next →
+                        </button>
+                      </div>
+
+                      {/* Calendar Grid */}
+                      <div className="grid grid-cols-7 gap-2 mb-4">
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                          <div key={day} className="text-center text-xs font-bold text-gray-600">
+                            {day}
+                          </div>
+                        ))}
+                        {generateCalendarDays().map((date, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => date && handleDateSelect(date)}
+                            disabled={!date}
+                            className={`p-2 rounded text-sm font-medium transition-colors ${
+                              !date
+                                ? 'text-gray-300 cursor-default'
+                                : isDateSelected(date)
+                                ? 'bg-green-500 text-white'
+                                : date < new Date()
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
+                            }`}
+                          >
+                            {date ? date.getDate() : ''}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Selected Dates Display */}
+                      {selectedDates && selectedDates.length > 0 ? (
+                        <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                          <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
+                          {selectedDates
+                            .slice()
+                            .sort((a,b) => a.getTime() - b.getTime())
+                            .map((d) => (
+                              <p key={d.getTime()} className="text-sm text-gray-600">{d.toLocaleDateString()}</p>
+                            ))}
+                        </div>
+                      ) : (
+                        <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                          <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
+                          <p className="text-sm text-gray-600">None</p>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => {
+                            setShowDatePicker(false);
+                            setSelectedDates([]);
+                            setCurrentPickerMonth(new Date());
+                          }}
+                          className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Cancel
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedDates([])}
+                          className="flex-1 bg-yellow-200 hover:bg-yellow-300 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Clear All
+                        </button>
+
+                        <button
+                          onClick={confirmDates}
+                          disabled={selectedDates.length === 0}
+                          className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -765,7 +947,7 @@ export default function MyCart({ cart, setCart }) {
                     <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
                     <div className="flex flex-col space-y-2">
                       <button
-                        onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
+                        onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
                           ? 'bg-red-100 text-red-700 border border-red-300'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
@@ -773,7 +955,7 @@ export default function MyCart({ cart, setCart }) {
                         One Time
                       </button>
                       <button
-                        onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
+                        onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
                           ? 'bg-green-100 text-green-700 border border-green-300'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
@@ -781,7 +963,11 @@ export default function MyCart({ cart, setCart }) {
                         30 Days
                       </button>
                       <button
-                        onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
+                        onClick={() => { 
+                          setSelectedFrequency('alternative'); 
+                          setSubscriptionDuration(15);
+                          setShowDatePicker(true);
+                        }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
                           ? 'bg-green-100 text-green-700 border border-green-300'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}

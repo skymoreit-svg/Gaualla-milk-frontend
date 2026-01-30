@@ -533,6 +533,22 @@ const OrderDetailPage = () => {
                   <span className="font-semibold text-gray-700">Order Type:</span>
                   <p className="text-gray-600 capitalize">{order.type || "onetime"}</p>
                 </div>
+                {order.type === 'alternative' && order.alternative_dates && order.alternative_dates.length > 0 && (
+                  <div>
+                    <span className="font-semibold text-gray-700">Selected Dates:</span>
+                    <div className="text-gray-600 mt-2">
+                      {order.alternative_dates.map((date, index) => (
+                        <p key={index} className="py-1">
+                          {new Date(date).toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div>
                   <span className="font-semibold text-gray-700">Created:</span>
                   <p className="text-gray-600">{formatDate(order.created_at)}</p>
