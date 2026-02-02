@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaHome, FaBuilding, FaExclamationTriangle, FaSpinner } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
@@ -42,7 +43,7 @@ export default function MyCart({ cart, setCart }) {
   const [showMapModal, setShowMapModal] = useState(false);
   const [mapLocation, setMapLocation] = useState(null);
 
-  
+
 
   // Alternative days calendar states
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -51,17 +52,25 @@ export default function MyCart({ cart, setCart }) {
   const [currentPickerMonth, setCurrentPickerMonth] = useState(new Date());
   const [alternativeDaysDuration, setAlternativeDaysDuration] = useState(null);
 
-  // // Disable background scrolling when date picker modal is open
-  // useEffect(() => {
-  //   if (typeof window === 'undefined') return;
-  //   const originalOverflow = document.body.style.overflow;
-  //   if (showDatePicker) {
-  //     document.body.style.overflow = 'hidden';
-  //   }
-  //   return () => {
-  //     document.body.style.overflow = originalOverflow || '';
-  //   };
-  // }, [showDatePicker]);
+  // Disable background scrolling when date picker modal is open
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (showDatePicker) {
+      // Disable scrolling completely
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Restore scrolling
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [showDatePicker]);
 
 
 
@@ -312,7 +321,7 @@ export default function MyCart({ cart, setCart }) {
               address_id: defaultAddress,
               total_amount: amountToPay,
               type: selectedFrequency,
-               selectedDates: selectedFrequency === 'alternative' ? selectedDates : [], 
+              selectedDates: selectedFrequency === 'alternative' ? selectedDates : [],
               cart_items: (Array.isArray(cartData) ? cartData : []).map((item) => ({
                 product_id: item.product_id,
                 quantity: item.quantity,
@@ -473,7 +482,7 @@ export default function MyCart({ cart, setCart }) {
   const handleDateSelect = (date) => {
     if (!date) return;
     // keep existing behaviour: prevent selecting past dates
-    if (date < new Date(new Date().setHours(0,0,0,0))) return;
+    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
 
     setSelectedDates((prev) => {
       const exists = prev.some((d) => d.getTime() === date.getTime());
@@ -784,12 +793,12 @@ export default function MyCart({ cart, setCart }) {
                   />
                 )}
 
-                {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS */}
-                {showDatePicker && (
-                  <div className="fixed inset-0 bg-white/60 backdrop-blur-xs flex items-center justify-center z-[9999] p-4">
-                    <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6">
+                {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS - Rendered at document root via portal */}
+                {showDatePicker && typeof document !== 'undefined' && createPortal(
+                  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
+                    <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
                       <h3 className="text-xl font-bold text-gray-800 mb-4">Select Alternative Days</h3>
-                      
+
 
                       {/* Month/Year Navigation */}
                       <div className="flex justify-between items-center mb-4">
@@ -822,15 +831,14 @@ export default function MyCart({ cart, setCart }) {
                             key={idx}
                             onClick={() => date && handleDateSelect(date)}
                             disabled={!date}
-                            className={`p-2 rounded text-sm font-medium transition-colors ${
-                              !date
-                                ? 'text-gray-300 cursor-default'
-                                : isDateSelected(date)
+                            className={`p-2 rounded text-sm font-medium transition-colors ${!date
+                              ? 'text-gray-300 cursor-default'
+                              : isDateSelected(date)
                                 ? 'bg-green-500 text-white'
                                 : date < new Date()
-                                ? 'text-gray-400 cursor-not-allowed'
-                                : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
-                            }`}
+                                  ? 'text-gray-400 cursor-not-allowed'
+                                  : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
+                              }`}
                           >
                             {date ? date.getDate() : ''}
                           </button>
@@ -843,7 +851,7 @@ export default function MyCart({ cart, setCart }) {
                           <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
                           {selectedDates
                             .slice()
-                            .sort((a,b) => a.getTime() - b.getTime())
+                            .sort((a, b) => a.getTime() - b.getTime())
                             .map((d) => (
                               <p key={d.getTime()} className="text-sm text-gray-600">{d.toLocaleDateString()}</p>
                             ))}
@@ -885,7 +893,7 @@ export default function MyCart({ cart, setCart }) {
                       </div>
                     </div>
                   </div>
-                )}
+                  , document.body)}
               </div>
             </div>
 
@@ -963,8 +971,8 @@ export default function MyCart({ cart, setCart }) {
                         30 Days
                       </button>
                       <button
-                        onClick={() => { 
-                          setSelectedFrequency('alternative'); 
+                        onClick={() => {
+                          setSelectedFrequency('alternative');
                           setSubscriptionDuration(15);
                           setShowDatePicker(true);
                         }}
