@@ -12,6 +12,7 @@ const containerStyle = {
 export default function OrderMapModal({ isOpen, onClose, latitude, longitude, address }) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: GOOGLE_MAPS_KEY,
+    id: "google-map-script",
   });
 
   if (!isOpen) return null;

@@ -263,6 +263,61 @@ export default function MyCart({ cart, setCart }) {
       return;
     }
 
+    const shouldBypassPayment =
+      process.env.NEXT_PUBLIC_BYPASS_PAYMENT === "true" ||
+      process.env.NODE_ENV !== "production";
+
+    if (shouldBypassPayment) {
+      try {
+        setIsProcessingPayment(true);
+        setError("");
+
+        const payload = {
+          address_id: defaultAddress,
+          total_amount: parseFloat(grandTotal).toFixed(2),
+          type: selectedFrequency,
+          selectedDates: selectedFrequency === "alternative"
+            ? selectedDates.map((d) => d.toISOString())
+            : [],
+          cart_items: (Array.isArray(cartData) ? cartData : []).map((item) => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.cart_price,
+          })),
+        };
+
+        const { data } = await axios.post(`${baseurl}/order/create-dev`, payload, {
+          withCredentials: true,
+        });
+
+        if (!data.success) {
+          setError(data.message || "Failed to place order in dev mode");
+          return;
+        }
+
+        toast.success("Order placed (development payment bypass)");
+
+        try {
+          await axios.delete(`${baseurl}/cart/clearall`, { withCredentials: true });
+        } catch (clearError) {
+          console.error("Error clearing cart:", clearError);
+        }
+
+        fetchCart();
+        setCart(false);
+        setTimeout(() => {
+          router.push("/orders");
+        }, 800);
+        return;
+      } catch (error) {
+        console.error("Dev bypass order error:", error);
+        setError(error.response?.data?.message || "Failed to place order in dev bypass mode");
+        return;
+      } finally {
+        setIsProcessingPayment(false);
+      }
+    }
+
     const res = await loadRazorpay();
     if (!res) {
       setError("Razorpay SDK failed to load. Check your internet connection.");

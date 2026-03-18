@@ -21,6 +21,9 @@ import { useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import LiveTrackingMap from "../../components/LiveTrackingMap";
+import OrderTimeline from "../../components/OrderTimeline";
+import RiderCard from "../../components/RiderCard";
 
 // Enable credentials
 axios.defaults.withCredentials = true;
@@ -31,6 +34,7 @@ const OrderDetailPage = () => {
   const orderId = params.id;
   const { info } = useSelector((state) => state.user);
   const [order, setOrder] = useState(null);
+  const [tracking, setTracking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -48,14 +52,19 @@ const OrderDetailPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${baseurl}/order/getsingleorder/${orderId}`, {
-        withCredentials: true
-      });
+      const [orderRes, trackingRes] = await Promise.all([
+        axios.get(`${baseurl}/order/getsingleorder/${orderId}`, { withCredentials: true }),
+        axios.get(`${baseurl}/order/track/${orderId}`, { withCredentials: true }).catch(() => ({ data: { success: false } })),
+      ]);
 
-      if (response.data.success && response.data.order) {
-        setOrder(response.data.order);
+      if (orderRes.data.success && orderRes.data.order) {
+        setOrder(orderRes.data.order);
       } else {
         setError("Order not found");
+      }
+
+      if (trackingRes.data.success) {
+        setTracking(trackingRes.data.tracking);
       }
     } catch (err) {
       console.error("Error fetching order:", err);
@@ -219,6 +228,46 @@ const OrderDetailPage = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Live Tracking Section */}
+        {tracking && tracking.delivery_status && tracking.delivery_status !== "unassigned" && (
+          <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Truck className="w-5 h-5" />
+              Delivery Tracking
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <OrderTimeline
+                  deliveryStatus={tracking.delivery_status}
+                  assignment={tracking.assignment}
+                />
+                {tracking.rider && <RiderCard rider={tracking.rider} />}
+                {tracking.delivery_status === "in_transit" && tracking.delivery_otp && (
+                  <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <p className="text-sm text-yellow-700 font-medium">Delivery OTP</p>
+                    <p className="text-2xl font-bold text-yellow-900 font-mono tracking-widest">{tracking.delivery_otp}</p>
+                    <p className="text-xs text-yellow-600 mt-1">Share this OTP with the rider to confirm delivery</p>
+                  </div>
+                )}
+                {tracking.assignment?.estimated_time_minutes && tracking.delivery_status === "in_transit" && (
+                  <p className="text-sm text-gray-500 mt-3">
+                    Estimated delivery: ~{tracking.assignment.estimated_time_minutes} minutes
+                  </p>
+                )}
+              </div>
+              <div>
+                {["in_transit", "picked_up"].includes(tracking.delivery_status) && (
+                  <LiveTrackingMap
+                    orderId={parseInt(orderId)}
+                    riderLocation={tracking.rider}
+                    deliveryAddress={order.address}
+                  />
+                )}
               </div>
             </div>
           </div>

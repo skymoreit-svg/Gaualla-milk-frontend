@@ -16,6 +16,7 @@ const defaultCenter = {
 export default function MapModal({ onClose, onConfirm, initialLocation }) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY,
+    id: "google-map-script",
   });
 
   const [position, setPosition] = useState(initialLocation || defaultCenter);

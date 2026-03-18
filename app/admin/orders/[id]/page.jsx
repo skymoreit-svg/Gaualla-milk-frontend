@@ -22,6 +22,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import OrderMapModal from "../../adminCompo/OrderMapModal";
+import AssignRiderModal from "../../adminCompo/AssignRiderModal";
 
 // Enable credentials
 axios.defaults.withCredentials = true;
@@ -39,6 +40,7 @@ const OrderDetailPage = () => {
   const [newPaymentStatus, setNewPaymentStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [showMapModal, setShowMapModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
 
   useEffect(() => {
     if (orderId) {
@@ -441,6 +443,15 @@ const OrderDetailPage = () => {
                     </p>
                   )}
 
+                  {(order.address.latitude || order.address.longitude) && (
+                    <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                      <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Coordinates</p>
+                      <p className="font-mono text-sm text-gray-800 break-all">
+                        Lat: {order.address.latitude || "N/A"} | Lng: {order.address.longitude || "N/A"}
+                      </p>
+                    </div>
+                  )}
+
 
                 </div>
 
@@ -559,9 +570,65 @@ const OrderDetailPage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Delivery & Rider Assignment */}
+            <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Truck className="w-5 h-5" />
+                Delivery
+              </h2>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <span className="font-semibold text-gray-700">Delivery Status:</span>
+                  <p className="mt-1">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      order.delivery_status === "delivered" ? "bg-green-100 text-green-700" :
+                      order.delivery_status === "in_transit" ? "bg-blue-100 text-blue-700" :
+                      order.delivery_status === "unassigned" ? "bg-gray-100 text-gray-700" :
+                      "bg-yellow-100 text-yellow-700"
+                    }`}>
+                      {(order.delivery_status || "unassigned").replace(/_/g, " ")}
+                    </span>
+                  </p>
+                </div>
+                {order.delivery_otp && (
+                  <div>
+                    <span className="font-semibold text-gray-700">Delivery OTP:</span>
+                    <p className="text-gray-600 font-mono text-lg">{order.delivery_otp}</p>
+                  </div>
+                )}
+              </div>
+              <div className="mt-4">
+                {(!order.delivery_status || order.delivery_status === "unassigned") ? (
+                  <button
+                    onClick={() => setShowAssignModal(true)}
+                    className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium"
+                  >
+                    Assign Rider
+                  </button>
+                ) : (
+                  <div className="text-sm text-gray-600">
+                    <p className="font-medium">Rider assigned</p>
+                    {order.assigned_rider_id && (
+                      <Link href={`/admin/riders/${order.assigned_rider_id}`} className="text-blue-600 hover:underline">
+                        View Rider Profile
+                      </Link>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {showAssignModal && (
+        <AssignRiderModal
+          orderId={parseInt(orderId)}
+          onClose={() => setShowAssignModal(false)}
+          onAssigned={() => fetchOrder()}
+        />
+      )}
     </div>
   );
 };

@@ -6,12 +6,13 @@ import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { adminurl } from "./adminapis";
 
-import { FaHome, FaShoppingCart, FaUser, FaSignInAlt, FaSignOutAlt, FaBlog } from "react-icons/fa";
+import { FaHome, FaShoppingCart, FaUser, FaSignInAlt, FaSignOutAlt, FaBlog, FaMotorcycle, FaMapMarkedAlt } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { PiFlagBannerFill } from "react-icons/pi";
 import { LuPackage } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaCreditCard } from "react-icons/fa";
+import NotificationBell from "./NotificationBell";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -131,6 +132,24 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/riders")}`}>
+                <Link href="/admin/riders" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaMotorcycle /> <span>Riders</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/riders/live-map")}`}>
+                <Link href="/admin/riders/live-map" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaMapMarkedAlt /> <span>Live Map</span>
+                </Link>
+              </li>
+
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/settlements")}`}>
+                <Link href="/admin/settlements" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <FaCreditCard /> <span>Settlements</span>
+                </Link>
+              </li>
+
               <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
                 <Link href="/admin/user" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
                   <FaUser /> <span>Users</span>
@@ -154,6 +173,7 @@ export default function Sidebar() {
           <div className="flex gap-x-4 items-center mb-8">
             <FaShoppingCart className="text-white text-2xl" />
             <h1 className="text-white font-bold text-xl">Gaualla</h1>
+            <div className="ml-auto"><NotificationBell /></div>
           </div>
 
           <ul className="pt-6 space-y-1">
@@ -199,12 +219,29 @@ export default function Sidebar() {
               </Link>
             </li>
 
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/riders")}`}>
+              <Link href="/admin/riders" className="flex items-center gap-x-4">
+                <FaMotorcycle /> <span>Riders</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/riders/live-map")}`}>
+              <Link href="/admin/riders/live-map" className="flex items-center gap-x-4">
+                <FaMapMarkedAlt /> <span>Live Map</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/settlements")}`}>
+              <Link href="/admin/settlements" className="flex items-center gap-x-4">
+                <FaCreditCard /> <span>Settlements</span>
+              </Link>
+            </li>
+
             <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
               <Link href="/admin/user" className="flex items-center gap-x-4">
                 <FaUser /> <span>Users</span>
               </Link>
             </li>
-
 
               <li className="p-2 text-white rounded-md hover:bg-gray-700 cursor-pointer"
                   onClick={handleLogout}>
