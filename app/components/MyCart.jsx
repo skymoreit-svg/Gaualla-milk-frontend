@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaHome, FaBuilding, FaExclamationTriangle, FaSpinner } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
@@ -12,6 +13,7 @@ import { baseurl, imageurl } from "./utlis/apis";
 import { useRouter } from "next/navigation";
 import AddressForm from "./AddressForm";
 import toast from "react-hot-toast";
+import MapModal from "./MapModal";
 
 // Enable cookies in all requests
 axios.defaults.withCredentials = true;
@@ -22,18 +24,56 @@ export default function MyCart({ cart, setCart }) {
   const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  
+
   // Address management states
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [allAddress, setAllAddress] = useState([]);
   const [defaultAddress, setDefaultAddress] = useState(null);
   const [addressLoading, setAddressLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   // Order and payment states
   const [selectedFrequency, setSelectedFrequency] = useState('one_time');
   const [subscriptionDuration, setSubscriptionDuration] = useState(1);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+
+
+  // Map modal states
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [mapLocation, setMapLocation] = useState(null);
+
+
+
+  // Alternative days calendar states
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  // store selected dates as an array of Date objects
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [currentPickerMonth, setCurrentPickerMonth] = useState(new Date());
+  const [alternativeDaysDuration, setAlternativeDaysDuration] = useState(null);
+
+  // Disable background scrolling when date picker modal is open
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (showDatePicker) {
+      // Disable scrolling completely
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Restore scrolling
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [showDatePicker]);
+
+
+
 
   const fetchCart = useCallback(async () => {
     try {
@@ -77,36 +117,36 @@ export default function MyCart({ cart, setCart }) {
     }
   };
 
- const handelcartquentity = async (increment, id) => {
-  // 1Optimistic UI update
-  setCartData((prev) =>
-    prev.map((item) => {
-      if (item.cart_id === id) {
-        const newQty = increment
-          ? item.quantity + 1
-          : Math.max(1, item.quantity - 1);
+  const handelcartquentity = async (increment, id) => {
+    // 1Optimistic UI update
+    setCartData((prev) =>
+      prev.map((item) => {
+        if (item.cart_id === id) {
+          const newQty = increment
+            ? item.quantity + 1
+            : Math.max(1, item.quantity - 1);
 
-        return {
-          ...item,
-          quantity: newQty,
-          total_price: newQty * item.cart_price,
-        };
-      }
-      return item;
-    })
-  );
+          return {
+            ...item,
+            quantity: newQty,
+            total_price: newQty * item.cart_price,
+          };
+        }
+        return item;
+      })
+    );
 
-  // Update backend silently
-  try {
-    await axios.put(`${baseurl}/cart/updatecart/${id}`, {
-      increment,
-    });
-  } catch (error) {
-    console.error("Quantity update failed", error);
-    // optional: refetch cart on error
-    fetchCart();
-  }
-};
+    // Update backend silently
+    try {
+      await axios.put(`${baseurl}/cart/updatecart/${id}`, {
+        increment,
+      });
+    } catch (error) {
+      console.error("Quantity update failed", error);
+      // optional: refetch cart on error
+      fetchCart();
+    }
+  };
 
   // Fetch addresses
   const fetchaddress = useCallback(async () => {
@@ -161,13 +201,19 @@ export default function MyCart({ cart, setCart }) {
 
   const deliveryCharge = 0;
   const handlingCharge = 0;
-  
-  // Calculate total based on subscription duration
+
+  // Calculate total to pay.
+  // If user selected custom dates in the calendar, those dates override other options
+  // and total is `singleDayPrice * selectedDates.length`.
   const totalToPay = useMemo(() => {
+    const singleDayPrice = Number(derivedSubTotal || 0);
+    if (Array.isArray(selectedDates) && selectedDates.length > 0) {
+      return singleDayPrice * selectedDates.length;
+    }
     const duration = Number(subscriptionDuration || 1);
-    return derivedSubTotal * (Number.isFinite(duration) && duration > 0 ? duration : 1);
-  }, [derivedSubTotal, subscriptionDuration]);
-  
+    return singleDayPrice * (Number.isFinite(duration) && duration > 0 ? duration : 1);
+  }, [derivedSubTotal, subscriptionDuration, selectedDates.length]);
+
   const grandTotal = totalToPay + deliveryCharge + handlingCharge;
   const hasItems = Array.isArray(cartData) && cartData.length > 0;
 
@@ -266,7 +312,7 @@ export default function MyCart({ cart, setCart }) {
           try {
             setIsProcessingPayment(true);
             setError('');
-            
+
             // Create order with pending status (webhook will confirm payment)
             const verifyRes = await axios.post(`${baseurl}/order/verify`, {
               razorpay_order_id: response.razorpay_order_id,
@@ -275,6 +321,7 @@ export default function MyCart({ cart, setCart }) {
               address_id: defaultAddress,
               total_amount: amountToPay,
               type: selectedFrequency,
+              selectedDates: selectedFrequency === 'alternative' ? selectedDates : [],
               cart_items: (Array.isArray(cartData) ? cartData : []).map((item) => ({
                 product_id: item.product_id,
                 quantity: item.quantity,
@@ -284,7 +331,7 @@ export default function MyCart({ cart, setCart }) {
 
             if (verifyRes.data.success && verifyRes.data.order_id) {
               const orderId = verifyRes.data.order_id;
-              
+
               // Clear cart items immediately after order creation
               try {
                 await axios.delete(`${baseurl}/cart/clearall`, {
@@ -295,23 +342,23 @@ export default function MyCart({ cart, setCart }) {
                 console.error("Error clearing cart:", clearError);
                 // Non-critical error, continue anyway
               }
-              
+
               // Show success message immediately
               toast.success("✅ Payment received! Confirming order...");
               setError("⏳ Processing payment confirmation... Please wait.");
-              
+
               // Poll for order status (webhook will update payment_status to 'paid')
               let attempts = 0;
               const maxAttempts = 30; // 30 seconds max wait
               const pollInterval = 1000; // Check every 1 second
-              
+
               const checkOrderStatus = async () => {
                 try {
                   const statusRes = await axios.get(`${baseurl}/order/getsingleorder/${orderId}`);
-                  
+
                   if (statusRes.data.success && statusRes.data.order) {
                     const order = statusRes.data.order;
-                    
+
                     if (order.payment_status === 'paid') {
                       // Webhook confirmed payment - SUCCESS!
                       toast.success("✅ Payment Successful! Your order has been confirmed.");
@@ -339,7 +386,7 @@ export default function MyCart({ cart, setCart }) {
                       return;
                     }
                   }
-                  
+
                   // Continue polling if not confirmed yet
                   attempts++;
                   if (attempts < maxAttempts) {
@@ -372,7 +419,7 @@ export default function MyCart({ cart, setCart }) {
                   }
                 }
               };
-              
+
               // Start polling after a short delay (give webhook time to arrive)
               setTimeout(checkOrderStatus, 2000);
             } else {
@@ -397,7 +444,7 @@ export default function MyCart({ cart, setCart }) {
           color: "#60BE74",
         },
         modal: {
-          ondismiss: function() {
+          ondismiss: function () {
             setError("Payment was cancelled. Please try again.");
           }
         },
@@ -414,7 +461,7 @@ export default function MyCart({ cart, setCart }) {
       }
 
       const rzp = new window.Razorpay(options);
-      
+
       rzp.on('payment.failed', function (response) {
         const errorMsg = response.error?.description || response.error?.reason || response.error?.code || "Unknown error";
         setError(`Payment failed: ${errorMsg}`);
@@ -429,6 +476,57 @@ export default function MyCart({ cart, setCart }) {
     } finally {
       setIsProcessingPayment(false);
     }
+  };
+
+  // Handle date selection for alternative days (toggle individual dates)
+  const handleDateSelect = (date) => {
+    if (!date) return;
+    // keep existing behaviour: prevent selecting past dates
+    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
+
+    setSelectedDates((prev) => {
+      const exists = prev.some((d) => d.getTime() === date.getTime());
+      if (exists) {
+        return prev.filter((d) => d.getTime() !== date.getTime());
+      }
+      return [...prev, date];
+    });
+  };
+
+  const confirmDates = () => {
+    // simply close the modal and keep selected dates
+    setShowDatePicker(false);
+  };
+
+  const isDateSelected = (date) => {
+    if (!date) return false;
+    return selectedDates.some((d) => d.getTime() === date.getTime());
+  };
+
+  const getDaysInMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const generateCalendarDays = () => {
+    const days = [];
+    const daysInMonth = getDaysInMonth(currentPickerMonth);
+    const firstDay = getFirstDayOfMonth(currentPickerMonth);
+
+    // Empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+
+    // Days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth(), i));
+    }
+
+    return days;
   };
 
   // ────────────────────────────────────────────────
@@ -484,8 +582,8 @@ export default function MyCart({ cart, setCart }) {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Checkout</h1>
-              <button 
-                onClick={() => setCart(false)} 
+              <button
+                onClick={() => setCart(false)}
                 className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <RxCross2 />
@@ -569,9 +667,39 @@ export default function MyCart({ cart, setCart }) {
 
               {/* Address Section */}
               <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
-                  <FaMapMarkerAlt className="mr-3 text-blue-500" />
-                  Delivery Address
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FaMapMarkerAlt className="mr-3 text-blue-500" />
+                    Delivery Address
+                  </div>
+
+                  {/* Map button inside header */}
+                  {!showNewAddress && allAddress.length > 0 && (
+                    <button
+                      onClick={() => {
+                        if (!navigator.geolocation) {
+                          alert("Geolocation is not supported by your browser");
+                          return;
+                        }
+
+                        navigator.geolocation.getCurrentPosition(
+                          (position) => {
+                            setMapLocation({
+                              lat: position.coords.latitude,
+                              lng: position.coords.longitude,
+                            });
+                            setShowMapModal(true);
+                          },
+                          () => {
+                            alert("Please allow location access to use map");
+                          }
+                        );
+                      }}
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-4 rounded-lg text-sm flex items-center shadow-md"
+                    >
+                      📍 Set on Map
+                    </button>
+                  )}
                 </h3>
 
                 {!showNewAddress ? (
@@ -593,9 +721,8 @@ export default function MyCart({ cart, setCart }) {
                           <div
                             key={addr.id}
                             className={`p-4 rounded-2xl shadow-md border transition cursor-pointer
-                              ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
-                              ${defaultAddress === addr.id ? "ring-2 ring-[#60BE74]" : ""}
-                            `}
+                ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
+                ${defaultAddress === addr.id ? "ring-2 ring-[#60BE74]" : ""}`}
                             onClick={() => setDefaultAddress(addr.id)}
                           >
                             <div className="flex items-center justify-between">
@@ -610,12 +737,12 @@ export default function MyCart({ cart, setCart }) {
                               {addr.is_default === 1 ? (
                                 <MdOutlineStar className="text-yellow-500 text-xl" />
                               ) : (
-                                <MdOutlineStarBorder 
+                                <MdOutlineStarBorder
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handelDefault(addr.id);
-                                  }} 
-                                  className="text-gray-400 text-xl cursor-pointer hover:text-yellow-500" 
+                                  }}
+                                  className="text-gray-400 text-xl cursor-pointer hover:text-yellow-500"
                                 />
                               )}
                             </div>
@@ -623,8 +750,12 @@ export default function MyCart({ cart, setCart }) {
                             <p className="mt-2 font-semibold text-gray-800">
                               {addr.first_name} {addr.last_name}
                             </p>
-                            <p className="text-gray-600 text-sm">{addr.street}, {addr.city}</p>
-                            <p className="text-gray-600 text-sm">{addr.state}, {addr.zip_code}</p>
+                            <p className="text-gray-600 text-sm">
+                              {addr.street}, {addr.city}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                              {addr.state}, {addr.zip_code}
+                            </p>
                             <p className="text-gray-600 text-sm">{addr.country}</p>
                             <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
                           </div>
@@ -636,15 +767,137 @@ export default function MyCart({ cart, setCart }) {
                       <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
                         <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
                         <p className="text-gray-500">No addresses saved yet.</p>
-                        <p className="text-gray-400 text-sm mt-1">Please add an address to continue with your order.</p>
+                        <p className="text-gray-400 text-sm mt-1">
+                          Please add an address to continue with your order.
+                        </p>
                       </div>
                     )}
                   </>
                 ) : (
-                  <AddressForm onCancel={handleCancelForm} />
+                  <AddressForm
+                    onCancel={handleCancelForm}
+                    mapLocation={mapLocation}
+                  />
                 )}
+
+                {/* MAP MODAL */}
+                {showMapModal && (
+                  <MapModal
+                    initialLocation={mapLocation}
+                    onClose={() => setShowMapModal(false)}
+                    onConfirm={(location) => {
+                      setMapLocation(location); // Store complete location data
+                      setShowNewAddress(true);
+                      setShowMapModal(false);
+                    }}
+                  />
+                )}
+
+                {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS - Rendered at document root via portal */}
+                {showDatePicker && typeof document !== 'undefined' && createPortal(
+                  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
+                    <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+                      <h3 className="text-xl font-bold text-gray-800 mb-4">Select Alternative Days</h3>
+
+
+                      {/* Month/Year Navigation */}
+                      <div className="flex justify-between items-center mb-4">
+                        <button
+                          onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() - 1))}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                        >
+                          ← Prev
+                        </button>
+                        <span className="text-gray-800 font-semibold">
+                          {currentPickerMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                        </span>
+                        <button
+                          onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() + 1))}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                        >
+                          Next →
+                        </button>
+                      </div>
+
+                      {/* Calendar Grid */}
+                      <div className="grid grid-cols-7 gap-2 mb-4">
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                          <div key={day} className="text-center text-xs font-bold text-gray-600">
+                            {day}
+                          </div>
+                        ))}
+                        {generateCalendarDays().map((date, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => date && handleDateSelect(date)}
+                            disabled={!date}
+                            className={`p-2 rounded text-sm font-medium transition-colors ${!date
+                              ? 'text-gray-300 cursor-default'
+                              : isDateSelected(date)
+                                ? 'bg-green-500 text-white'
+                                : date < new Date()
+                                  ? 'text-gray-400 cursor-not-allowed'
+                                  : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
+                              }`}
+                          >
+                            {date ? date.getDate() : ''}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Selected Dates Display */}
+                      {selectedDates && selectedDates.length > 0 ? (
+                        <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                          <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
+                          {selectedDates
+                            .slice()
+                            .sort((a, b) => a.getTime() - b.getTime())
+                            .map((d) => (
+                              <p key={d.getTime()} className="text-sm text-gray-600">{d.toLocaleDateString()}</p>
+                            ))}
+                        </div>
+                      ) : (
+                        <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                          <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
+                          <p className="text-sm text-gray-600">None</p>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => {
+                            setShowDatePicker(false);
+                            setSelectedDates([]);
+                            setCurrentPickerMonth(new Date());
+                          }}
+                          className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Cancel
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedDates([])}
+                          className="flex-1 bg-yellow-200 hover:bg-yellow-300 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Clear All
+                        </button>
+
+                        <button
+                          onClick={confirmDates}
+                          disabled={selectedDates.length === 0}
+                          className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  , document.body)}
               </div>
             </div>
+
+
 
             {/* Right Column - Order Summary */}
             <div className="lg:col-span-1">
@@ -702,7 +955,7 @@ export default function MyCart({ cart, setCart }) {
                     <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
                     <div className="flex flex-col space-y-2">
                       <button
-                        onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
+                        onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
                           ? 'bg-red-100 text-red-700 border border-red-300'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
@@ -710,7 +963,7 @@ export default function MyCart({ cart, setCart }) {
                         One Time
                       </button>
                       <button
-                        onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
+                        onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
                           ? 'bg-green-100 text-green-700 border border-green-300'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
@@ -718,7 +971,11 @@ export default function MyCart({ cart, setCart }) {
                         30 Days
                       </button>
                       <button
-                        onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
+                        onClick={() => {
+                          setSelectedFrequency('alternative');
+                          setSubscriptionDuration(15);
+                          setShowDatePicker(true);
+                        }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
                           ? 'bg-green-100 text-green-700 border border-green-300'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}

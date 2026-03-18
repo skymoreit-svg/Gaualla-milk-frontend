@@ -85,7 +85,7 @@ export default function Sidebar() {
 
             <div className="flex gap-x-4 items-center mb-8">
               <FaShoppingCart className="text-white text-2xl" />
-              <h1 className="text-white font-bold text-xl">MyShop</h1>
+              <h1 className="text-white font-bold text-xl">Gaualla</h1>
             </div>
 
             <ul className="pt-6 space-y-1">
@@ -153,7 +153,7 @@ export default function Sidebar() {
         <div className="w-64 bg-gray-900 h-screen p-5 pt-8">
           <div className="flex gap-x-4 items-center mb-8">
             <FaShoppingCart className="text-white text-2xl" />
-            <h1 className="text-white font-bold text-xl">MyShop</h1>
+            <h1 className="text-white font-bold text-xl">Gaualla</h1>
           </div>
 
           <ul className="pt-6 space-y-1">

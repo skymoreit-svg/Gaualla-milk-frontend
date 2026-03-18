@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { 
+import {
   ArrowLeft,
-  Package, 
-  CheckCircle, 
-  Clock, 
-  XCircle, 
+  Package,
+  CheckCircle,
+  Clock,
+  XCircle,
   Truck,
   User,
   MapPin,
@@ -21,6 +21,7 @@ import { adminurl, adminimg } from "../../adminCompo/adminapis";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import OrderMapModal from "../../adminCompo/OrderMapModal";
 
 // Enable credentials
 axios.defaults.withCredentials = true;
@@ -37,6 +38,7 @@ const OrderDetailPage = () => {
   const [newStatus, setNewStatus] = useState("");
   const [newPaymentStatus, setNewPaymentStatus] = useState("");
   const [saving, setSaving] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
 
   useEffect(() => {
     if (orderId) {
@@ -404,11 +406,25 @@ const OrderDetailPage = () => {
 
             {/* Delivery Address */}
             {order.address && (
-              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  Delivery Address
-                </h2>
+              <div className="bg-white rounded-lg shadow border border-gray-200 p-6 relative">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    <MapPin className="w-5 h-5" />
+                    Delivery Address
+                  </h2>
+
+                  {order.address.latitude && order.address.longitude && (
+                    <button
+                      onClick={() => setShowMapModal(true)}
+                      className="text-sm bg-blue-600 text-white px-4 py-1.5 rounded-md hover:bg-blue-700 transition"
+                    >
+                      View on Map
+                    </button>
+                  )}
+                </div>
+
+                {/* Address Details */}
                 <div className="text-gray-700">
                   <p className="font-semibold mb-2">
                     {order.address.first_name} {order.address.last_name}
@@ -418,10 +434,26 @@ const OrderDetailPage = () => {
                     {order.address.city}, {order.address.state} {order.address.zip_code}
                   </p>
                   <p>{order.address.country}</p>
+
                   {order.address.phone && (
-                    <p className="mt-2"><span className="font-semibold">Phone:</span> {order.address.phone}</p>
+                    <p className="mt-2">
+                      <span className="font-semibold">Phone:</span> {order.address.phone}
+                    </p>
                   )}
+
+
                 </div>
+
+                {/* Map Modal */}
+                {order.address.latitude && order.address.longitude && (
+                  <OrderMapModal
+                    isOpen={showMapModal}
+                    onClose={() => setShowMapModal(false)}
+                    latitude={order.address.latitude}
+                    longitude={order.address.longitude}
+                    address={order.address}
+                  />
+                )}
               </div>
             )}
 
@@ -501,6 +533,22 @@ const OrderDetailPage = () => {
                   <span className="font-semibold text-gray-700">Order Type:</span>
                   <p className="text-gray-600 capitalize">{order.type || "onetime"}</p>
                 </div>
+                {order.type === 'alternative' && order.alternative_dates && order.alternative_dates.length > 0 && (
+                  <div>
+                    <span className="font-semibold text-gray-700">Selected Dates:</span>
+                    <div className="text-gray-600 mt-2">
+                      {order.alternative_dates.map((date, index) => (
+                        <p key={index} className="py-1">
+                          {new Date(date).toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div>
                   <span className="font-semibold text-gray-700">Created:</span>
                   <p className="text-gray-600">{formatDate(order.created_at)}</p>

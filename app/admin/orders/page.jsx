@@ -213,6 +213,7 @@ const OrdersPage = () => {
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Customer</th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Items</th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Amount</th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Type</th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Payment</th>
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Date</th>
@@ -222,7 +223,7 @@ const OrdersPage = () => {
           <tbody className="divide-y divide-gray-200">
             {filteredOrders.length === 0 ? (
               <tr>
-                <td colSpan={8} className="text-center py-12 text-gray-500">
+                <td colSpan={9} className="text-center py-12 text-gray-500">
                   {loading ? "Loading orders..." : "No orders found"}
                 </td>
               </tr>
@@ -241,6 +242,17 @@ const OrdersPage = () => {
                   </td>
                   <td className="px-6 py-4 text-sm font-semibold text-gray-900">
                     {formatCurrency(parseFloat(order.total_amount || 0))}
+                  </td>
+                  <td className="px-6 py-4 text-sm">
+                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${
+                      order.type === 'alternative' ? 'bg-purple-100 text-purple-700' :
+                      order.type === 'daily' ? 'bg-green-100 text-green-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {order.type === 'onetime' ? 'One Time' : 
+                       order.type === 'daily' ? '30 Days' :
+                       order.type === 'alternative' ? 'Alternative' : order.type}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
