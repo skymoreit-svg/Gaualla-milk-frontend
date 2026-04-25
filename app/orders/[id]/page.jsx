@@ -98,7 +98,7 @@ const OrderDetailPage = () => {
     if (statusLower === "completed") {
       return { bg: "bg-green-100", text: "text-green-700", icon: CheckCircle };
     }
-    if (statusLower === "processing" || statusLower === "out for_delivery") {
+    if (statusLower === "processing" || statusLower === "out_for_delivery") {
       return { bg: "bg-blue-100", text: "text-blue-700", icon: Truck };
     }
     if (statusLower === "pending") {

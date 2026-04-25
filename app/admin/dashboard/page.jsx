@@ -20,7 +20,7 @@ const DashboardPage = () => {
   const [orderBreakdown, setOrderBreakdown] = useState({
     pending: 0,
     processing: 0,
-    "out for_delivery": 0,
+    "out_for_delivery": 0,
     completed: 0,
     cancelled: 0,
   });
@@ -53,7 +53,7 @@ const DashboardPage = () => {
         setOrderBreakdown(data.orderStatusBreakdown || {
           pending: 0,
           processing: 0,
-          "out for_delivery": 0,
+          "out_for_delivery": 0,
           completed: 0,
           cancelled: 0,
         });
@@ -131,7 +131,7 @@ const DashboardPage = () => {
   ];
 
   const orderBreakdownItems = [
-    { status: "Out For_delivery", count: orderBreakdown["out for_delivery"] || 0 },
+    { status: "Out For Delivery", count: orderBreakdown["out_for_delivery"] || 0 },
     { status: "Pending", count: orderBreakdown.pending || 0 },
     { status: "Processing", count: orderBreakdown.processing || 0 },
     { status: "Completed", count: orderBreakdown.completed || 0 },

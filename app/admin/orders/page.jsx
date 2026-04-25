@@ -174,7 +174,7 @@ const OrdersPage = () => {
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
             <option value="processing">Processing</option>
-            <option value="out for_delivery">Out For Delivery</option>
+            <option value="out_for_delivery">Out For Delivery</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
