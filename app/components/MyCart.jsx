@@ -922,7 +922,7 @@ export default function MyCart({ cart, setCart }) {
                 {showDatePicker && typeof document !== 'undefined' && createPortal(
                   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
                     <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-                      <h3 className="text-xl font-bold text-gray-800 mb-4">Select Alternative Days</h3>
+                      <h3 className="text-xl font-bold text-gray-800 mb-4">Custom Delivery Schedule</h3>
 
 
                       {/* Month/Year Navigation */}
@@ -1105,7 +1105,7 @@ export default function MyCart({ cart, setCart }) {
                           ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                       >
-                        Alternative days
+                        Calendar Schedule
                       </button>
                     </div>
                   </div>

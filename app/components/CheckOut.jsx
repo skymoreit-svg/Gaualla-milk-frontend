@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   FaGreaterThan,
   FaMapMarkerAlt,
@@ -10,6 +11,7 @@ import {
 
   FaExclamationTriangle,
   FaSpinner,
+  FaMinus,
 
 } from 'react-icons/fa';
 
@@ -18,6 +20,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 // ✅ Enable cookies in all requests
 axios.defaults.withCredentials = true;
@@ -25,10 +28,6 @@ import { baseurl, imageurl } from "./utlis/apis";
 import AddressForm from "./AddressForm";
 import OtherBanner from "./OtherBanner";
 import OrderSuccessModal from "./OrderSuccessModal";
-
-
-
-
 
 export default function CheckOut() {
   const router = useRouter();
@@ -44,7 +43,12 @@ export default function CheckOut() {
   const [orderLoading, setOrderLoading] = useState(true);
   const [orderSuccessOpen, setOrderSuccessOpen] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState(null);
-  const [subscriptionDuration, setSubscriptionDuration] = useState(1)
+  const [subscriptionDuration, setSubscriptionDuration] = useState(1);
+
+  // Date picker states for Alternative Days
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [currentPickerMonth, setCurrentPickerMonth] = useState(new Date());
 
 
   const fetchCartItemById = async (id) => {
@@ -163,9 +167,60 @@ export default function CheckOut() {
   }, [orderItems]);
 
   const totalToPay = useMemo(() => {
+    const singleDayPrice = Number(subtotal || 0);
+    if (selectedFrequency === 'alternative' && Array.isArray(selectedDates) && selectedDates.length > 0) {
+      return singleDayPrice * selectedDates.length;
+    }
     const duration = Number(subscriptionDuration || 1);
-    return subtotal * (Number.isFinite(duration) && duration > 0 ? duration : 1);
-  }, [subtotal, subscriptionDuration]);
+    return singleDayPrice * (Number.isFinite(duration) && duration > 0 ? duration : 1);
+  }, [subtotal, subscriptionDuration, selectedFrequency, selectedDates.length]);
+
+  // Calendar Helper Functions
+  const handleDateSelect = (date) => {
+    if (!date) return;
+    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
+
+    setSelectedDates((prev) => {
+      const exists = prev.some((d) => d.getTime() === date.getTime());
+      if (exists) {
+        return prev.filter((d) => d.getTime() !== date.getTime());
+      }
+      return [...prev, date];
+    });
+  };
+
+  const confirmDates = () => {
+    setShowDatePicker(false);
+  };
+
+  const isDateSelected = (date) => {
+    if (!date) return false;
+    return selectedDates.some((d) => d.getTime() === date.getTime());
+  };
+
+  const getDaysInMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const generateCalendarDays = () => {
+    const days = [];
+    const daysInMonth = getDaysInMonth(currentPickerMonth);
+    const firstDay = getFirstDayOfMonth(currentPickerMonth);
+
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth(), i));
+    }
+
+    return days;
+  };
 
 
 
@@ -323,6 +378,7 @@ export default function CheckOut() {
               address_id: defaultAddress,
               total_amount: amountToPay,
               type: selectedFrequency,
+              selectedDates: selectedFrequency === 'alternative' ? selectedDates : [],
               cart_items: (Array.isArray(orderItems) ? orderItems : []).map((item) => ({
                 product_id: item.product_id,
                 quantity: item.quantity,
@@ -641,12 +697,12 @@ export default function CheckOut() {
                             30 Days
                           </button>
                           <button
-                            onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
+                            onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); setShowDatePicker(true); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
                               ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                           >
-                            Alternative days
+                            Calendar Schedule
                           </button>
                         </div>
                       </div>
@@ -660,12 +716,12 @@ export default function CheckOut() {
 
                     <button
                       onClick={handlePlaceOrder}
-                      disabled={!defaultAddress}
+                      disabled={!defaultAddress || (selectedFrequency === 'alternative' && selectedDates.length === 0)}
                       className="w-full bg-[#62371f] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
                     >
                       {!defaultAddress ? 'Select Address First' :
-                        (isSettingDefault ? <FaSpinner className="animate-spin mr-2" /> : null)}
-                      {defaultAddress && !isSettingDefault && 'Place Order'}
+                        (selectedFrequency === 'alternative' && selectedDates.length === 0) ? 'Select Dates on Calendar' :
+                        (isSettingDefault ? <FaSpinner className="animate-spin mr-2" /> : 'Place Order')}
                     </button>
                   </>
                 ) : (
@@ -685,6 +741,101 @@ export default function CheckOut() {
           window.location.href = '/orders/';
         }}
       />
+
+      {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS - Rendered at document root via portal */}
+      {showDatePicker && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
+          <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Custom Delivery Schedule</h3>
+
+            {/* Month/Year Navigation */}
+            <div className="flex justify-between items-center mb-4">
+              <button
+                onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() - 1))}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+              >
+                ← Prev
+              </button>
+              <span className="text-gray-800 font-semibold text-sm">
+                {currentPickerMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+              </span>
+              <button
+                onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() + 1))}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+              >
+                Next →
+              </button>
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 gap-2 mb-4">
+              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                <div key={day} className="text-center text-[10px] font-bold text-gray-600">
+                  {day}
+                </div>
+              ))}
+              {generateCalendarDays().map((date, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => date && handleDateSelect(date)}
+                  disabled={!date}
+                  className={`p-2 rounded text-xs font-medium transition-colors ${!date
+                    ? 'text-gray-300 cursor-default'
+                    : isDateSelected(date)
+                      ? 'bg-[#62371f] text-white'
+                      : date < new Date(new Date().setHours(0,0,0,0))
+                        ? 'text-gray-400 cursor-not-allowed opacity-50'
+                        : 'bg-gray-100 text-gray-800 hover:bg-[#62371f]/10'
+                    }`}
+                >
+                  {date ? date.getDate() : ''}
+                </button>
+              ))}
+            </div>
+
+            {/* Selected Dates Display */}
+            {selectedDates && selectedDates.length > 0 ? (
+              <div className="bg-[#62371f]/5 p-3 rounded-lg mb-4 max-h-[120px] overflow-y-auto">
+                <p className="text-xs text-[#62371f] font-bold mb-1">Selected Dates ({selectedDates.length}):</p>
+                <div className="flex flex-wrap gap-1">
+                  {selectedDates
+                    .slice()
+                    .sort((a, b) => a.getTime() - b.getTime())
+                    .map((d) => (
+                      <span key={d.getTime()} className="text-[10px] bg-white px-2 py-1 rounded border border-[#62371f]/20 text-[#62371f]">
+                        {d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      </span>
+                    ))}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-gray-50 p-3 rounded-lg mb-4 text-center">
+                <p className="text-xs text-gray-500 font-medium italic">No dates selected yet</p>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowDatePicker(false);
+                  setSelectedDates([]);
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2.5 rounded-lg text-sm font-bold transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDates}
+                disabled={selectedDates.length === 0}
+                className="flex-1 bg-[#62371f] hover:bg-black disabled:bg-gray-300 text-white py-2.5 rounded-lg text-sm font-bold transition-colors shadow-md"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+        , document.body)}
     </div>
   );
 }
