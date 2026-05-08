@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { baseurl } from "../components/utlis/apis";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { GetUser } from "../store/userSlice";
+import Link from "next/link";
+import Image from "next/image";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -36,7 +38,7 @@ const LoginPage = () => {
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { ...errors };
+    const newErrors = { email: "", password: "" };
 
     if (!formData.email) {
       newErrors.email = "Email is required";
@@ -71,19 +73,16 @@ const LoginPage = () => {
       if (data.success) {
         toast.success("Login successful!");
 
-        // Save email if Remember Me
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", formData.email);
         } else {
           localStorage.removeItem("rememberedEmail");
         }
 
-        // Refresh user state immediately after login
         dispatch(GetUser());
 
-        // Small delay to ensure state is updated before redirect
         setTimeout(() => {
-          router.push("/"); // redirect after login
+          router.push("/");
         }, 100);
       } else {
         toast.error(data.message || "Login failed. Please try again.");
@@ -97,119 +96,146 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-700 p-4">
-      <div className="flex w-full max-w-6xl shadow-2xl overflow-hidden rounded-2xl bg-white/10 backdrop-blur-2xl">
-        {/* Left Side - Image */}
-        <div className="hidden lg:flex w-1/2 relative">
-          <img
-            src="/img1.webp"
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30 flex items-center justify-center">
-            <div className="text-center text-white px-8">
-              <h1 className="text-4xl font-extrabold mb-4 leading-snug drop-shadow-xl">
-                Welcome Back!
-              </h1>
-              <p className="text-lg text-gray-200 max-w-md mx-auto">
-                Login to explore exclusive features, insights, and opportunities.
-              </p>
-            </div>
-          </div>
+    <>
+    <div className="min-h-screen w-full grid lg:grid-cols-2">
+      {/* Left Panel */}
+      <div className="flex flex-col justify-center items-center bg-[#F5EFE6] p-8 text-center">
+        <div className="max-w-md">
+          <Image src="/img/logo.webp" alt="Gaualla Milk Logo" width={150} height={150} className="mx-auto mb-6" />
+          <h1 className="text-4xl font-bold text-[#4A403A] leading-tight">
+            Gaualla Milk
+            <br />
+            Freshness Delivered, Right to Your Doorstep.
+          </h1>
+          <p className="text-[#6D5D53] mt-4">
+            Join thousands of happy families enjoying the purest milk, every single day.
+          </p>
         </div>
+      </div>
 
-        {/* Right Side - Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-8 md:p-12 rounded-r-2xl">
-          <div className="w-full max-w-md space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
-              Sign in to Your Account
+      {/* Right Panel */}
+      <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-white">
+        <div className="w-full max-w-sm">
+          <div className="text-left mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+              Sign In
             </h2>
-
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Email */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email address
-                </label>
-                <div className="relative">
-                  <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="you@example.com"
-                    className={`w-full py-3 pl-10 pr-3 border ${errors.email ? "border-red-400" : "border-gray-300"} rounded-lg shadow-sm focus:ring-2 ${errors.email ? "focus:ring-red-500" : "focus:ring-indigo-500"} focus:border-transparent transition`}
-                  />
-                </div>
-                {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
-              </div>
-
-              {/* Password */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="••••••••"
-                    className={`w-full py-3 pl-10 pr-10 border ${errors.password ? "border-red-400" : "border-gray-300"} rounded-lg shadow-sm focus:ring-2 ${errors.password ? "focus:ring-red-500" : "focus:ring-indigo-500"} focus:border-transparent transition`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-                {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password}</p>}
-              </div>
-
-              {/* Remember Me */}
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={() => setRememberMe(!rememberMe)}
-                    className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                  />
-                  <span className="text-gray-700">Remember me</span>
-                </label>
-                <a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium">
-                  Forgot password?
-                </a>
-              </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={loader}
-                className="w-full py-3 px-4 text-white font-semibold rounded-lg shadow-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:ring-2 focus:ring-indigo-500 transition-all"
-              >
-                {loader ? "Loading..." : "Sign In"}
-              </button>
-            </form>
-
-            {/* Signup Link */}
-            <p className="text-center text-sm text-gray-600 mt-6">
-              Don’t have an account?{" "}
-              <a href="/signup" className="text-indigo-600 hover:text-indigo-500 font-medium">
-                Sign up
-              </a>
+            <p className="text-gray-500 text-sm mt-2">
+              Enter your credentials to access your account.
             </p>
           </div>
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-xs font-medium text-gray-600"
+              >
+                Email address
+              </label>
+              <div className="mt-1 relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="you@example.com"
+                  className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${
+                    errors.email ? "ring-2 ring-red-500" : ""
+                  }`}
+                />
+              </div>
+              {errors.email && (
+                <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-xs font-medium text-gray-600"
+              >
+                Password
+              </label>
+              <div className="mt-1 relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${
+                    errors.password ? "ring-2 ring-red-500" : ""
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between text-xs">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                  className="h-4 w-4 text-[#7F5539] border-gray-300 rounded focus:ring-[#7F5539]"
+                />
+                <span className="text-gray-700">Remember me</span>
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-[#7F5539] hover:underline font-medium"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loader}
+              className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#7F5539] hover:bg-[#6A472F] focus:ring-2 focus:ring-offset-2 focus:ring-[#7F5539] transition-all"
+            >
+              {loader ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
+          </form>
+
+          <p className="text-center text-xs text-gray-600 mt-6">
+            Don’t have an account?{" "}
+            <Link
+              href="/signup"
+              className="text-[#7F5539] hover:underline font-medium"
+            >
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
+    </>
   );
 };
 

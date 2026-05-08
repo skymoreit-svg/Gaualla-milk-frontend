@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import { FaPlus } from "react-icons/fa6";
 
@@ -44,6 +44,18 @@ const ProductDetails = ({ slug }) => {
   const [AyutramartProduct, setAyutramartProduct] = useState();
 
   //  DERIVED STATE (NO useState)
+  const productImages = useMemo(() => {
+    if (!productData?.images) return [];
+    try {
+      return typeof productData.images === 'string' 
+        ? JSON.parse(productData.images) 
+        : productData.images;
+    } catch (e) {
+      console.error("Failed to parse product images", e);
+      return [];
+    }
+  }, [productData?.images]);
+
   const inCart = cartItems.some(
     (item) => item.id === productData?.id
   );
@@ -58,14 +70,32 @@ const ProductDetails = ({ slug }) => {
 
   const fetchproduct = async () => {
     setLoader(true);
-    const response = await axios.get(`${baseurl}/getproduct/product/${slug}`);
-    const data = await response.data;
-    if (data.success) {
-      setProductData(data.product);
-      setActiveImg(data.product.images[0]);
-      //  REMOVED: fetchAllreadyincart
+    try {
+      // Remove trailing slashes from slug if present
+      const cleanSlug = slug?.replace(/\/$/, "");
+      const response = await axios.get(`${baseurl}/getproduct/product/${cleanSlug}`);
+      const data = await response.data;
+      if (data.success && data.product) {
+        setProductData(data.product);
+        
+        // Safety check for images JSON parsing
+        try {
+          const images = typeof data.product.images === 'string' 
+            ? JSON.parse(data.product.images) 
+            : data.product.images;
+          
+          if (Array.isArray(images) && images.length > 0) {
+            setActiveImg(images[0]);
+          }
+        } catch (parseError) {
+          console.error("Error parsing product images:", parseError);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    } finally {
+      setLoader(false);
     }
-    setLoader(false);
   };
 
   //  REMOVED COMPLETELY
@@ -238,6 +268,21 @@ const ProductDetails = ({ slug }) => {
     );
   }
 
+  if (!productData) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">Product Not Found</h2>
+        <p className="text-gray-600 mb-8">Sorry, we couldn't find the product you're looking for.</p>
+        <button 
+          onClick={() => route.push('/product?name=all')}
+          className="bg-[#62371f] text-white px-8 py-3 rounded-lg hover:bg-[#87c243] transition-colors"
+        >
+          Explore All Products
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="bg-[#f3f1ec76]">
@@ -245,7 +290,7 @@ const ProductDetails = ({ slug }) => {
           <div className=" w-full py-10 lg:py-16 px-5 md:px-12 xl:px-32 flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start  gap-8 ">
             <div className="leftside flex flex-col-reverse xl:flex-row gap-5 items-center justify-center relative lg:sticky top-0 lg:top-20 h-full">
               <div className="sideimages scrollbar-hide hidden lg:flex flex-wrap justify-center gap-2 xl:block w-full xl:w-auto  lg:h-[500px] overflow-auto">
-                {JSON.parse(productData?.images)?.map((elm, index) => (
+                {productImages.map((elm, index) => (
                   <div
                     key={index}
                     onClick={() => setActiveImg(elm)}
@@ -269,7 +314,7 @@ const ProductDetails = ({ slug }) => {
                   loop={true} // infinite loop
                   className="w-[86%] lg:w-full h-auto md:h-[500px] overflow-hidden"
                 >
-                  {JSON.parse(productData?.images || "[]").map((img, i) => (
+                  {productImages.map((img, i) => (
                     <SwiperSlide key={i}>
                       <img
                         src={`${imageurl}/${img}`}

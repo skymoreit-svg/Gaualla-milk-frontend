@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import AddressForm from "./AddressForm";
 import toast from "react-hot-toast";
 import MapModal from "./MapModal";
+import OrderSuccessModal from "./OrderSuccessModal";
 
 // Enable cookies in all requests
 axios.defaults.withCredentials = true;
@@ -36,6 +37,8 @@ export default function MyCart({ cart, setCart }) {
   const [selectedFrequency, setSelectedFrequency] = useState('one_time');
   const [subscriptionDuration, setSubscriptionDuration] = useState(1);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [orderSuccessOpen, setOrderSuccessOpen] = useState(false);
+  const [successOrderId, setSuccessOrderId] = useState(null);
 
 
 
@@ -295,7 +298,9 @@ export default function MyCart({ cart, setCart }) {
           return;
         }
 
-        toast.success("Order placed (development payment bypass)");
+        const orderId = data.order_id || data.order?.id || null;
+        setSuccessOrderId(orderId);
+        setOrderSuccessOpen(true);
 
         try {
           await axios.delete(`${baseurl}/cart/clearall`, { withCredentials: true });
@@ -304,10 +309,7 @@ export default function MyCart({ cart, setCart }) {
         }
 
         fetchCart();
-        setCart(false);
-        setTimeout(() => {
-          router.push("/orders");
-        }, 800);
+        // setCart(false); // DO NOT CLOSE DRAWER AUTOMATICALLY
         return;
       } catch (error) {
         console.error("Dev bypass order error:", error);
@@ -386,7 +388,6 @@ export default function MyCart({ cart, setCart }) {
 
             if (verifyRes.data.success && verifyRes.data.order_id) {
               const orderId = verifyRes.data.order_id;
-
               // Clear cart items immediately after order creation
               try {
                 await axios.delete(`${baseurl}/cart/clearall`, {
@@ -416,7 +417,8 @@ export default function MyCart({ cart, setCart }) {
 
                     if (order.payment_status === 'paid') {
                       // Webhook confirmed payment - SUCCESS!
-                      toast.success("✅ Payment Successful! Your order has been confirmed.");
+                      setSuccessOrderId(orderId);
+                      setOrderSuccessOpen(true);
                       // Clear all cart items from backend
                       try {
                         await axios.delete(`${baseurl}/cart/clearall`, {
@@ -425,14 +427,9 @@ export default function MyCart({ cart, setCart }) {
                         console.log("✅ Cart cleared successfully");
                       } catch (clearError) {
                         console.error("Error clearing cart:", clearError);
-                        // Non-critical error, continue anyway
                       }
                       fetchCart();
-                      setCart(false);
-                      // Redirect to orders page
-                      setTimeout(() => {
-                        router.push("/orders");
-                      }, 1000);
+                      // setCart(false); // DO NOT CLOSE DRAWER AUTOMATICALLY
                       return;
                     } else if (order.payment_status === 'failed') {
                       // Payment failed
@@ -448,28 +445,27 @@ export default function MyCart({ cart, setCart }) {
                     setTimeout(checkOrderStatus, pollInterval);
                   } else {
                     // Timeout - order might still be processing
-                    toast.success("⏳ Payment is being processed. You will receive a confirmation shortly.");
+                    setSuccessOrderId(orderId);
+                    setOrderSuccessOpen(true);
                     setIsProcessingPayment(false);
-                    // Still clear cart and redirect to orders page (order exists, just waiting for webhook)
+                    // Still clear cart and show orders modal (order exists, waiting for webhook)
                     setTimeout(() => {
                       fetchCart();
-                      setCart(false);
-                      router.push("/orders");
+                      // setCart(false); // DO NOT CLOSE DRAWER AUTOMATICALLY
                     }, 2000);
                   }
-                } catch (error) {
+                  } catch (error) {
                   console.error("Error checking order status:", error);
                   attempts++;
                   if (attempts < maxAttempts) {
                     setTimeout(checkOrderStatus, pollInterval);
                   } else {
-                    toast.success("✅ Order created! Please check your orders page for status.");
+                    setSuccessOrderId(orderId);
+                    setOrderSuccessOpen(true);
                     setIsProcessingPayment(false);
-                    // Redirect to orders page even if status check failed
                     setTimeout(() => {
                       fetchCart();
                       setCart(false);
-                      router.push("/orders");
                     }, 2000);
                   }
                 }
@@ -602,6 +598,61 @@ export default function MyCart({ cart, setCart }) {
   }
 
   if (!cartData || cartData.length === 0) {
+    if (orderSuccessOpen) {
+      return (
+        <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-gray-800">Order Placed</h1>
+              <button onClick={() => setCart(false)} className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer">
+                <RxCross2 />
+              </button>
+            </div>
+            <div className="text-center flex flex-col items-center py-20">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold mb-4">Thank You!</h2>
+              <p className="text-lg text-gray-600 mb-8 text-center max-w-md">Your order has been placed successfully. You can view your order status in the orders section.</p>
+              <div className="flex flex-col gap-3 w-full max-w-xs">
+                <button
+                  onClick={() => {
+                    setOrderSuccessOpen(false);
+                    setCart(false);
+                    window.location.href = '/orders/';
+                  }}
+                  className="w-full py-4 rounded-xl bg-[#60BE74] text-white text-lg font-bold hover:bg-[#50b666] transition-all"
+                >
+                  View My Orders
+                </button>
+                <button
+                  onClick={() => {
+                    setOrderSuccessOpen(false);
+                    setCart(false);
+                  }}
+                  className="w-full py-3 rounded-xl border-2 border-gray-100 text-gray-600 font-semibold hover:bg-gray-50 transition-all"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          <OrderSuccessModal
+            open={orderSuccessOpen}
+            orderId={successOrderId}
+            onClose={() => setOrderSuccessOpen(false)}
+            onViewOrders={() => {
+              setOrderSuccessOpen(false);
+              setCart(false);
+              window.location.href = '/orders/';
+            }}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
         <div className="container mx-auto px-4 py-8">
@@ -847,6 +898,18 @@ export default function MyCart({ cart, setCart }) {
                     }}
                   />
                 )}
+
+                {/* ORDER SUCCESS MODAL */}
+                <OrderSuccessModal
+                  open={orderSuccessOpen}
+                  orderId={successOrderId}
+                  onClose={() => setOrderSuccessOpen(false)}
+                  onViewOrders={() => {
+                    setOrderSuccessOpen(false);
+                    setCart(false);
+                    window.location.href = '/orders/';
+                  }}
+                />
 
                 {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS - Rendered at document root via portal */}
                 {showDatePicker && typeof document !== 'undefined' && createPortal(

@@ -24,6 +24,7 @@ axios.defaults.withCredentials = true;
 import { baseurl, imageurl } from "./utlis/apis";
 import AddressForm from "./AddressForm";
 import OtherBanner from "./OtherBanner";
+import OrderSuccessModal from "./OrderSuccessModal";
 
 
 
@@ -41,6 +42,8 @@ export default function CheckOut() {
   const [selectedFrequency, setSelectedFrequency] = useState('one_time');
   const [loading, setLoading] = useState(true);
   const [orderLoading, setOrderLoading] = useState(true);
+  const [orderSuccessOpen, setOrderSuccessOpen] = useState(false);
+  const [successOrderId, setSuccessOrderId] = useState(null);
   const [subscriptionDuration, setSubscriptionDuration] = useState(1)
 
 
@@ -223,7 +226,10 @@ export default function CheckOut() {
           return;
         }
 
-        toast.success("Order placed (development payment bypass)");
+        const orderId = data.order_id || data.order?.id || null;
+        setSuccessOrderId(orderId);
+        setOrderSuccessOpen(true);
+        setOrderItems([]); // Clear items so they don't show behind modal
 
         try {
           await axios.delete(`${baseurl}/cart/clearall`, { withCredentials: true });
@@ -233,9 +239,6 @@ export default function CheckOut() {
 
         localStorage.removeItem("buyitem");
         localStorage.removeItem("buyitems");
-        setTimeout(() => {
-          router.push("/orders");
-        }, 800);
         return;
       } catch (error) {
         console.error("Dev bypass order error:", error);
@@ -322,8 +325,10 @@ export default function CheckOut() {
 
             if (verifyRes.data.success) {
               const orderId = verifyRes.data.order_id;
-              toast.success("✅ Payment Successful! Redirecting to your orders...");
-              
+              setSuccessOrderId(orderId);
+              setOrderSuccessOpen(true);
+              setOrderItems([]); // Clear items so they don't show behind modal
+
               // Clear all cart items from backend
               try {
                 await axios.delete(`${baseurl}/cart/clearall`, {
@@ -332,23 +337,16 @@ export default function CheckOut() {
                 console.log("✅ Cart cleared successfully");
               } catch (clearError) {
                 console.error("Error clearing cart:", clearError);
-                // Non-critical error, continue anyway
               }
-              
+
               // Clear cart/localStorage if needed
               localStorage.removeItem("buyitem");
               localStorage.removeItem("buyitems");
-              // Redirect to orders page
-              setTimeout(() => {
-                router.push("/orders");
-              }, 1500);
             } else {
               const orderId = verifyRes.data?.order_id;
               if (orderId) {
-                toast.error("Payment verification had issues. Please check your orders page.");
-                setTimeout(() => {
-                  router.push("/orders");
-                }, 2000);
+                setSuccessOrderId(orderId);
+                setOrderSuccessOpen(true);
               } else {
                 toast.error("Payment verification failed: " + (verifyRes.data.message || "Unknown error"));
               }
@@ -357,10 +355,8 @@ export default function CheckOut() {
             console.error("Payment verification error:", error);
             const orderId = error.response?.data?.order_id;
             if (orderId) {
-              toast.error("Payment verification failed. Please check your orders page or contact support.");
-              setTimeout(() => {
-                router.push("/orders");
-              }, 2000);
+              setSuccessOrderId(orderId);
+              setOrderSuccessOpen(true);
             } else {
               toast.error("Payment verification failed. Please contact support with Payment ID: " + response.razorpay_payment_id);
             }
@@ -450,205 +446,237 @@ export default function CheckOut() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 lg:gap-x-8 gap-y-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
-                <FaMapMarkerAlt className="mr-3 text-blue-500" />
-                Delivery Address
-              </h3>
+        {orderSuccessOpen ? (
+          <div className="bg-white p-12 rounded-2xl shadow-xl border border-green-100 text-center max-w-2xl mx-auto my-10">
+             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-4xl font-black text-gray-900 mb-4">Thank You!</h2>
+              <p className="text-xl text-gray-600 mb-8">Your order has been placed and is being processed.</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button 
+                  onClick={() => window.location.href = '/orders/'} 
+                  className="px-8 py-4 bg-[#60BE74] text-white rounded-xl font-bold text-lg hover:bg-[#50b666] transition-all shadow-lg shadow-green-100"
+                >
+                  View My Orders
+                </button>
+                <Link href="/" className="px-8 py-4 border-2 border-gray-100 text-gray-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all">
+                  Back to Home
+                </Link>
+              </div>
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-3 lg:gap-x-8 gap-y-8">
+            <div className="lg:col-span-2">
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
+                  <FaMapMarkerAlt className="mr-3 text-blue-500" />
+                  Delivery Address
+                </h3>
 
-              {!showNewAddress ? (
-                <>
-                  <button
-                    onClick={() => setShowNewAddress(true)}
-                    className="mb-6 bg-[#60BE74] hover:bg-[#50b666] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
-                  >
-                    <FaPlus className="mr-2" /> Add New Address
-                  </button>
+                {!showNewAddress ? (
+                  <>
+                    <button
+                      onClick={() => setShowNewAddress(true)}
+                      className="mb-6 bg-[#60BE74] hover:bg-[#50b666] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
+                    >
+                      <FaPlus className="mr-2" /> Add New Address
+                    </button>
 
-                  {loading ? (
-                    <div className="flex justify-center py-10">
-                      <FaSpinner className="animate-spin text-2xl text-blue-500" />
-                    </div>
-                  ) : (
-                    <div className="address-list">
+                    {loading ? (
+                      <div className="flex justify-center py-10">
+                        <FaSpinner className="animate-spin text-2xl text-blue-500" />
+                      </div>
+                    ) : (
+                      <div className="address-list">
 
-                      <div className="grid gap-4">
-                        {allAddress?.map((addr) => (
-                          <div
-                            key={addr.id}
-                            className={`p-4 rounded-2xl shadow-md border transition 
-              ${addr.is_default ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
-            `}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-gray-700">
-                                {addr.address_type === "home" ? (
-                                  <FaHome className="text-blue-500" />
+                        <div className="grid gap-4">
+                          {allAddress?.map((addr) => (
+                            <div
+                              key={addr.id}
+                              className={`p-4 rounded-2xl shadow-md border transition 
+                ${addr.is_default ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
+              `}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2 text-gray-700">
+                                  {addr.address_type === "home" ? (
+                                    <FaHome className="text-blue-500" />
+                                  ) : (
+                                    <FaBuilding className="text-green-500" />
+                                  )}
+                                  <span className="font-medium capitalize">{addr.address_type}</span>
+                                </div>
+                                {addr.is_default ? (
+                                  <MdOutlineStar className="text-yellow-500 text-xl" />
                                 ) : (
-                                  <FaBuilding className="text-green-500" />
+                                  <MdOutlineStarBorder onClick={() => handelDefault(addr.id)} className="text-gray-400 text-xl cursor-pointer" />
                                 )}
-                                <span className="font-medium capitalize">{addr.address_type}</span>
                               </div>
-                              {addr.is_default ? (
-                                <MdOutlineStar className="text-yellow-500 text-xl" />
-                              ) : (
-                                <MdOutlineStarBorder onClick={() => handelDefault(addr.id)} className="text-gray-400 text-xl cursor-pointer" />
-                              )}
+
+                              <p className="mt-2 font-semibold text-gray-800">
+                                {addr.first_name} {addr.last_name}
+                              </p>
+                              <p className="text-gray-600 text-sm">{addr.street}, {addr.city}</p>
+                              <p className="text-gray-600 text-sm">{addr.state}, {addr.zip_code}</p>
+                              <p className="text-gray-600 text-sm">{addr.country}</p>
+                              <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
                             </div>
+                          ))}
+                        </div>
 
-                            <p className="mt-2 font-semibold text-gray-800">
-                              {addr.first_name} {addr.last_name}
-                            </p>
-                            <p className="text-gray-600 text-sm">{addr.street}, {addr.city}</p>
-                            <p className="text-gray-600 text-sm">{addr.state}, {addr.zip_code}</p>
-                            <p className="text-gray-600 text-sm">{addr.country}</p>
-                            <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
+
+                        {allAddress?.length === 0 && (
+                          <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
+                            <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
+                            <p className="text-gray-500">No addresses saved yet.</p>
+                            <p className="text-gray-400 text-sm mt-1">Please add an address to continue with your order.</p>
                           </div>
-                        ))}
+                        )}
                       </div>
+                    )}
+                  </>
+                ) : (
+
+                  <AddressForm
+
+                    onCancel={handleCancelForm}
+                  />
 
 
-                      {allAddress?.length === 0 && (
-                        <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
-                          <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
-                          <p className="text-gray-500">No addresses saved yet.</p>
-                          <p className="text-gray-400 text-sm mt-1">Please add an address to continue with your order.</p>
+                )}
+              </div>
+            </div>
+
+            <div className="lg:col-span-1">
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 sticky top-6">
+                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
+                  Order Summary
+                </h3>
+
+                {orderLoading ? (
+                  <div className="flex justify-center py-10">
+                    <FaSpinner className="animate-spin text-2xl text-blue-500" />
+                  </div>
+                ) : orderItems?.length ? (
+                  <>
+                    <div className="mb-5 pb-4 border-b space-y-4 max-h-[320px] overflow-auto pr-1">
+                      {orderItems.map((item) => (
+                        <div key={item.cart_id ?? `${item.product_id}-${item.name}`} className="flex items-center">
+                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden mr-4 shrink-0">
+                            <img
+                              src={`${imageurl}/${JSON.parse(item.images)[0]}` || "/img/placeholder-product.webp"}
+                              alt={item?.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.src = "/img/placeholder-product.webp";
+                              }}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-gray-800 truncate">{item?.name}</h4>
+                            <p className="text-gray-600 text-sm mt-1">Quantity: {item?.quantity}</p>
+                          </div>
+                          <div className="text-right ml-3">
+                            <p className="font-bold text-gray-800">
+                              ₹{parseFloat(item?.total_price ?? 0).toFixed(2)}
+                            </p>
+                          </div>
                         </div>
-                      )}
+                      ))}
                     </div>
-                  )}
-                </>
-              ) : (
 
-                <AddressForm
+                    <div className="space-y-3 pb-4 border-b mb-4">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Subtotal</span>
+                        <span className="text-gray-800">₹{parseFloat(subtotal || 0).toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Shipping</span>
+                        <span className="text-green-600 font-medium">Free</span>
+                      </div>
+                    </div>
 
-                  onCancel={handleCancelForm}
-                />
 
+                    {orderItems.length > 1 ? (
+                      <div className="mb-6">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
+                          <span className="text-blue-700 font-medium">One-time purchase (multiple items)</span>
+                        </div>
+                      </div>
+                    ) : orderItems?.[0]?.one_time ? (
+                      <div className="mb-6">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
+                          <span className="text-blue-700 font-medium">One-time purchase</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mb-6">
+                        <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
+                            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
+                              ? 'bg-red-100 text-red-700 border border-red-300'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                          >
+                            One Time
+                          </button>
+                          <button
+                            onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
+                            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
+                              ? 'bg-green-100 text-green-700 border border-green-300'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                          >
+                            30 Days
+                          </button>
+                          <button
+                            onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
+                            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
+                              ? 'bg-green-100 text-green-700 border border-green-300'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                          >
+                            Alternative days
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex justify-between mb-6">
+                      <span className="text-lg font-semibold text-gray-800">Total</span>
+                      <span className="text-xl font-bold text-gray-800">
+                        ₹{parseFloat(totalToPay || 0).toFixed(2)}
+                      </span>
+                    </div>
 
-              )}
+                    <button
+                      onClick={handlePlaceOrder}
+                      disabled={!defaultAddress}
+                      className="w-full bg-[#60BE74] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
+                    >
+                      {!defaultAddress ? 'Select Address First' :
+                        (isSettingDefault ? <FaSpinner className="animate-spin mr-2" /> : null)}
+                      {defaultAddress && !isSettingDefault && 'Place Order'}
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-gray-500 text-center py-8">No order details available.</p>
+                )}
+              </div>
             </div>
           </div>
-
-          <div className="lg:col-span-1">
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 sticky top-6">
-              <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
-                Order Summary
-              </h3>
-
-              {orderLoading ? (
-                <div className="flex justify-center py-10">
-                  <FaSpinner className="animate-spin text-2xl text-blue-500" />
-                </div>
-              ) : orderItems?.length ? (
-                <>
-                  <div className="mb-5 pb-4 border-b space-y-4 max-h-[320px] overflow-auto pr-1">
-                    {orderItems.map((item) => (
-                      <div key={item.cart_id ?? `${item.product_id}-${item.name}`} className="flex items-center">
-                        <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden mr-4 shrink-0">
-                          <img
-                            src={`${imageurl}/${JSON.parse(item.images)[0]}` || "/img/placeholder-product.webp"}
-                            alt={item?.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.target.src = "/img/placeholder-product.webp";
-                            }}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-800 truncate">{item?.name}</h4>
-                          <p className="text-gray-600 text-sm mt-1">Quantity: {item?.quantity}</p>
-                        </div>
-                        <div className="text-right ml-3">
-                          <p className="font-bold text-gray-800">
-                            ₹{parseFloat(item?.total_price ?? 0).toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-3 pb-4 border-b mb-4">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Subtotal</span>
-                      <span className="text-gray-800">₹{parseFloat(subtotal || 0).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Shipping</span>
-                      <span className="text-green-600 font-medium">Free</span>
-                    </div>
-                  </div>
-
-
-                  {orderItems.length > 1 ? (
-                    <div className="mb-6">
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
-                        <span className="text-blue-700 font-medium">One-time purchase (multiple items)</span>
-                      </div>
-                    </div>
-                  ) : orderItems?.[0]?.one_time ? (
-                    <div className="mb-6">
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
-                        <span className="text-blue-700 font-medium">One-time purchase</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mb-6">
-                      <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
-                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
-                            ? 'bg-red-100 text-red-700 border border-red-300'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                        >
-                          One Time
-                        </button>
-                        <button
-                          onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
-                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
-                            ? 'bg-green-100 text-green-700 border border-green-300'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                        >
-                          30 Days
-                        </button>
-                        <button
-                          onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
-                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
-                            ? 'bg-green-100 text-green-700 border border-green-300'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                        >
-                          Alternative days
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex justify-between mb-6">
-                    <span className="text-lg font-semibold text-gray-800">Total</span>
-                    <span className="text-xl font-bold text-gray-800">
-                      ₹{parseFloat(totalToPay || 0).toFixed(2)}
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={handlePlaceOrder}
-                    disabled={!defaultAddress}
-                    className="w-full bg-[#60BE74] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
-                  >
-                    {!defaultAddress ? 'Select Address First' :
-                      (isSettingDefault ? <FaSpinner className="animate-spin mr-2" /> : null)}
-                    {defaultAddress && !isSettingDefault && 'Place Order'}
-                  </button>
-                </>
-              ) : (
-                <p className="text-gray-500 text-center py-8">No order details available.</p>
-              )}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
+      <OrderSuccessModal
+        open={orderSuccessOpen}
+        orderId={successOrderId}
+        onClose={() => setOrderSuccessOpen(false)}
+        onViewOrders={() => {
+          setOrderSuccessOpen(false);
+          window.location.href = '/orders/';
+        }}
+      />
     </div>
   );
 }
