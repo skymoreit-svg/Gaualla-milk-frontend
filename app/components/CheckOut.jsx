@@ -115,7 +115,16 @@ export default function CheckOut() {
 
 
 
+  const { info, isLoading: userLoading } = useSelector((state) => state.user);
+
   useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem("accessToken");
+    if (!userLoading && !info?.success && !token) {
+      router.push("/login");
+      return;
+    }
+
     // client-only
     let ids = [];
     try {
@@ -133,13 +142,13 @@ export default function CheckOut() {
       if (single) ids = [single];
     }
 
-    if (!ids.length) {
+    if (!ids.length && !userLoading) {
       router.push("/");
     } else {
       fetchOrderItems(ids);
       fetchaddress()
     }
-  }, [router]);
+  }, [router, info, userLoading]);
 
   const subtotal = useMemo(() => {
     return (Array.isArray(orderItems) ? orderItems : []).reduce((sum, item) => {
@@ -200,9 +209,7 @@ export default function CheckOut() {
       return;
     }
 
-    const shouldBypassPayment =
-      process.env.NEXT_PUBLIC_BYPASS_PAYMENT === "true" ||
-      process.env.NODE_ENV !== "production";
+    const shouldBypassPayment = false; // Forced false to ensure Razorpay opens
 
     if (shouldBypassPayment) {
       try {
@@ -260,7 +267,7 @@ export default function CheckOut() {
       // 👉 0. Get Razorpay Key from Backend (ensures key matches)
       let razorpayKey;
       try {
-        const keyResponse = await axios.get(`${baseurl}/order/key`);
+        const keyResponse = await axios.get(`${baseurl}/order/key`, { withCredentials: true });
         if (keyResponse.data.success && keyResponse.data.key_id) {
           razorpayKey = keyResponse.data.key_id;
           console.log("✅ Razorpay key fetched from backend");
@@ -275,7 +282,7 @@ export default function CheckOut() {
       // 👉 1. Create Order on Backend
       const { data } = await axios.post(`${baseurl}/order/create`, {
         amount: amountInRupees, // Send as number, not string
-      });
+      }, { withCredentials: true });
 
       console.log("Order creation response:", data); // Debug log
 
@@ -363,15 +370,16 @@ export default function CheckOut() {
           }
         },
         prefill: {
-          name: "John Doe",
-          email: "john@example.com",
-          contact: "9876543210",
+          name: info?.user?.name || "Customer",
+          email: info?.user?.email || "",
+          contact: info?.user?.phone || "",
         },
         notes: {
           address: "Order address ID: " + defaultAddress,
+          user_id: info?.user?.id
         },
         theme: {
-          color: "#3399cc",
+          color: "#60BE74", // Branded green color
         },
         modal: {
           ondismiss: function() {

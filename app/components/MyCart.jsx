@@ -6,7 +6,7 @@ import { FaMapMarkerAlt, FaHome, FaBuilding, FaExclamationTriangle, FaSpinner } 
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../store/cartSlice";
 import axios from "axios";
 import { baseurl, imageurl } from "./utlis/apis";
@@ -39,6 +39,7 @@ export default function MyCart({ cart, setCart }) {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [orderSuccessOpen, setOrderSuccessOpen] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState(null);
+  const { info, isLoading: userLoading } = useSelector((state) => state.user);
 
 
 
@@ -173,13 +174,20 @@ export default function MyCart({ cart, setCart }) {
 
   useEffect(() => {
     if (cart) {
+      // Check if user is logged in
+      const token = localStorage.getItem("accessToken");
+      if (!userLoading && !info?.success && !token) {
+        router.push("/login");
+        return;
+      }
+
       // Reset payment processing state when cart drawer opens
       setIsProcessingPayment(false);
       setError('');
       fetchCart();
       fetchaddress();
     }
-  }, [cart, fetchCart, fetchaddress]);
+  }, [cart, fetchCart, fetchaddress, info, userLoading, router]);
 
 
   // Moved useMemo to top level (before any return)
@@ -266,9 +274,7 @@ export default function MyCart({ cart, setCart }) {
       return;
     }
 
-    const shouldBypassPayment =
-      process.env.NEXT_PUBLIC_BYPASS_PAYMENT === "true" ||
-      process.env.NODE_ENV !== "production";
+    const shouldBypassPayment = false; // Forced false for Razorpay
 
     if (shouldBypassPayment) {
       try {
@@ -336,7 +342,7 @@ export default function MyCart({ cart, setCart }) {
       // Get Razorpay Key from Backend
       let razorpayKey;
       try {
-        const keyResponse = await axios.get(`${baseurl}/order/key`);
+        const keyResponse = await axios.get(`${baseurl}/order/key`, { withCredentials: true });
         if (keyResponse.data.success && keyResponse.data.key_id) {
           razorpayKey = keyResponse.data.key_id;
         } else {
@@ -350,7 +356,7 @@ export default function MyCart({ cart, setCart }) {
       // Create Order on Backend
       const { data } = await axios.post(`${baseurl}/order/create`, {
         amount: amountInRupees,
-      });
+      }, { withCredentials: true });
 
       if (!data.success || !data.order || !data.order.id) {
         setError("Failed to create Razorpay order: " + (data.message || "Unknown error"));
@@ -484,12 +490,13 @@ export default function MyCart({ cart, setCart }) {
           }
         },
         prefill: {
-          name: "Customer",
-          email: "customer@example.com",
-          contact: "9876543210",
+          name: info?.user?.name || "Customer",
+          email: info?.user?.email || "",
+          contact: info?.user?.phone || "",
         },
         notes: {
           address: "Order address ID: " + defaultAddress,
+          user_id: info?.user?.id
         },
         theme: {
           color: "#60BE74",
