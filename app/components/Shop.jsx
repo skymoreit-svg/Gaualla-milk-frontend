@@ -12,12 +12,15 @@ import { motion } from "framer-motion";
 
 import { Pagination, Navigation } from "swiper/modules";
 import Link from "next/link";
+import LogoLoader from "./LogoLoader";
 
 export default function CategoriesGrid() {
   const [categoryData, setCategoryData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchCategory = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`${baseurl}/category`);
       const data = response.data;
       if (data.success) {
@@ -25,12 +28,20 @@ export default function CategoriesGrid() {
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCategory();
   }, []);
+
+  if (loading) return (
+    <section className="py-20 lg:py-28 bg-[#fdfaf7]">
+      <LogoLoader text="Discovering Purity..." />
+    </section>
+  );
 
   return (
     <section className="py-20 lg:py-28 bg-[#fdfaf7] overflow-hidden">

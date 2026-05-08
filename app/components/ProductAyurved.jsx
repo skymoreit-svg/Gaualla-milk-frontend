@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ProductAyurvedCard from './ProductAyurvedCard';
 import axios from 'axios';
 import { baseurl } from './utlis/apis';
+import LogoLoader from './LogoLoader';
 
 export default function ProductAyurved() {
     const [productData, setProductData] = useState([]);
@@ -29,15 +30,8 @@ export default function ProductAyurved() {
     }, []);
 
     if (loading) return (
-        <div className="w-full max-w-7xl mx-auto px-4 py-20 text-center">
-            <div className="animate-pulse flex flex-col items-center">
-                <div className="h-8 w-64 bg-gray-200 rounded mb-10"></div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
-                    {[...Array(4)].map((_, i) => (
-                        <div key={i} className="aspect-[3/4] bg-gray-100 rounded-xl"></div>
-                    ))}
-                </div>
-            </div>
+        <div className="bg-[#fdfaf7] py-20">
+            <LogoLoader text="Collecting the Best of Nature..." />
         </div>
     );
 

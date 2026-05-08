@@ -7,6 +7,8 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { API_ENDPOINTS } from "@/app/config/constants";
 import Image from "next/image";
 
+import LogoLoader from "./LogoLoader";
+
 export default function BlogCardsGrid() {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,7 +36,11 @@ export default function BlogCardsGrid() {
     }, []);
 
     if (loading)
-        return <div className="py-20 text-center text-lg font-serif animate-pulse">Curating fresh stories for you...</div>;
+        return (
+            <div className="py-24 bg-white">
+                <LogoLoader text="Gathering Fresh Stories..." />
+            </div>
+        );
     
     if (!blogs.length)
         return <div className="py-20 text-center text-lg text-gray-500">Our storytellers are busy at work. Check back soon!</div>;

@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { baseurl, imageurl } from "./utlis/apis";
+import { baseurl, imageurl, adminurl } from "./utlis/apis";
+import LogoLoader from "./LogoLoader";
 
 const SkeletonCard = () => (
   <div className="animate-pulse bg-white p-6 rounded-2xl shadow-md">
@@ -38,7 +39,7 @@ const Blogs = () => {
       try {
         setLoading(true);
         // Using common API endpoint structure
-        const response = await axios.get(`http://localhost:9002/admin/blog/getall`);
+        const response = await axios.get(`${adminurl}/blog/getall`);
         if (response.data.success) {
           // Get the 3 most recent blogs
           setBlogs(response.data.blogs.slice(0, 3));
@@ -76,11 +77,9 @@ const Blogs = () => {
 
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-10 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {loading ? (
-            <>
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-            </>
+            <div className="col-span-full py-20">
+              <LogoLoader text="Brewing Fresh Stories..." />
+            </div>
           ) : error ? (
             <div className="col-span-full text-center p-12 bg-white/50 backdrop-blur-md rounded-3xl border border-red-100">
               <p className="text-red-500 font-medium">{error}</p>
