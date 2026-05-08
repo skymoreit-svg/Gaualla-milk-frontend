@@ -1029,19 +1029,19 @@ export default function MyCart({ cart, setCart }) {
                     <div key={item.cart_id} className="flex items-center">
                       <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden mr-4 shrink-0">
                         <img
-                          src={`${imageurl}/${JSON.parse(item.images || '[]')[0]}` || "/img/placeholder-product.webp"}
-                          alt={item?.name}
+                          src={`${imageurl}/${item.product_image}`}
+                          alt={item.product_name}
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             e.target.src = "/img/placeholder-product.webp";
                           }}
                         />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-800 truncate">{item?.name}</h4>
-                        <p className="text-gray-600 text-sm mt-1">Quantity: {item?.quantity}</p>
+                      <div className="flex-grow">
+                        <h4 className="font-semibold text-gray-800 truncate">{item.product_name}</h4>
+                        <p className="text-gray-600 text-sm mt-1">Quantity: {item.quantity}</p>
                       </div>
-                      <div className="text-right ml-3">
+                      <div className="text-right">
                         <p className="font-bold text-gray-800">
                           ₹{parseFloat(item?.total_price ?? 0).toFixed(2)}
                         </p>
