@@ -39,11 +39,15 @@ const OrderDetailPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!info?.success) {
+    const token = localStorage.getItem("accessToken");
+    // Redirect to login if not authenticated (no info and no token)
+    if (!info?.success && !token) {
       router.push("/login");
       return;
     }
-    if (orderId) {
+    
+    // Only fetch order if we have at least a token or info and an orderId
+    if ((info?.success || token) && orderId) {
       fetchOrder();
     }
   }, [orderId, info]);

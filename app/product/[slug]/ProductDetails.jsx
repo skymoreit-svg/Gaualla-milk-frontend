@@ -152,11 +152,16 @@ const ProductDetails = ({ slug }) => {
   }, []);
 
   useEffect(() => {
-    // Update userLogin state when user info changes
-    if (!isLoading && info?.success) {
+    // Update userLogin state when user info changes or on mount
+    const token = localStorage.getItem("accessToken");
+    if (token) {
       setUserLogin(true);
-    } else if (!isLoading && !info?.success) {
-      setUserLogin(false);
+    } else if (!isLoading) {
+      if (info?.success) {
+        setUserLogin(true);
+      } else {
+        setUserLogin(false);
+      }
     }
   }, [isLoading, info]);
 

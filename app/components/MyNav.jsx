@@ -40,17 +40,27 @@ export default function MyNav() {
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false);
   const [userLogin, setUserLogin] = useState(false);
   const [adminLogin, setAdminLogin] = useState(false); // admin login state
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setUserLogin(true);
+    }
+  }, []);
 
   // Detect regular user login
   useEffect(() => {
-    if (!isLoading) {
-      if (info?.success) {
+    if (!isLoading && hasMounted) {
+      const token = localStorage.getItem("accessToken");
+      if (token || info?.success) {
         setUserLogin(true);
       } else {
         setUserLogin(false);
       }
     }
-  }, [isLoading, info]);
+  }, [isLoading, info, hasMounted]);
 
   // Detect admin login
   useEffect(() => {
@@ -238,40 +248,54 @@ export default function MyNav() {
         </ul>
 
         <ul className="flex items-center gap-x-2 lg:gap-x-6">
-          {!userLogin && !adminLogin ? (
-            <li className="hidden md:block">
-              <Link href={"/signup"} className="w-8 h-8 flex justify-center items-center rounded-full border border-gray-400 hover:bg-[#F3F4F7] cursor-pointer">
-                <RiUserLine className="text-gray-600" />
-              </Link>
-            </li>
-          ) : null}
-
-          {adminLogin && (
-            <li>
-              <button
-                onClick={handleAdminLogout}
-                className="text-gray-700 hover:text-[#23955c]"
-              >
-                Logout
-              </button>
-            </li>
-          )}
-
-          {userLogin && !adminLogin && (
+          {!hasMounted ? null : (
             <>
-              <li className="">
-                <Link href="/user/profile" className="w-8 h-8 flex justify-center items-center rounded-full border border-gray-400 hover:bg-[#F3F4F7] cursor-pointer">
-                  <RiUserLine className="text-gray-600" />
-                </Link>
-              </li>
-              <li className="">
-                <button onClick={() => dispatch(openCartDrawer())} className="w-8 h-8 relative flex justify-center items-center rounded-full bg-[#b2e18c30] border border-[#62371f] cursor-pointer">
-                  <BsCartPlus className="text-[#62371f]" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                    {cartCount}
-                  </span>
-                </button>
-              </li>
+              {!userLogin && !adminLogin ? (
+                <li className="">
+                  <Link 
+                    href="/login" 
+                    className="px-6 py-2 bg-[#62371f] text-white text-sm font-bold rounded-full shadow-lg hover:bg-black transition-all duration-300"
+                  >
+                    Login
+                  </Link>
+                </li>
+              ) : null}
+
+              {adminLogin && (
+                <li>
+                  <button
+                    onClick={handleAdminLogout}
+                    className="px-6 py-2 border border-[#62371f] text-[#62371f] text-sm font-bold rounded-full hover:bg-[#62371f] hover:text-white transition-all duration-300"
+                  >
+                    Logout
+                  </button>
+                </li>
+              )}
+
+              {userLogin && !adminLogin && (
+                <>
+                  <li className="">
+                    <Link 
+                      href="/user/profile" 
+                      className="w-10 h-10 flex justify-center items-center rounded-full bg-gray-100 border border-gray-200 hover:bg-[#62371f] hover:text-white group transition-all duration-300"
+                      title="My Profile"
+                    >
+                      <RiUserLine className="text-gray-600 group-hover:text-white transition-colors" />
+                    </Link>
+                  </li>
+                  <li className="">
+                    <button 
+                      onClick={() => dispatch(openCartDrawer())} 
+                      className="w-10 h-10 relative flex justify-center items-center rounded-full bg-[#fcfaf8] border border-[#62371f] hover:bg-[#62371f] hover:text-white group transition-all duration-300"
+                    >
+                      <BsCartPlus className="text-[#62371f] group-hover:text-white transition-colors" />
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
+                        {cartCount}
+                      </span>
+                    </button>
+                  </li>
+                </>
+              )}
             </>
           )}
 
