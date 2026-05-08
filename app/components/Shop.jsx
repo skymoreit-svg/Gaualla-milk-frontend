@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { motion } from "framer-motion";Order Summary
+import { motion } from "framer-motion";
 
 import { Pagination, Navigation } from "swiper/modules";
 import Link from "next/link";
