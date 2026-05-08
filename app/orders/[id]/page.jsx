@@ -100,10 +100,10 @@ const OrderDetailPage = () => {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || "";
     if (statusLower === "completed") {
-      return { bg: "bg-green-100", text: "text-green-700", icon: CheckCircle };
+      return { bg: "bg-[#62371f]/10", text: "text-[#62371f]", icon: CheckCircle };
     }
     if (statusLower === "processing" || statusLower === "out_for_delivery") {
-      return { bg: "bg-blue-100", text: "text-blue-700", icon: Truck };
+      return { bg: "bg-orange-50", text: "text-orange-700", icon: Truck };
     }
     if (statusLower === "pending") {
       return { bg: "bg-yellow-100", text: "text-yellow-700", icon: Clock };
@@ -117,7 +117,7 @@ const OrderDetailPage = () => {
   const getPaymentStatusBadge = (paymentStatus) => {
     const statusLower = paymentStatus?.toLowerCase() || "";
     if (statusLower === "paid") {
-      return "bg-green-100 text-green-700";
+      return "bg-[#62371f]/10 text-[#62371f]";
     }
     if (statusLower === "pending") {
       return "bg-yellow-100 text-yellow-700";
@@ -142,9 +142,9 @@ const OrderDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#62371f] mb-4"></div>
           <p className="text-gray-600">Loading order details...</p>
         </div>
       </div>
@@ -158,9 +158,9 @@ const OrderDetailPage = () => {
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Not Found</h2>
           <p className="text-gray-600 mb-6">{error || "The order you're looking for doesn't exist."}</p>
-          <Link
+           <Link
             href="/orders"
-            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="inline-block px-6 py-3 bg-[#62371f] text-white rounded-lg hover:bg-[#4a2917] transition"
           >
             Back to Orders
           </Link>
@@ -362,9 +362,9 @@ const OrderDetailPage = () => {
                   <span>Subtotal</span>
                   <span>{formatCurrency(order.total_amount)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
-                  <span className="text-green-600">Free</span>
+                  <span className="text-[#62371f] font-bold">Free</span>
                 </div>
                 <div className="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg">
                   <span>Total</span>
@@ -374,28 +374,26 @@ const OrderDetailPage = () => {
             </div>
 
             {/* Support Contact */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg p-6 text-white">
+             <div className="bg-[#62371f] rounded-lg p-6 text-white shadow-lg">
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                 <Phone className="w-5 h-5" />
                 Need Help?
               </h3>
               <div className="space-y-3 text-sm">
                 <div>
-                  <p className="text-blue-100 mb-1">Phone Support</p>
-                  <a href="tel:+91 8378-000052
-" className="text-lg font-semibold hover:underline block">
+                  <p className="text-gray-200 mb-1">Phone Support</p>
+                  <a href="tel:+91 8378-000052" className="text-lg font-semibold hover:underline block">
                     +91 8378-000052
-
                   </a>
                 </div>
                 <div>
-                  <p className="text-blue-100 mb-1">Email Support</p>
+                  <p className="text-gray-200 mb-1">Email Support</p>
                   <a href="mailto:gauallamilkpvtltd@gmail.com" className="text-lg font-semibold hover:underline block">
                     gauallamilkpvtltd@gmail.com
                   </a>
                 </div>
                 <div className="pt-3 border-t border-white/20">
-                  <p className="text-blue-100">Support Hours</p>
+                  <p className="text-gray-200">Support Hours</p>
                   <p className="font-semibold">9 AM - 6 PM IST</p>
                 </div>
               </div>

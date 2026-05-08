@@ -1,76 +1,83 @@
 "use client";
 import React from "react";
-import { FaLeaf, FaFlask, FaRecycle, FaSeedling } from "react-icons/fa";
+import { Leaf, ShieldCheck, Zap, Heart } from "lucide-react";
 
 const features = [
   {
-    icon: <FaLeaf size={28} className="text-white" />,
-    title: "Pure A2 Desi Cow Milk",
-    description:
-      "Wholesome, A2-certified milk sourced from indigenous cows raised ethically with love and care.",
+    icon: <Leaf size={20} />,
+    title: "Pure A2 Heritage",
+    description: "Sourced from indigenous cows raised with traditional care."
   },
   {
-    icon: <FaFlask size={28} className="text-white" />,
-    title: "Chemical & Antibiotic Free",
-    description:
-      "No adulteration, no antibiotics—just 100% natural, healthy milk for your family’s well-being.",
+    icon: <ShieldCheck size={20} />,
+    title: "Zero Compromise",
+    description: "100% antibiotic-free and chemical-free purity guaranteed."
   },
   {
-    icon: <FaRecycle size={28} className="text-white" />,
-    title: "Sustainable Farming Practices",
-    description:
-      "We use cow dung and urine for organic soil health and natural pest control, promoting sustainability.",
+    icon: <Zap size={20} />,
+    title: "Farm Fresh",
+    description: "Delivered within 24 hours of milking for peak nutrition."
   },
   {
-    icon: <FaSeedling size={28} className="text-white" />,
-    title: "Tradition & Freshness Focused",
-    description:
-      "Daily milk sourced traditionally with care, maintaining freshness and quality from farm to home.",
-  },
+    icon: <Heart size={20} />,
+    title: "Ethical Farming",
+    description: "Our cows are treated as family in a stress-free environment."
+  }
 ];
 
 const AboutSection = () => {
   return (
-    <section className="py-9 px-5 md:px-16 xl:px-16 bg-white">
-      <div className="flex flex-col lg:flex-row items-center gap-10">
-        {/* Left Image */}
-        <div className="w-full lg:w-1/2 relative flex justify-center">
-          {/* Main Image */}
-          <div className="relative w-full overflow-hidden  group transition-all duration-500 lg:w-4/5">
-            <img
-              src="/img1.webp"
-              alt="Analyst"
-              className=" h-auto object-contain w-full"
-            />
+    <section className="py-20 lg:py-32 bg-white overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+          
+          {/* Left: Professional Image */}
+          <div className="w-full lg:w-1/2 relative">
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-xl">
+              <img
+                src="/img1.webp"
+                alt="Gaualla Farm"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Subtle Accent */}
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#62371f] rounded-2xl -z-10 hidden md:block" />
           </div>
 
-          {/* Floating Image Box */}
-
-        </div>
-
-        {/* Right Content */}
-        <div className="w-full lg:w-1/2">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Natural Taste From The <br />
-            Gaualla Farm!
-          </h2>
-          <p className="text-gray-600 mb-8">
-            Enjoy the authentic, creamy taste of A2 Desi Cow milk—pure, fresh,
-            and naturally produced on our ethical Gaualla farms.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {features.map((item, index) => (
-              <div key={index} className="flex gap-4 items-start">
-                <div className="p-3 bg-[#63371f] rounded">{item.icon}</div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800">
-                    {item.title}
-                  </h4>
-                  <p className="text-gray-600 text-sm">{item.description}</p>
-                </div>
+          {/* Right: Content */}
+          <div className="w-full lg:w-1/2 space-y-10">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-px bg-[#62371f]" />
+                <span className="text-[#62371f] text-xs font-bold uppercase tracking-widest">About Gaualla</span>
               </div>
-            ))}
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                Bringing You the <br />
+                <span className="text-[#62371f]">Purity of Nature.</span>
+              </h2>
+              <p className="text-lg text-gray-500 leading-relaxed font-medium">
+                Our journey started with a simple goal: to provide families with the same pure, unadulterated A2 milk that our grandparents enjoyed. Today, we stand as a symbol of trust, quality, and ethical farming.
+              </p>
+            </div>
+
+            {/* Features Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+              {features.map((item, index) => (
+                <div key={index} className="space-y-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#fdf5f0] text-[#62371f] flex items-center justify-center">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-gray-900 mb-1">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-gray-400 font-medium leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -79,3 +86,4 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
+

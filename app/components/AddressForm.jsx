@@ -115,8 +115,8 @@ const AddressForm = ({ onCancel, mapLocation, onSuccess }) => {
 
       {/* 📍 Map indicator */}
       {mapLocation?.formattedAddress && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm font-medium text-green-900">📍 Location from map</p>
+        <div className="mb-4 p-3 bg-[#62371f]/5 border border-[#62371f]/10 rounded-lg">
+          <p className="text-sm font-medium text-[#62371f]">📍 Location from map</p>
           <p className="text-sm text-gray-700 mt-1">
             {mapLocation.formattedAddress}
           </p>
@@ -155,7 +155,7 @@ const AddressForm = ({ onCancel, mapLocation, onSuccess }) => {
 
         <div className="md:col-span-2 flex gap-4 mt-4">
           <button type="submit"
-            className="flex-1 bg-[#60BE74] text-white py-2.5 rounded-lg font-semibold">
+            className="flex-1 bg-[#62371f] text-white py-2.5 rounded-lg font-semibold">
             {isSubmitting ? "Saving..." : "Save Address"}
           </button>
 

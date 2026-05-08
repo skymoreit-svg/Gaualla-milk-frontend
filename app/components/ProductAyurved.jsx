@@ -1,9 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { FaStar } from 'react-icons/fa6';
-import { IoMdCart } from 'react-icons/io';
 import ProductAyurvedCard from './ProductAyurvedCard';
-import AyutramartProduct from '../AyutramartData';
 import axios from 'axios';
 import { baseurl } from './utlis/apis';
 
@@ -12,9 +9,6 @@ export default function ProductAyurved() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    const tabs = ["BEST SELLERS", "Newly launched", "Sets and combos"];
-    const [activeTab, setActiveTab] = useState("BEST SELLERS");
-
     const fetchProduct = async () => {
         try {
             setLoading(true);
@@ -34,34 +28,41 @@ export default function ProductAyurved() {
         fetchProduct();
     }, []);
 
+    if (loading) return (
+        <div className="w-full max-w-7xl mx-auto px-4 py-20 text-center">
+            <div className="animate-pulse flex flex-col items-center">
+                <div className="h-8 w-64 bg-gray-200 rounded mb-10"></div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="aspect-[3/4] bg-gray-100 rounded-xl"></div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 
-    if (loading) return <div className="text-center py-10">Loading products...</div>;
-    if (error) return <div className="text-center py-10 text-red-500">Error: {error}</div>;
+    if (error) return <div className="text-center py-20 text-red-500 font-medium">Unable to load products. Please try again later.</div>;
 
     return (
-        <div className="relative categories bg-[#F3F1EC] py-10 lg:pt-16">
-            <div className="w-full relative z-10 container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 max-w-7xl">
-                <div className="block lg:flex justify-between items-center mb-6">
-                    <h6 className="text-center text-xl lg:text-4xl">Our all time Favourites</h6>
-                    {/* <div className="flex justify-center space-x-2 lg:space-x-4 mt-2 lg:mt-0">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab)}
-                                className={`cursor-pointer px-2 lg:px-3 py-2 border-2 text-[10px] lg:text-base rounded-full shadow-lg font-medium transition-colors ${
-                                    activeTab === tab
-                                        ? "border-green-600 text-green-700"
-                                        : "border-black text-gray-500 hover:border-gray-600"
-                                }`}
-                            >
-                                {tab}
-                            </button>
-                        ))}
-                    </div> */}
+        <section className="bg-[#fdfaf7] py-20 lg:py-28">
+            <div className="max-w-[1400px] mx-auto px-6">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                            <span className="w-8 h-px bg-[#62371f]"></span>
+                            <span className="text-[#62371f] text-xs font-bold uppercase tracking-widest">Our Collection</span>
+                        </div>
+                        <h2 className="text-3xl lg:text-4xl font-black text-gray-900 font-serif">
+                            Best Sellers
+                        </h2>
+                    </div>
+                    <p className="text-gray-500 max-w-md text-sm md:text-right font-medium">
+                        Explore our range of premium A2 dairy products, sourced directly from our ethical farms and delivered fresh to your doorstep.
+                    </p>
                 </div>
 
                 {productData.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
                         {productData.map((product) => (
                             <ProductAyurvedCard 
                                 key={product.id} 
@@ -70,11 +71,11 @@ export default function ProductAyurved() {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-10">
-                        No products found in this category.
+                    <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200 text-gray-400 font-medium">
+                        No products available at the moment.
                     </div>
                 )}
             </div>
-        </div>
+        </section>
     );
-}
+}

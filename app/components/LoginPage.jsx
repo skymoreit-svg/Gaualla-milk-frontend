@@ -68,7 +68,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition`}
+                  className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition`}
                 />
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition`}
+                  className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition`}
                 />
                 <button
                   type="button"
@@ -109,13 +109,13 @@ export default function LoginPage() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 text-[#7F5539] border-gray-300 rounded focus:ring-[#7F5539]"
+                  className="h-4 w-4 text-[#62371f] border-gray-300 rounded focus:ring-[#62371f]"
                 />
                 <span className="text-gray-700">Remember me</span>
               </label>
               <Link
                 href="/forgot-password"
-                className="text-[#7F5539] hover:underline font-medium"
+                className="text-[#62371f] hover:underline font-medium"
               >
                 Forgot password?
               </Link>
@@ -124,7 +124,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#7F5539] hover:bg-[#6A472F] focus:ring-2 focus:ring-offset-2 focus:ring-[#7F5539] transition-all"
+              className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#62371f] hover:bg-[#4a2917] focus:ring-2 focus:ring-offset-2 focus:ring-[#62371f] transition-all"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -141,7 +141,7 @@ export default function LoginPage() {
             Don’t have an account?{" "}
             <Link
               href="/signup"
-              className="text-[#7F5539] hover:underline font-medium"
+              className="text-[#62371f] hover:underline font-medium"
             >
               Sign up
             </Link>

@@ -1,0 +1,171 @@
+.product-premium-story {
+    background-color: #fdfaf7;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+.product-main-card {
+    background: white;
+    border-radius: 40px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(98, 55, 31, 0.05);
+}
+
+.v-thumb {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.v-thumb.active {
+    border-color: #62371f;
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.brand-tag {
+    color: #62371f;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    margin-bottom: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.save-badge {
+    background: #62371f;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.price-tag {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1a1a1a;
+}
+
+.old-price-tag {
+    font-size: 1.25rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.unit-tag {
+    font-size: 0.9rem;
+    color: #666;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.cta-button {
+    background: #62371f;
+    color: white;
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(98, 55, 31, 0.2);
+}
+
+.cta-button:hover {
+    background: #4a2917;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(98, 55, 31, 0.3);
+}
+
+.cta-button:active {
+    transform: translateY(0);
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.q-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.q-btn:hover {
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.trust-badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.trust-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fdf5f0;
+    color: #62371f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.description-highlight {
+    border-left: 4px solid #62371f;
+    padding-left: 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: #4a4a4a;
+}
+
+.lifestyle-img {
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+

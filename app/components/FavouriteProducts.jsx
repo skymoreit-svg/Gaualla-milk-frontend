@@ -177,7 +177,7 @@ const FavouriteProducts = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`cursor-pointer px-3 py-2 border-2 border-black rounded-full shadow-lg font-medium ${activeTab === tab
-                  ? "  border-green-600 text-green-700"
+                  ? "  border-[#62371f] text-[#62371f]"
                   : "text-gray-500"
                   }`}
               >
@@ -195,7 +195,7 @@ const FavouriteProducts = () => {
               className="card shadow-lg relative hover:shadow-xl transition-shadow duration-300  overflow-hidden"
             >
               <div className="relative">
-                <span className="absolute top-5 left-5 z-10 bg-green-500 text-white text-xs font-semibold py-1 px-3 rounded-full">
+                <span className="absolute top-5 left-5 z-10 bg-[#62371f] text-white text-xs font-semibold py-1 px-3 rounded-full">
                   -{product.discount}%
                 </span>
                 <img

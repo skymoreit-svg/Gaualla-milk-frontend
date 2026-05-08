@@ -87,7 +87,7 @@ const OrdersPage = () => {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || "";
     if (statusLower === "completed") {
-      return { bg: "bg-green-100", text: "text-green-700", icon: CheckCircle };
+      return { bg: "bg-[#62371f]/10", text: "text-[#62371f]", icon: CheckCircle };
     }
     if (statusLower === "processing" || statusLower === "out_for_delivery") {
       return { bg: "bg-blue-100", text: "text-blue-700", icon: Truck };
@@ -104,7 +104,7 @@ const OrdersPage = () => {
   const getPaymentStatusBadge = (paymentStatus) => {
     const statusLower = paymentStatus?.toLowerCase() || "";
     if (statusLower === "paid") {
-      return "bg-green-100 text-green-700";
+      return "bg-[#62371f]/10 text-[#62371f]";
     }
     if (statusLower === "pending") {
       return "bg-yellow-100 text-yellow-700";
@@ -129,9 +129,9 @@ const OrdersPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#62371f] mb-4"></div>
           <p className="text-gray-600">Loading your orders...</p>
         </div>
       </div>
@@ -148,7 +148,7 @@ const OrdersPage = () => {
         </div>
 
         {/* Contact Support Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg p-6 mb-6 text-white">
+         <div className="bg-[#62371f] rounded-lg p-6 mb-6 text-white shadow-lg">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
             <Phone className="w-6 h-6" />
             Need Help? Contact Support
@@ -159,30 +159,29 @@ const OrdersPage = () => {
                 <Phone className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-sm text-blue-100">Phone</p>
-                <a href="tel:+91 8378-000052
-" className="text-lg font-semibold hover:underline">
+                <p className="text-sm text-gray-200">Phone</p>
+                <a href="tel:+91 8378-000052" className="text-lg font-semibold hover:underline">
                   +91 8378-000052
                 </a>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-3 rounded-lg">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-sm text-blue-100">Email</p>
+                <p className="text-sm text-gray-200">Email</p>
                 <a href="mailto:gauallamilkpvtltd@gmail.com" className="text-lg font-semibold hover:underline">
                   gauallamilkpvtltd@gmail.com
                 </a>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-3 rounded-lg">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-sm text-blue-100">Support Hours</p>
+                <p className="text-sm text-gray-200">Support Hours</p>
                 <p className="text-lg font-semibold">9 AM - 6 PM IST</p>
               </div>
             </div>
@@ -206,9 +205,9 @@ const OrdersPage = () => {
             <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">No Orders Yet</h3>
             <p className="text-gray-600 mb-6">You haven't placed any orders yet.</p>
-            <Link
+             <Link
               href="/"
-              className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="inline-block px-6 py-3 bg-[#62371f] text-white rounded-lg hover:bg-[#4a2917] transition shadow-md"
             >
               Start Shopping
             </Link>
@@ -246,9 +245,9 @@ const OrdersPage = () => {
                           </div>
                         </div>
                       </div>
-                      <Link
+                       <Link
                         href={`/orders/${order.id}`}
-                        className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                        className="text-[#62371f] hover:text-[#4a2917] font-bold text-sm"
                       >
                         View Details →
                       </Link>

@@ -63,11 +63,11 @@ code, pre {
   content: "";
   position: absolute;
   z-index: -10;
-  color: green;
+  color: #62371f;
   top: 69%;
   right: 6px;
   height: 1px;
-  border: 1px dotted green;
+  border: 1px dotted #62371f;
   width: 61%;
   transform: rotate(5deg);
 }
@@ -76,11 +76,11 @@ code, pre {
   content: "";
   position: absolute;
   z-index: -10;
-  color: green;
+  color: #62371f;
   top: 90%;
   left: -285px;
   height: 1px;
-  border: 1px dotted green;
+  border: 1px dotted #62371f;
   width: 230%;
   transform: rotate(-5deg);
 }
@@ -116,7 +116,7 @@ code, pre {
   0% {
     opacity: 0.5;
     transform: translateY(-10px);
-    color: #8be541;
+    color: #62371f;
   }
   50% {
     opacity: 1;

@@ -499,7 +499,7 @@ export default function MyCart({ cart, setCart }) {
           user_id: info?.user?.id
         },
         theme: {
-          color: "#60BE74",
+          color: "#62371f",
         },
         modal: {
           ondismiss: function () {
@@ -596,7 +596,7 @@ export default function MyCart({ cart, setCart }) {
       <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
         <div className="flex justify-center items-center h-full">
           <div className="text-center">
-            <FaSpinner className="animate-spin text-4xl text-[#60BE74] mx-auto mb-4" />
+            <FaSpinner className="animate-spin text-4xl text-[#62371f] mx-auto mb-4" />
             <p className="text-lg text-gray-600">Loading your cart...</p>
           </div>
         </div>
@@ -616,21 +616,21 @@ export default function MyCart({ cart, setCart }) {
               </button>
             </div>
             <div className="text-center flex flex-col items-center py-20">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-20 h-20 bg-[#62371f]/10 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-10 h-10 text-[#62371f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <h2 className="text-3xl font-bold mb-4">Thank You!</h2>
               <p className="text-lg text-gray-600 mb-8 text-center max-w-md">Your order has been placed successfully. You can view your order status in the orders section.</p>
               <div className="flex flex-col gap-3 w-full max-w-xs">
-                <button
+                 <button
                   onClick={() => {
                     setOrderSuccessOpen(false);
                     setCart(false);
                     window.location.href = '/orders/';
                   }}
-                  className="w-full py-4 rounded-xl bg-[#60BE74] text-white text-lg font-bold hover:bg-[#50b666] transition-all"
+                  className="w-full py-4 rounded-xl bg-[#62371f] text-white text-lg font-bold hover:bg-[#4a2917] transition-all"
                 >
                   View My Orders
                 </button>
@@ -673,10 +673,10 @@ export default function MyCart({ cart, setCart }) {
           <div className="text-center flex flex-col items-center py-20">
             <h2 className="text-3xl font-semibold mb-4">Cart is Empty</h2>
             <p className="text-lg text-gray-500 mb-8">Looks like you haven't added anything to your cart yet.</p>
-            <Link
+             <Link
               href="/product?name=all"
               onClick={() => setCart(false)}
-              className="uppercase font-medium text-base text-white px-8 py-3 rounded-md bg-[#60BE74] hover:bg-[#50b666] transition-all duration-300 shadow-md"
+              className="uppercase font-medium text-base text-white px-8 py-3 rounded-md bg-[#62371f] hover:bg-[#4a2917] transition-all duration-300 shadow-md"
             >
               Continue Shopping
             </Link>
@@ -748,19 +748,19 @@ export default function MyCart({ cart, setCart }) {
                         </h5>
                         <div className="flex justify-between items-center mt-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-xl font-bold text-green-600">₹{item?.total_price}</span>
+                            <span className="text-xl font-bold text-[#62371f]">₹{item?.total_price}</span>
                           </div>
-                          <div className="flex items-center gap-3 bg-white px-2 rounded-2xl">
+                           <div className="flex items-center gap-3 bg-white px-2 rounded-2xl">
                             <button
                               onClick={() => handelcartquentity(false, item.cart_id)}
-                              className="rounded-2xl bg-[#e6f3eb76] text-gray-600 hover:text-green-500 transition border border-gray-400 p-1"
+                              className="rounded-2xl bg-[#62371f]/5 text-gray-600 hover:text-[#62371f] transition border border-gray-400 p-1"
                             >
                               <FaMinus className="text-xs" />
                             </button>
                             <span className="text-lg font-medium">{item?.quantity}</span>
                             <button
                               onClick={() => handelcartquentity(true, item.cart_id)}
-                              className="rounded-2xl bg-[#e6f3eb76] text-gray-600 hover:text-green-500 transition border border-gray-400 p-1"
+                              className="rounded-2xl bg-[#62371f]/5 text-gray-600 hover:text-[#62371f] transition border border-gray-400 p-1"
                             >
                               <FaPlus className="text-xs" />
                             </button>
@@ -819,7 +819,7 @@ export default function MyCart({ cart, setCart }) {
                   <>
                     <button
                       onClick={() => setShowNewAddress(true)}
-                      className="mb-6 bg-[#60BE74] hover:bg-[#50b666] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
+                      className="mb-6 bg-[#62371f] hover:bg-[#4a2917] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
                     >
                       <FaPlus className="mr-2" /> Add New Address
                     </button>
@@ -835,7 +835,7 @@ export default function MyCart({ cart, setCart }) {
                             key={addr.id}
                             className={`p-4 rounded-2xl shadow-md border transition cursor-pointer
                 ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
-                ${defaultAddress === addr.id ? "ring-2 ring-[#60BE74]" : ""}`}
+                ${defaultAddress === addr.id ? "ring-2 ring-[#62371f]" : ""}`}
                             onClick={() => setDefaultAddress(addr.id)}
                           >
                             <div className="flex items-center justify-between">
@@ -843,7 +843,7 @@ export default function MyCart({ cart, setCart }) {
                                 {addr.address_type === "home" ? (
                                   <FaHome className="text-blue-500" />
                                 ) : (
-                                  <FaBuilding className="text-green-500" />
+                                  <FaBuilding className="text-[#62371f]" />
                                 )}
                                 <span className="font-medium capitalize">{addr.address_type}</span>
                               </div>
@@ -959,7 +959,7 @@ export default function MyCart({ cart, setCart }) {
                             className={`p-2 rounded text-sm font-medium transition-colors ${!date
                               ? 'text-gray-300 cursor-default'
                               : isDateSelected(date)
-                                ? 'bg-green-500 text-white'
+                                ? 'bg-[#62371f] text-white'
                                 : date < new Date()
                                   ? 'text-gray-400 cursor-not-allowed'
                                   : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
@@ -1008,10 +1008,10 @@ export default function MyCart({ cart, setCart }) {
                           Clear All
                         </button>
 
-                        <button
+                         <button
                           onClick={confirmDates}
                           disabled={selectedDates.length === 0}
-                          className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white py-2 rounded-lg font-medium transition-colors"
+                          className="flex-1 bg-[#62371f] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-2 rounded-lg font-medium transition-colors"
                         >
                           Confirm
                         </button>
@@ -1062,9 +1062,9 @@ export default function MyCart({ cart, setCart }) {
                     <span className="text-gray-600">Subtotal</span>
                     <span className="text-gray-800">₹{parseFloat(derivedSubTotal || 0).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between">
+                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
-                    <span className="text-green-600 font-medium">Free</span>
+                    <span className="text-[#62371f] font-medium">Free</span>
                   </div>
                 </div>
 
@@ -1079,30 +1079,30 @@ export default function MyCart({ cart, setCart }) {
                   <div className="mb-6">
                     <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
                     <div className="flex flex-col space-y-2">
-                      <button
+                       <button
                         onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
-                          ? 'bg-red-100 text-red-700 border border-red-300'
+                          ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                       >
                         One Time
                       </button>
-                      <button
+                       <button
                         onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
-                          ? 'bg-green-100 text-green-700 border border-green-300'
+                          ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                       >
                         30 Days
                       </button>
-                      <button
+                       <button
                         onClick={() => {
                           setSelectedFrequency('alternative');
                           setSubscriptionDuration(15);
                           setShowDatePicker(true);
                         }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
-                          ? 'bg-green-100 text-green-700 border border-green-300'
+                          ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                       >
                         Alternative days
@@ -1118,10 +1118,10 @@ export default function MyCart({ cart, setCart }) {
                   </span>
                 </div>
 
-                <button
+                 <button
                   onClick={handlePlaceOrder}
                   disabled={!defaultAddress || isProcessingPayment || !hasItems}
-                  className="w-full bg-[#60BE74] hover:bg-[#50b666] disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center cursor-pointer"
+                  className="w-full bg-[#62371f] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center cursor-pointer"
                 >
                   {isProcessingPayment ? (
                     <>

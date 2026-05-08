@@ -37,7 +37,7 @@ const dairyData = {
 
 const CheckIcon = () => (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="9" fill="#139F21" stroke="#139F21" />
+        <circle cx="10" cy="10" r="9" fill="#62371f" stroke="#62371f" />
         <path d="M6 10L7.45 11.45C8.18 12.18 8.53 12.54 8.97 12.52C9.41 12.5 9.75 12.1 10.4 11.32L14 7" stroke="white" strokeLinecap="round" />
     </svg>
 );

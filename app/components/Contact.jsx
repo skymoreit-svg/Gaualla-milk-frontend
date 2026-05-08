@@ -104,7 +104,7 @@ export default function Contact() {
                     ></textarea>
 
 
-                    <button className="bg-[#60BE74] mt-3 px-6 lg:px-8 py-1  md:py-2 lg:py-3 rounded text-white text-lg lg:text-xl font-semibold">
+                    <button className="bg-[#62371f] mt-3 px-6 lg:px-8 py-1  md:py-2 lg:py-3 rounded text-white text-lg lg:text-xl font-semibold">
                       Send A Message
                     </button>
 
@@ -121,7 +121,7 @@ export default function Contact() {
                       className="contact-info  p-4 flex flex-col  lg:flex-row  gap-x-4 items-center text-center"
                     >
                       <div>
-                        <div className="icon text-green-600 h-20 w-20 lg:h-16 lg:w-16 bg-white rounded-full text-4xl flex items-center justify-center">
+                        <div className="icon text-[#62371f] h-20 w-20 lg:h-16 lg:w-16 bg-white rounded-full text-4xl flex items-center justify-center">
                           {info.icon}
                         </div>
                       </div>

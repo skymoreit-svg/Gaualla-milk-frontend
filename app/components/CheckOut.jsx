@@ -379,7 +379,7 @@ export default function CheckOut() {
           user_id: info?.user?.id
         },
         theme: {
-          color: "#60BE74", // Branded green color
+          color: "#62371f", // Branded brown color
         },
         modal: {
           ondismiss: function() {
@@ -455,9 +455,9 @@ export default function CheckOut() {
         )}
 
         {orderSuccessOpen ? (
-          <div className="bg-white p-12 rounded-2xl shadow-xl border border-green-100 text-center max-w-2xl mx-auto my-10">
-             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white p-12 rounded-2xl shadow-xl border border-[#62371f]/10 text-center max-w-2xl mx-auto my-10">
+             <div className="w-24 h-24 bg-[#62371f]/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                <svg className="w-12 h-12 text-[#62371f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
@@ -466,7 +466,7 @@ export default function CheckOut() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
                   onClick={() => window.location.href = '/orders/'} 
-                  className="px-8 py-4 bg-[#60BE74] text-white rounded-xl font-bold text-lg hover:bg-[#50b666] transition-all shadow-lg shadow-green-100"
+                  className="px-8 py-4 bg-[#62371f] text-white rounded-xl font-bold text-lg hover:bg-[#4a2917] transition-all shadow-lg shadow-gray-100"
                 >
                   View My Orders
                 </button>
@@ -488,7 +488,7 @@ export default function CheckOut() {
                   <>
                     <button
                       onClick={() => setShowNewAddress(true)}
-                      className="mb-6 bg-[#60BE74] hover:bg-[#50b666] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
+                      className="mb-6 bg-[#62371f] hover:bg-[#4a2917] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
                     >
                       <FaPlus className="mr-2" /> Add New Address
                     </button>
@@ -513,7 +513,7 @@ export default function CheckOut() {
                                   {addr.address_type === "home" ? (
                                     <FaHome className="text-blue-500" />
                                   ) : (
-                                    <FaBuilding className="text-green-500" />
+                                    <FaBuilding className="text-[#62371f]" />
                                   )}
                                   <span className="font-medium capitalize">{addr.address_type}</span>
                                 </div>
@@ -603,7 +603,7 @@ export default function CheckOut() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Shipping</span>
-                        <span className="text-green-600 font-medium">Free</span>
+                        <span className="text-[#62371f] font-medium">Free</span>
                       </div>
                     </div>
 
@@ -627,7 +627,7 @@ export default function CheckOut() {
                           <button
                             onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
-                              ? 'bg-red-100 text-red-700 border border-red-300'
+                              ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                           >
                             One Time
@@ -635,7 +635,7 @@ export default function CheckOut() {
                           <button
                             onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
-                              ? 'bg-green-100 text-green-700 border border-green-300'
+                              ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                           >
                             30 Days
@@ -643,7 +643,7 @@ export default function CheckOut() {
                           <button
                             onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
-                              ? 'bg-green-100 text-green-700 border border-green-300'
+                              ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                           >
                             Alternative days
@@ -661,7 +661,7 @@ export default function CheckOut() {
                     <button
                       onClick={handlePlaceOrder}
                       disabled={!defaultAddress}
-                      className="w-full bg-[#60BE74] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
+                      className="w-full bg-[#62371f] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
                     >
                       {!defaultAddress ? 'Select Address First' :
                         (isSettingDefault ? <FaSpinner className="animate-spin mr-2" /> : null)}

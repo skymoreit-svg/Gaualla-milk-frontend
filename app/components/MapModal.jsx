@@ -103,8 +103,8 @@ export default function MapModal({ onClose, onConfirm, initialLocation }) {
 
         {/* ADDRESS PREVIEW */}
         {addressData && (
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm font-medium text-blue-900 mb-1">
+          <div className="mt-4 p-4 bg-[#62371f]/5 border border-[#62371f]/10 rounded-lg">
+            <p className="text-sm font-medium text-[#62371f] mb-1">
               Selected Address:
             </p>
             <p className="text-sm text-gray-700">
@@ -134,7 +134,7 @@ export default function MapModal({ onClose, onConfirm, initialLocation }) {
               );
             }}
             disabled={!addressData || isLoadingAddress}
-            className="px-4 py-2 bg-[#60BE74] text-white rounded-lg disabled:bg-gray-400"
+            className="px-4 py-2 bg-[#62371f] text-white rounded-lg disabled:bg-gray-400"
           >
             {isLoadingAddress ? "Loading..." : "Use This Location"}
           </button>

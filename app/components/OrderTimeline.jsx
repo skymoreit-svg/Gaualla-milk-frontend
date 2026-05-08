@@ -46,14 +46,14 @@ export default function OrderTimeline({ deliveryStatus, assignment }) {
               <div className="flex flex-col items-center mr-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2
                   ${isComplete
-                    ? "bg-green-500 border-green-500 text-white"
+                    ? "bg-[#62371f] border-[#62371f] text-white"
                     : "bg-white border-gray-300 text-gray-400"
-                  } ${isCurrent ? "ring-4 ring-green-100" : ""}`}
+                  } ${isCurrent ? "ring-4 ring-[#62371f]/10" : ""}`}
                 >
                   {isComplete ? "✓" : idx + 1}
                 </div>
                 {idx < steps.length - 1 && (
-                  <div className={`w-0.5 h-8 ${idx < currentIdx ? "bg-green-500" : "bg-gray-200"}`} />
+                  <div className={`w-0.5 h-8 ${idx < currentIdx ? "bg-[#62371f]" : "bg-gray-200"}`} />
                 )}
               </div>
               <div className={`pt-1 ${isCurrent ? "font-semibold" : ""}`}>

@@ -30,13 +30,13 @@ export default function WishList() {
             <FaHeartBroken className="text-5xl text-red-400 mb-4 space-y-4 lg:space-y-6" />
             <p className="text-gray-500 text-lg">Your wishlist is empty!</p>
             <p className="text-sm text-gray-400">Start adding items you love.</p>
-            <Link href="/product?name=all" className="bg-[#60BE74] mt-4 lg:mt-8 px-6 lg:px-8 py-1   md:py-2 lg:py-3 rounded text-white text-base lg:text-lg font-semibold">  Continue Shopping</Link>
+            <Link href="/product?name=all" className="bg-[#62371f] mt-4 lg:mt-8 px-6 lg:px-8 py-1   md:py-2 lg:py-3 rounded text-white text-base lg:text-lg font-semibold">  Continue Shopping</Link>
           </div>
         ) : (
           <>
             <button
               onClick={() => dispatch(clearWishlist())}
-              className=" font-semibold text-white  w-fit px-5 py-2 text-center flex items-center justify-center rounded-md border border-gray-200 bg-[#62371f] hover:bg-[#69a14fe7] transition duration-300"
+              className=" font-semibold text-white  w-fit px-5 py-2 text-center flex items-center justify-center rounded-md border border-gray-200 bg-[#62371f] hover:bg-[#4a2917] transition duration-300"
             >
               Remove All from Wishlist
             </button>
@@ -50,7 +50,7 @@ export default function WishList() {
 
             {/* <div className="overflow-x-auto">
       <table className="w-full text-nowrap border-collapse bg-white shadow-md rounded-md">
-        <thead className="bg-[#60BE74] text-white">
+        <thead className="bg-[#62371f] text-white">
           <tr>
             <th className="text-left px-4 py-3">Image</th>
             <th className="text-left px-4 py-3">Product</th>
@@ -82,7 +82,7 @@ export default function WishList() {
                 <h5 className="text-sm">{item.price}</h5>
               </td>
               <td className="px-4 py-3">
-                <button className="bg-[#60BE74] px-4 py-2 rounded text-white text-sm font-medium hover:bg-green-700 transition">
+                <button className="bg-[#62371f] px-4 py-2 rounded text-white text-sm font-medium hover:bg-[#4a2917] transition">
                   Add to Cart
                 </button>
               </td>

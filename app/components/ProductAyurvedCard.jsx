@@ -1,12 +1,10 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { FaLongArrowAltLeft } from "react-icons/fa";
-import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa6";
-import { IoMdCart, IoMdClose } from "react-icons/io";
+import React, { useMemo } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addWish, removeWish } from "../store/wishListSlice";
-import { useSelector } from "react-redux";
 import { imageurl } from "./utlis/apis";
 
 export default function ProductAyurvedCard({ product }) {
@@ -16,259 +14,112 @@ export default function ProductAyurvedCard({ product }) {
     description,
     price,
     old_price,
-    stock,
     unit_quantity,
-    id,
-    slug
+    slug,
+    id
   } = product;
 
-
-
-
-
-  const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
   const wishList = useSelector((state) => state.wish.wishlist);
   const dispatch = useDispatch();
-  const [quickView, setQuickView] = useState(false);
-  const [activeImg, setActiveImg] = useState(images?.[0]);
-  const [zoom, setZoom] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const imgRef = useRef(null);
 
-  const isWishList = (productId) => {
-    return wishList.find((elm) => elm.id == productId);
-  };
+  const isWishList = (productId) => wishList.some((elm) => elm.id == productId);
+  const added = isWishList(id);
 
-  const handleWishListToogle = (product) => {
-    if (isWishList(product.id)) {
+  const discount = useMemo(() => {
+    if (price && old_price) {
+      const p = parseFloat(price);
+      const op = parseFloat(old_price);
+      if (op > p) return Math.round(((op - p) / op) * 100);
+    }
+    return 0;
+  }, [price, old_price]);
+
+  const handleWishListToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (added) {
       dispatch(removeWish(product));
     } else {
       dispatch(addWish(product));
     }
   };
 
-  const handleMouseMove = (e) => {
-    if (imgRef.current) {
-      const { left, top, width, height } = imgRef.current.getBoundingClientRect();
-      const x = ((e.pageX - left) / width) * 100;
-      const y = ((e.pageY - top) / height) * 100;
-      setPosition({ x, y });
-    }
-  };
-
-  const QuickView = () => {
-    return (
-      <div className="fixed inset-0 bg-black/50 z-[99999] flex justify-center items-center px-2 md:px-6 overflow-auto">
-        <div className="w-full max-w-6xl bg-white rounded-md shadow-lg relative overflow-hidden my-4">
-          <button
-            onClick={() => setQuickView(false)}
-            className="absolute z-10 top-3 right-3 cursor-pointer text-2xl sm:text-3xl text-gray-700 hover:text-green-500 transition"
-          >
-            <IoMdClose />
-          </button>
-
-          <div className="grid md:grid-cols-5 gap-4 sm:gap-6 md:gap-8 p-4 sm:p-6 md:p-10">
-            <div className="leftside md:col-span-2 w-full flex flex-col-reverse md:flex-col-reverse lg:flex-row gap-3 sm:gap-4 items-center">
-              <div className="flex lg:flex sideimages lg:flex-col gap-2">
-                {images?.map((img, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setActiveImg(img)}
-                    className="w-[70px] h-[70px] sm:h-[90px] sm:w-[90px] lg:w-[100px] lg:h-[110px] xl:h-[100px] border border-green-500 cursor-pointer"
-                  >
-                    <img
-                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/storage/${img}`}
-                      className="w-full h-full object-cover"
-                      alt={`Product ${index + 1}`}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div
-                className="relative h-[250px] sm:h-[300px] md:h-[350px] xl:h-[330px] magnifyImg w-full lg:max-w-md border border-green-500 overflow-hidden"
-                onMouseEnter={() => setZoom(true)}
-                onMouseLeave={() => setZoom(false)}
-                onMouseMove={handleMouseMove}
-              >
-                <img
-                  ref={imgRef}
-                  className="w-full h-full object-cover"
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/storage/${activeImg}`}
-                  alt={name}
-                />
-                {zoom && (
-                  <div
-                    className="absolute inset-0 bg-no-repeat rounded-md"
-                    style={{
-                      backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_URL}/storage/${activeImg})`,
-                      backgroundSize: "200%",
-                      backgroundPosition: `${position.x}% ${position.y}%`,
-                    }}
-                  ></div>
-                )}
-              </div>
-            </div>
-
-            <div className="md:col-span-3 flex flex-col justify-between space-y-3 sm:space-y-4 max-h-[75vh] overflow-y-auto pr-1 sm:pr-2">
-              <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
-                  {name}
-                </h2>
-                <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed">
-                  {description}
-                </p>
-
-                <ul className="text-sm sm:text-base md:text-lg text-gray-700 space-y-1 pt-2">
-                  <li>
-                    <span className="font-semibold">Availability:</span>{" "}
-                    {stock > 0 ? "In stock" : "Out of stock"}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Quantity:</span> {unit_quantity}
-                  </li>
-                  <li>
-                    <span className="font-semibold text-green-600">
-                      Free Shipping
-                    </span>{" "}
-                    on all orders above ₹999
-                  </li>
-                </ul>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl sm:text-2xl font-bold text-gray-800">
-                    ₹{price}
-                  </span>
-                  {old_price && (
-                    <span className="line-through text-gray-400 text-base sm:text-lg">
-                      ₹{old_price}
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex gap-1 text-yellow-400 text-lg">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} />
-                  ))}
-                </div>
-
-                <button className="w-full bg-[#62371f] hover:bg-[#4a9347] transition text-white font-semibold py-2.5 sm:py-3 rounded-md flex items-center justify-center gap-2 text-base sm:text-lg">
-                  <IoMdCart />
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const added = isWishList(product.id);
-
   return (
-    <>
-      <Link
-        href={`/product/${slug}`}
-        className="card group shadow-lg relative hover:shadow-xl transition-shadow bg-white duration-300 rounded-lg overflow-hidden h-full min-h-[280px] sm:min-h-[320px] lg:min-h-[520px] flex flex-col w-full"
-      >
-        {/* Image Section */}
-        <div className="relative ">
-          {old_price && (
-            <span className="absolute hidden lg:block top-2 lg:top-5 left-2 lg:left-5 z-10 bg-green-500 text-white text-xs font-semibold py-1 px-3 rounded-full">
-              {Math.round(((old_price - price) / old_price) * 100)}% OFF
-            </span>
+    <Link 
+      href={`/product/${slug}`}
+      className="group relative bg-white rounded-2xl border-2 border-gray-50 hover:border-[#62371f]/20 hover:shadow-2xl transition-all duration-500 flex flex-col h-full overflow-hidden"
+    >
+      {/* Product Image Area */}
+      <div className="relative aspect-square overflow-hidden bg-[#fdfaf7] p-6">
+        {discount > 0 && (
+          <div className="absolute top-4 left-4 z-10 bg-[#62371f] text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">
+            {discount}% OFF
+          </div>
+        )}
+        
+        <button 
+          onClick={handleWishListToggle}
+          className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-white shadow-sm border border-gray-100 hover:bg-gray-50 transition-all group/wish"
+        >
+          {added ? (
+            <FaHeart className="text-red-500 scale-110" />
+          ) : (
+            <FaRegHeart className="text-gray-400 group-hover/wish:text-[#62371f]" />
           )}
-          <img
-            src={`${imageurl}/${images?.[0]}`}
-            alt={name}
-            className="w-full hover:scale-105 h-[140px] sm:h-[160px] md:h-[200px] lg:h-[280px] xl:h-[300px] object-contain transition-opacity duration-600 pt-2"
+        </button>
+
+        <img
+          src={`${imageurl}/${images?.[0]}`}
+          alt={name}
+          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
+        />
+        
+        {/* Unit Quantity Badge */}
+        {unit_quantity && (
+          <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm text-[#62371f] text-[9px] font-bold px-2 py-0.5 rounded border border-[#62371f]/10">
+            {unit_quantity}
+          </div>
+        )}
+      </div>
+
+      {/* Product Details Area */}
+      <div className="p-5 flex flex-col flex-grow bg-white">
+        <div className="flex-grow space-y-1.5">
+          <div className="flex items-center gap-1 text-yellow-400 mb-1">
+            {[...Array(5)].map((_, i) => <Star key={i} size={10} fill="currentColor" />)}
+            <span className="text-[10px] text-gray-400 font-bold ml-1">4.8</span>
+          </div>
+          
+          <h3 className="text-base font-bold text-gray-900 leading-snug group-hover:text-[#62371f] transition-colors line-clamp-1">
+            {name}
+          </h3>
+          
+          <div 
+            className="text-xs text-gray-400 font-medium line-clamp-2 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: description }}
           />
         </div>
 
-        {/* Content Section */}
-        <div className="p-3 sm:p-4 space-y-2 bg-white flex flex-col flex-grow min-w-0">
-          <div className="flex justify-between min-w-0">
-            <p className="font-semibold text-sm lg:text-lg text-gray-800 truncate pr-2">{name}</p>
-          </div>
-
-          <div className="text-gray-600 text-xs sm:text-sm lg:text-base leading-relaxed hidden lg:block min-w-0">
-            <div
-              className="line-clamp-2"
-              dangerouslySetInnerHTML={{
-                __html: isDescriptionExpanded
-                  ? description
-                  : `${description?.slice(0, 50)}...`,
-              }}
-            />
-            {description?.length > 50 && (
-              <button
-                className="text-blue-500 ml-1 text-xs"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setDescriptionExpanded(!isDescriptionExpanded);
-                }}
-              >
-                {isDescriptionExpanded ? "Show less" : "Read more"}
-              </button>
-            )}
-          </div>
-
-          <hr className="text-gray-300 my-1" />
-
-          {/* Price + Rating */}
-          <div className="flex flex-col gap-1.5 sm:gap-2 mt-auto min-w-0">
-            {/* Prices */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 flex-shrink-0 min-w-0">
-              <span className="text-xs sm:text-sm lg:text-lg xl:text-xl font-semibold text-gray-800 whitespace-nowrap">
-                ₹{price}
-              </span>
-
+        {/* Price & Action Area */}
+        <div className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between">
+          <div className="flex flex-col">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-lg font-black text-[#62371f]">₹{price}</span>
               {old_price && (
-                <span className="text-[10px] sm:text-xs lg:text-sm line-through text-gray-400 whitespace-nowrap">
-                  ₹{old_price}
-                </span>
+                <span className="text-xs text-gray-300 line-through font-medium">₹{old_price}</span>
               )}
             </div>
-
-            {/* Rating */}
-            <div className="flex text-yellow-400 text-[10px] sm:text-xs lg:text-sm items-center gap-0.5 flex-shrink-0">
-              {[...Array(5)].map((_, i) => (
-                <FaStar key={i} className="flex-shrink-0 w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
-              ))}
-            </div>
+            <span className="text-[9px] font-bold text-green-600 uppercase tracking-wider">In Stock</span>
           </div>
-
-
-
-          {/* Buttons */}
-          <div className="flex items-center gap-2 mt-2 sm:mt-3">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleWishListToogle(product);
-              }}
-              className="border p-1.5 sm:p-2 rounded bg-white absolute top-2 right-2 lg:static z-10 flex-shrink-0 hover:bg-gray-50 transition"
-            >
-              {added ? (
-                <FaHeart className="text-red-500 text-xs sm:text-sm" />
-              ) : (
-                <FaRegHeart className="text-xs sm:text-sm" />
-              )}
-            </button>
-
-            <p className="text-xs sm:text-sm lg:text-base text-white w-full py-2 sm:py-2.5 flex items-center justify-center rounded-md bg-[#62371f] hover:bg-[#69a14fe7] transition min-w-0">
-              <IoMdCart className="mr-1 flex-shrink-0" />
-              <span className="truncate">View product</span>
-            </p>
+          
+          <div className="flex items-center gap-2 bg-[#62371f] text-white px-4 py-2.5 rounded-xl hover:bg-[#4a2917] transition-all shadow-lg shadow-[#62371f]/20 group/btn">
+            <span className="text-[10px] font-black uppercase tracking-widest">Buy</span>
+            <ShoppingCart size={14} className="transition-transform group-hover/btn:translate-x-0.5" />
           </div>
         </div>
-      </Link>
-
-
-      {quickView && <QuickView />}
-    </>
+      </div>
+    </Link>
   );
 }
+
+

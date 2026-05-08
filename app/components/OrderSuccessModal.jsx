@@ -14,8 +14,8 @@ export default function OrderSuccessModal({ open, orderId, onClose, onViewOrders
   return createPortal(
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">
       <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8 transition-all duration-300 scale-100">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-20 h-20 bg-[#62371f]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 text-[#62371f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
           </svg>
         </div>
@@ -24,10 +24,10 @@ export default function OrderSuccessModal({ open, orderId, onClose, onViewOrders
         <p className="text-center text-gray-600 mb-6 text-lg">Your order has been placed successfully.</p>
         
         {orderId && (
-          <div className="bg-green-50 rounded-xl p-4 mb-8 border border-green-100">
-            <p className="text-sm text-green-700 text-center flex flex-col">
-              <span className="text-green-600 font-medium mb-1">Order ID</span>
-              <span className="font-mono font-bold text-lg text-green-900">{orderId}</span>
+          <div className="bg-[#62371f]/5 rounded-xl p-4 mb-8 border border-[#62371f]/10">
+            <p className="text-sm text-[#62371f] text-center flex flex-col">
+              <span className="text-[#62371f]/60 font-medium mb-1">Order ID</span>
+              <span className="font-mono font-bold text-lg text-[#62371f]">{orderId}</span>
             </p>
           </div>
         )}
@@ -43,7 +43,7 @@ export default function OrderSuccessModal({ open, orderId, onClose, onViewOrders
                 onViewOrders();
               }
             }}
-            className="w-full py-4 rounded-xl bg-[#60BE74] text-white text-lg font-bold hover:bg-[#50b666] transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-200"
+            className="w-full py-4 rounded-xl bg-[#62371f] text-white text-lg font-bold hover:bg-[#4a2917] transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-gray-200"
           >
             View My Orders
           </button>

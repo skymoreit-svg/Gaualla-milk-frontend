@@ -7,7 +7,7 @@ export default function RiderCard({ rider }) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">
-      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-lg">
+      <div className="w-12 h-12 rounded-full bg-[#62371f]/10 flex items-center justify-center text-[#62371f] font-bold text-lg">
         {rider.name?.charAt(0)?.toUpperCase() || "R"}
       </div>
       <div className="flex-1">
@@ -23,7 +23,7 @@ export default function RiderCard({ rider }) {
       {rider.phone && (
         <a
           href={`tel:${rider.phone}`}
-          className="flex items-center gap-1 bg-green-50 text-green-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-100 transition"
+          className="flex items-center gap-1 bg-[#62371f]/10 text-[#62371f] px-3 py-2 rounded-lg text-sm font-bold hover:bg-[#62371f]/20 transition"
         >
           <FaPhone /> Call
         </a>

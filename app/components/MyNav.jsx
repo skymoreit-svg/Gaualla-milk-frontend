@@ -238,12 +238,12 @@ export default function MyNav() {
           )}
         </div>
 
-        <ul className="hidden lg:flex items-center gap-x-6 text-base">
+        <ul className="lg:flex hidden items-center gap-x-6 text-base">
           <li>
-            <Link href="/blogs" className="text-gray-700 hover:text-[#23955c]">Blogs</Link>
+            <Link href="/blogs" className="text-gray-700 hover:text-[#62371f]">Blogs</Link>
           </li>
           <li>
-            <Link href="/contact-us" className="text-gray-700 hover:text-[#23955c]">Contact us</Link>
+            <Link href="/contact-us" className="text-gray-700 hover:text-[#62371f]">Contact us</Link>
           </li>
         </ul>
 

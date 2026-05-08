@@ -196,7 +196,7 @@ const SignUpPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Full Name"
-                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${errors.name ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.name ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                 </div>
@@ -222,7 +222,7 @@ const SignUpPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email"
-                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${errors.email ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.email ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                 </div>
@@ -248,7 +248,7 @@ const SignUpPage = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Mobile Number"
-                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${errors.phone ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.phone ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                 </div>
@@ -274,7 +274,7 @@ const SignUpPage = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${errors.password ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.password ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                   <button
@@ -311,7 +311,7 @@ const SignUpPage = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition ${errors.confirmPassword ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.confirmPassword ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                   <button
@@ -319,7 +319,7 @@ const SignUpPage = () => {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                   >
-                    {showConfirmPassword ? (
+                    {showPassword ? (
                       <EyeOff className="h-5 w-5" />
                     ) : (
                       <Eye className="h-5 w-5" />
@@ -337,7 +337,7 @@ const SignUpPage = () => {
               <button
                 type="submit"
                 disabled={loader}
-                className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#7F5539] hover:bg-[#6A472F] focus:ring-2 focus:ring-offset-2 focus:ring-[#7F5539] transition-all"
+                className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#62371f] hover:bg-[#4a2917] focus:ring-2 focus:ring-offset-2 focus:ring-[#62371f] transition-all"
               >
                 {loader ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -356,7 +356,7 @@ const SignUpPage = () => {
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-[#7F5539] hover:underline transition"
+                  className="font-medium text-[#62371f] hover:underline transition"
                 >
                   Sign in
                 </Link>
