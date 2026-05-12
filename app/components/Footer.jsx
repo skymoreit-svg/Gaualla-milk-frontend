@@ -14,14 +14,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { baseurl } from "./utlis/apis";
+import { toast } from "react-hot-toast";
 
 const Footer = () => {
-
-
-
-  const [categoryData, setCategorydata] = useState()
-
-
+  const [categoryData, setCategorydata] = useState();
+  const [newsletterForm, setNewsletterForm] = useState({ email: "", phone: "" });
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
 
 
   const fetchcategory = async () => {
@@ -41,6 +39,40 @@ const Footer = () => {
   const pathName = usePathname();
 
   const check = pathName == "/";
+
+  const newsletterUrl =
+    process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ||
+    "http://localhost:8000/api/newsletter/subscribe";
+
+  const handleNewsletterChange = (event) => {
+    const { name, value } = event.target;
+    setNewsletterForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleNewsletterSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!newsletterForm.email || !newsletterForm.phone) {
+      toast.error("Please enter both email and phone number.");
+      return;
+    }
+
+    setNewsletterLoading(true);
+    try {
+      const { data } = await axios.post(newsletterUrl, newsletterForm);
+
+      if (data?.success) {
+        toast.success(data.message || "Subscribed successfully!");
+        setNewsletterForm({ email: "", phone: "" });
+      } else {
+        toast.error(data?.message || "Subscription failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Subscription failed. Please try again.");
+    } finally {
+      setNewsletterLoading(false);
+    }
+  };
 
 
   return (
@@ -69,6 +101,53 @@ const Footer = () => {
     className="w-10 h-10 bg-white rounded-full shadow-lg hover:scale-110 transition-transform animate-bounce"
   />
 </a>
+
+
+      <section className="px-5 md:px-12 xl:px-32 pb-8">
+        <div className="container mx-auto rounded-3xl border border-[#eaded1] bg-[#f7efe7] px-6 py-8 shadow-[0_20px_60px_rgba(98,55,31,0.12)] lg:px-10 lg:py-10">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+            <div className="space-y-3">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#62371f]">
+                Newsletter
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                Join our wellness updates before the footer.
+              </h2>
+              <p className="max-w-2xl text-base md:text-lg text-gray-700">
+                Share your email and phone number to receive product updates, offers, and dairy wellness news.
+              </p>
+            </div>
+
+            <form onSubmit={handleNewsletterSubmit} className="grid gap-3">
+              <div className="grid gap-3 md:grid-cols-2">
+                <input
+                  type="email"
+                  name="email"
+                  value={newsletterForm.email}
+                  onChange={handleNewsletterChange}
+                  placeholder="Email address"
+                  className="w-full rounded-full border border-[#d9c7b8] bg-white px-5 py-3 text-gray-900 outline-none transition focus:border-[#62371f]"
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={newsletterForm.phone}
+                  onChange={handleNewsletterChange}
+                  placeholder="Phone number"
+                  className="w-full rounded-full border border-[#d9c7b8] bg-white px-5 py-3 text-gray-900 outline-none transition focus:border-[#62371f]"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={newsletterLoading}
+                className="rounded-full bg-[#62371f] px-6 py-3 font-semibold text-white transition hover:bg-[#4f2c18] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {newsletterLoading ? "Subscribing..." : "Subscribe Now"}
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
 
 
       <footer
