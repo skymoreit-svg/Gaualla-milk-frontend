@@ -34,10 +34,13 @@ export default function AdminLogin() {
         const res = await fetch(`${adminurl}/verify`, {
           credentials: "include",
         });
-        if (res.ok) {
+        const data = await res.json();
+        
+        if (res.ok && data.success) {
           router.push("/admin/dashboard");
         }
       } catch (err) {
+        console.error("Auth check error:", err);
         // Not authenticated, stay on login
       }
     };
@@ -70,13 +73,22 @@ export default function AdminLogin() {
 
       const data = await res.json();
 
-      if (res.ok) {
-        router.push("/admin/dashboard");
+      if (res.ok && data.success) {
+        // Store token if provided
+        if (data.token) {
+          localStorage.setItem("adminToken", data.token);
+        }
+        
+        // Small delay to ensure cookie is set
+        setTimeout(() => {
+          router.push("/admin/dashboard");
+        }, 100);
       } else {
         setError(data.message || "Login failed");
       }
     } catch (err) {
-      setError("Network error");
+      console.error("Login error:", err);
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }

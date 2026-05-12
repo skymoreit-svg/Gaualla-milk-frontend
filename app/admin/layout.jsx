@@ -39,6 +39,7 @@ export default function Layout({ children }) {
             router.push("/admin");
           }
           setAllowed(false);
+          setLoading(false);
           return;
         }
 
@@ -48,6 +49,7 @@ export default function Layout({ children }) {
         ) {
           router.push("/admin/dashboard");
           setAllowed(false);
+          setLoading(false);
           return;
         }
 
@@ -60,6 +62,7 @@ export default function Layout({ children }) {
         ) {
           router.push("/admin");
         }
+        setAllowed(false);
       } finally {
         setLoading(false);
       }
