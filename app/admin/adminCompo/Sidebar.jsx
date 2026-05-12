@@ -13,6 +13,7 @@ import { LuPackage } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaCreditCard } from "react-icons/fa";
 import { MdNewspaper } from "react-icons/md";
+import { MdLocalOffer } from "react-icons/md";
 import NotificationBell from "./NotificationBell";
 
 export default function Sidebar() {
@@ -163,6 +164,12 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/offers")}`}>
+                <Link href="/admin/offers" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <MdLocalOffer /> <span>Offers</span>
+                </Link>
+              </li>
+
               <li className="p-2 text-white rounded-md hover:bg-gray-700 cursor-pointer"
                   onClick={handleLogout}>
                 <div className="flex items-center gap-x-4">
@@ -253,6 +260,12 @@ export default function Sidebar() {
             <li className={`p-2 text-white rounded-md ${isActive("/admin/newsletter")}`}>
               <Link href="/admin/newsletter" className="flex items-center gap-x-4">
                 <MdNewspaper /> <span>Newsletter</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/offers")}`}>
+              <Link href="/admin/offers" className="flex items-center gap-x-4">
+                <MdLocalOffer /> <span>Offers</span>
               </Link>
             </li>
 
