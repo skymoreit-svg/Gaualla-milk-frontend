@@ -4,10 +4,54 @@ import { FaLongArrowAltRight, FaLeaf, FaHeart, FaShieldAlt, FaSeedling, FaMapMar
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 
 export default function OfferProductValid() {
+  const [currentOffer, setCurrentOffer] = useState(null);
+  const [loadingOffer, setLoadingOffer] = useState(true);
+  const [timeLeft, setTimeLeft] = useState({
+    days: "00",
+    hours: "00",
+    minutes: "00",
+    seconds: "00",
+  });
+
+  // Fetch active offers from API
+  const fetchActiveOffer = async () => {
+    try {
+      setLoadingOffer(true);
+      const apiUrl = process.env.NEXT_PUBLIC_OFFERS_API_URL || "http://localhost:8000/admin/offers";
+      const { data } = await axios.get(`${apiUrl}?limit=1&offset=0&status=active`, {
+        withCredentials: true,
+      });
+
+      if (data.success && data.data && data.data.length > 0) {
+        setCurrentOffer(data.data[0]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch offer:", error);
+      // Fallback to default offer if API fails
+      setCurrentOffer({
+        offer_title: "Summer Sale",
+        offer_percent: 20,
+        end_time: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      });
+    } finally {
+      setLoadingOffer(false);
+    }
+  };
+
   const calculateTimeLeft = () => {
-    const targetDate = new Date("2025-05-01T00:00:00");
+    if (!currentOffer?.end_time) {
+      return {
+        days: "00",
+        hours: "00",
+        minutes: "00",
+        seconds: "00",
+      };
+    }
+
+    const targetDate = new Date(currentOffer.end_time);
     const now = new Date();
     const difference = targetDate - now;
 
@@ -28,15 +72,20 @@ export default function OfferProductValid() {
     };
   };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
+  // Fetch offer on mount
   useEffect(() => {
+    fetchActiveOffer();
+  }, []);
+
+  // Update timer every second
+  useEffect(() => {
+    setTimeLeft(calculateTimeLeft());
     const interval = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentOffer]);
 
   const features = [
     {
@@ -100,26 +149,41 @@ export default function OfferProductValid() {
                 </div>
 
                 {/* Offer badge */}
-                <div className="absolute -top-4 -right-4 w-18 lg:w-28 h-18 lg:h-28  bg-red-500 text-white rounded-full flex flex-col items-center justify-center shadow-lg z-20">
-                  <span className="text-xs font-semibold">OFFER</span>
-                  <span className="text-xl font-bold">20%</span>
-                  <span className="text-xs">OFF</span>
-                </div>
+                {currentOffer && (
+                  <div className="absolute -top-4 -right-4 w-18 lg:w-28 h-18 lg:h-28 bg-red-500 text-white rounded-full flex flex-col items-center justify-center shadow-lg z-20">
+                    <span className="text-xs font-semibold">OFFER</span>
+                    <span className="text-xl font-bold">{currentOffer.offer_percent || 20}%</span>
+                    <span className="text-xs">OFF</span>
+                  </div>
+                )}
 
                 {/* Countdown timer */}
-                <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg">
-                  <h3 className="text-center text-lg font-semibold text-gray-800 mb-4">Offer Ends In:</h3>
-                  <div className="flex justify-between">
-                    {Object.entries(timeLeft).map(([unit, value]) => (
-                      <div key={unit} className="flex flex-col items-center">
-                        <div className="w-14 h-14 flex items-center justify-center bg-[#fdf5f0] rounded-lg">
-                          <span className="text-xl font-bold text-[#62371f]">{value}</span>
-                        </div>
-                        <span className="text-xs mt-2 text-gray-600 capitalize">{unit}</span>
+                {loadingOffer ? (
+                  <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg text-center">
+                    <div className="animate-pulse">
+                      <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                      <div className="flex justify-between gap-2">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div key={i} className="flex-1 h-14 bg-gray-200 rounded-lg"></div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
+                ) : currentOffer ? (
+                  <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg">
+                    <h3 className="text-center text-lg font-semibold text-gray-800 mb-4">Offer Ends In:</h3>
+                    <div className="flex justify-between">
+                      {Object.entries(timeLeft).map(([unit, value]) => (
+                        <div key={unit} className="flex flex-col items-center">
+                          <div className="w-14 h-14 flex items-center justify-center bg-[#fdf5f0] rounded-lg">
+                            <span className="text-xl font-bold text-[#62371f]">{value}</span>
+                          </div>
+                          <span className="text-xs mt-2 text-gray-600 capitalize">{unit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
 
