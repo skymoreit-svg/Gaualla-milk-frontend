@@ -1380,7 +1380,7 @@ export default function SlugInerPage({ slug }) {
 
 
       <div className="container mx-auto">
-        <div className="px-5 md:px-12 xl:px-32  py-10 lg:py-20">
+        <div className="px-5 md:px-12 xl:px-32  py-10 lg:py-14">
           <div className="flex items-start lg:gap-x-10">
             <div className="lg:w-[30%] xl:w-[23%] mt-5 lg:mt-0">
               <div className="sticky top-0 lg:px-4  lg:py-4 space-y-10 lg:space-y-8 hidden lg:block">

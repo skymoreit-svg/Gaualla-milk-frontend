@@ -40,7 +40,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="w-full bg-[var(--background)] py-24 lg:py-32 overflow-hidden relative">
+    <section className="w-full bg-[var(--background)] py-24 lg:py-14 overflow-hidden relative">
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -mr-48 -mt-48" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -ml-48 -mb-48" />

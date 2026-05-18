@@ -45,7 +45,7 @@ export default function ProductAyurved() {
                         <img
                             src="/design_cat.png"
                             alt="decorative design left"
-                            className="w-full object-contain shrink-0"
+                            className="w-full md:w-56 lg:w-72 object-contain shrink-0"
                         />
                         <h2 className="luxury-title-main text-3xl sm:text-4xl lg:text-5xl text-center tracking-wide whitespace-nowrap shrink-0">
                             Best Sellers
@@ -53,7 +53,7 @@ export default function ProductAyurved() {
                         <img
                             src="/design_cat.png"
                             alt="decorative design right"
-                            className="w-full object-contain shrink-0 scale-x-[-1]"
+                            className="w-full md:w-56 lg:w-72 object-contain shrink-0 scale-x-[-1]"
                         />
                     </div>
                     <p className="text-gray-700 max-w-2xl text-center text-sm md:text-base font-medium px-4">
