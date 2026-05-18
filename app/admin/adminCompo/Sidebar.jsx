@@ -49,15 +49,15 @@ export default function Sidebar() {
   const isActive = (route) => {
     const ar = (activeRoute || "").toLowerCase();
     const r = (route || "").toLowerCase();
-    if (!r) return "hover:bg-gray-700";
+    if (!r) return "hover:bg-primary";
     if (r === "/admin") {
       return ar === "/admin" || ar === "/admin/"
-        ? "bg-gray-700 border-l-4 border-green-400"
-        : "hover:bg-gray-700";
+        ? "bg-primary border-l-4 border-accent"
+        : "hover:bg-primary";
     }
     return ar === r || ar.startsWith(r + "/")
-      ? "bg-gray-700 border-l-4 border-green-400"
-      : "hover:bg-gray-700";
+      ? "bg-primary border-l-4 border-accent"
+      : "hover:bg-primary";
   };
 
 
@@ -71,7 +71,7 @@ export default function Sidebar() {
     <>
       {/* Hamburger menu only on small screens */}
       <button
-        className="fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-lg md:hidden hover:bg-gray-800 transition-colors duration-200"
+        className="fixed top-4 left-4 z-50 p-2 bg-text text-white rounded-lg md:hidden hover:bg-text transition-colors duration-200"
         onClick={() => setOpen(true)}
       >
         <RxHamburgerMenu size={24} />
@@ -81,7 +81,7 @@ export default function Sidebar() {
       {open && (
         <>
           <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setOpen(false)} />
-          <div className="fixed top-0 left-0 h-full w-64 bg-gray-900 p-5 pt-8 z-50 md:hidden">
+          <div className="fixed top-0 left-0 h-full w-64 bg-text p-5 pt-8 z-50 md:hidden">
             <button className="absolute top-4 right-4 text-white" onClick={() => setOpen(false)}>
               ✕
             </button>
@@ -170,7 +170,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="p-2 text-white rounded-md hover:bg-gray-700 cursor-pointer"
+              <li className="p-2 text-white rounded-md hover:bg-primary cursor-pointer"
                   onClick={handleLogout}>
                 <div className="flex items-center gap-x-4">
                   <FaSignOutAlt /> <span>Logout</span>
@@ -183,7 +183,7 @@ export default function Sidebar() {
 
       {/* Desktop Sidebar */}
       <div className="hidden md:flex">
-        <div className="w-64 bg-gray-900 h-screen p-5 pt-8">
+        <div className="w-64 bg-text h-screen p-5 pt-8">
           <div className="flex gap-x-4 items-center mb-8">
             <FaShoppingCart className="text-white text-2xl" />
             <h1 className="text-white font-bold text-xl">Gaualla</h1>
@@ -269,7 +269,7 @@ export default function Sidebar() {
               </Link>
             </li>
 
-              <li className="p-2 text-white rounded-md hover:bg-gray-700 cursor-pointer"
+              <li className="p-2 text-white rounded-md hover:bg-primary cursor-pointer"
                   onClick={handleLogout}>
                 <div className="flex items-center gap-x-4">
                   <FaSignOutAlt /> <span>Logout</span>

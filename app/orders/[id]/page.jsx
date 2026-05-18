@@ -100,32 +100,32 @@ const OrderDetailPage = () => {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || "";
     if (statusLower === "completed") {
-      return { bg: "bg-[#62371f]/10", text: "text-[#62371f]", icon: CheckCircle };
+      return { bg: "bg-[var(--primary)]/10", text: "text-[var(--primary)]", icon: CheckCircle };
     }
     if (statusLower === "processing" || statusLower === "out_for_delivery") {
-      return { bg: "bg-orange-50", text: "text-orange-700", icon: Truck };
+      return { bg: "bg-orange-50", text: "text-highlight", icon: Truck };
     }
     if (statusLower === "pending") {
-      return { bg: "bg-yellow-100", text: "text-yellow-700", icon: Clock };
+      return { bg: "bg-yellow-100", text: "text-highlight", icon: Clock };
     }
     if (statusLower === "failed" || statusLower === "cancelled") {
       return { bg: "bg-red-100", text: "text-red-700", icon: XCircle };
     }
-    return { bg: "bg-gray-100", text: "text-gray-700", icon: Package };
+    return { bg: "bg-background00", text: "text-text", icon: Package };
   };
 
   const getPaymentStatusBadge = (paymentStatus) => {
     const statusLower = paymentStatus?.toLowerCase() || "";
     if (statusLower === "paid") {
-      return "bg-[#62371f]/10 text-[#62371f]";
+      return "bg-[var(--primary)]/10 text-[var(--primary)]";
     }
     if (statusLower === "pending") {
-      return "bg-yellow-100 text-yellow-700";
+      return "bg-yellow-100 text-highlight";
     }
     if (statusLower === "failed") {
       return "bg-red-100 text-red-700";
     }
-    return "bg-gray-100 text-gray-700";
+    return "bg-background00 text-text";
   };
 
   const parseImages = (images) => {
@@ -142,10 +142,10 @@ const OrderDetailPage = () => {
 
   if (loading) {
     return (
-       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#62371f] mb-4"></div>
-          <p className="text-gray-600">Loading order details...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)] mb-4"></div>
+          <p className="text-text">Loading order details...</p>
         </div>
       </div>
     );
@@ -153,14 +153,14 @@ const OrderDetailPage = () => {
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="text-center bg-white rounded-lg shadow p-8 max-w-md">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center bg-background rounded-lg shadow p-8 max-w-md">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Not Found</h2>
-          <p className="text-gray-600 mb-6">{error || "The order you're looking for doesn't exist."}</p>
+          <h2 className="text-2xl font-bold text-text mb-2">Order Not Found</h2>
+          <p className="text-text mb-6">{error || "The order you're looking for doesn't exist."}</p>
            <Link
             href="/orders"
-            className="inline-block px-6 py-3 bg-[#62371f] text-white rounded-lg hover:bg-[#4a2917] transition"
+            className="inline-block px-6 py-3 bg-[var(--primary)] text-white rounded-lg hover:bg-[#4a2917] transition"
           >
             Back to Orders
           </Link>
@@ -173,21 +173,21 @@ const OrderDetailPage = () => {
   const StatusIcon = statusBadge.icon;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <Link
             href="/orders"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center gap-2 text-text hover:text-text mb-4"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Orders
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Order #{order.id}</h1>
-              <p className="text-gray-600 mt-1">Order placed on {formatDate(order.created_at)}</p>
+              <h1 className="text-3xl font-bold text-text">Order #{order.id}</h1>
+              <p className="text-text mt-1">Order placed on {formatDate(order.created_at)}</p>
             </div>
             <div className="flex items-center gap-3">
               <span className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-bold ${statusBadge.bg} ${statusBadge.text}`}>
@@ -239,8 +239,8 @@ const OrderDetailPage = () => {
 
         {/* Live Tracking Section */}
         {tracking && tracking.delivery_status && tracking.delivery_status !== "unassigned" && (
-          <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-background rounded-lg shadow border border-highlight p-6 mb-6">
+            <h2 className="text-xl font-bold text-text mb-4 flex items-center gap-2">
               <Truck className="w-5 h-5" />
               Delivery Tracking
             </h2>
@@ -253,13 +253,13 @@ const OrderDetailPage = () => {
                 {tracking.rider && <RiderCard rider={tracking.rider} />}
                 {tracking.delivery_status === "in_transit" && tracking.delivery_otp && (
                   <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p className="text-sm text-yellow-700 font-medium">Delivery OTP</p>
-                    <p className="text-2xl font-bold text-yellow-900 font-mono tracking-widest">{tracking.delivery_otp}</p>
-                    <p className="text-xs text-yellow-600 mt-1">Share this OTP with the rider to confirm delivery</p>
+                    <p className="text-sm text-highlight font-medium">Delivery OTP</p>
+                    <p className="text-2xl font-bold text-highlight font-mono tracking-widest">{tracking.delivery_otp}</p>
+                    <p className="text-xs text-highlight mt-1">Share this OTP with the rider to confirm delivery</p>
                   </div>
                 )}
                 {tracking.assignment?.estimated_time_minutes && tracking.delivery_status === "in_transit" && (
-                  <p className="text-sm text-gray-500 mt-3">
+                  <p className="text-sm text-gray-700 mt-3">
                     Estimated delivery: ~{tracking.assignment.estimated_time_minutes} minutes
                   </p>
                 )}
@@ -281,8 +281,8 @@ const OrderDetailPage = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Order Items */}
-            <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="bg-background rounded-lg shadow border border-highlight p-6">
+              <h2 className="text-xl font-bold text-text mb-4 flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5" />
                 Order Items
               </h2>
@@ -293,21 +293,21 @@ const OrderDetailPage = () => {
                     const firstImage = itemImages.length > 0 ? itemImages[0] : null;
 
                     return (
-                      <div key={index} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0">
+                      <div key={index} className="flex gap-4 pb-4 border-b border-highlight last:border-0">
                         {firstImage && (
                           <div className="w-24 h-24 flex-shrink-0">
                             <img
                               src={`${imageurl}/${firstImage}`}
                               alt={item.product_name || "Product"}
-                              className="w-full h-full object-cover rounded-lg border border-gray-200"
+                              className="w-full h-full object-cover rounded-lg border border-highlight"
                             />
                           </div>
                         )}
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 mb-2">
+                          <h4 className="font-semibold text-text mb-2">
                             {item.product_name || "Product"}
                           </h4>
-                          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                          <div className="grid grid-cols-2 gap-2 text-sm text-text">
                             <div>
                               <span className="font-medium">Quantity:</span> {item.quantity}
                             </div>
@@ -316,7 +316,7 @@ const OrderDetailPage = () => {
                             </div>
                             <div className="col-span-2">
                               <span className="font-medium">Total:</span>{" "}
-                              <span className="font-bold text-gray-900">
+                              <span className="font-bold text-text">
                                 {formatCurrency(item.price * item.quantity)}
                               </span>
                             </div>
@@ -326,19 +326,19 @@ const OrderDetailPage = () => {
                     );
                   })
                 ) : (
-                  <p className="text-gray-500">No items found</p>
+                  <p className="text-gray-700">No items found</p>
                 )}
               </div>
             </div>
 
             {/* Delivery Address */}
             {order.address && (
-              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <div className="bg-background rounded-lg shadow border border-highlight p-6">
+                <h2 className="text-xl font-bold text-text mb-4 flex items-center gap-2">
                   <MapPin className="w-5 h-5" />
                   Delivery Address
                 </h2>
-                <div className="text-gray-700">
+                <div className="text-text">
                   <p className="font-semibold mb-2">
                     {order.address.first_name} {order.address.last_name}
                   </p>
@@ -355,18 +355,18 @@ const OrderDetailPage = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Order Summary */}
-            <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+            <div className="bg-background rounded-lg shadow border border-highlight p-6">
+              <h2 className="text-xl font-bold text-text mb-4">Order Summary</h2>
               <div className="space-y-3">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-text">
                   <span>Subtotal</span>
                   <span>{formatCurrency(order.total_amount)}</span>
                 </div>
-                 <div className="flex justify-between text-gray-600">
+                 <div className="flex justify-between text-text">
                   <span>Shipping</span>
-                  <span className="text-[#62371f] font-bold">Free</span>
+                  <span className="text-[var(--primary)] font-bold">Free</span>
                 </div>
-                <div className="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg">
+                <div className="border-t border-highlight pt-3 flex justify-between font-bold text-lg">
                   <span>Total</span>
                   <span>{formatCurrency(order.total_amount)}</span>
                 </div>
@@ -374,7 +374,7 @@ const OrderDetailPage = () => {
             </div>
 
             {/* Support Contact */}
-             <div className="bg-[#62371f] rounded-lg p-6 text-white shadow-lg">
+             <div className="bg-[var(--primary)] rounded-lg p-6 text-white shadow-lg">
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                 <Phone className="w-5 h-5" />
                 Need Help?

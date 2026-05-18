@@ -91,8 +91,8 @@ export default function OfferProductValid() {
     {
       title: "Fresh & Pure, Just Like It Should Be",
       description: "The Gaualla milk is provided by desi cows raised in spacious areas. We pledge to deliver fresh milk every single day, which is not processed and contains complete natural goodness.",
-      icon: <FaLeaf className="text-2xl text-[#62371f]" />,
-      color: "bg-[#62371f]/5"
+      icon: <FaLeaf className="text-2xl text-[var(--primary)]" />,
+      color: "bg-[var(--primary)]/5"
     },
     {
       title: "No Preservatives. No Compromise",
@@ -103,40 +103,40 @@ export default function OfferProductValid() {
     {
       title: "From Cow to Kitchen—With Complete Trust",
       description: "We believe in transparency and honesty. Gaualla feels that everyone should be able to trace their milk, and we guarantee that.",
-      icon: <FaShieldAlt className="text-2xl text-blue-500" />,
-      color: "bg-blue-50"
+      icon: <FaShieldAlt className="text-2xl text-primary" />,
+      color: "bg-primary"
     },
     {
       title: "Packed with Strength & Nourishment",
       description: "A2 milk from Gaualla boosts your body's growth, strength, and vitality because it is packed with important nutrients.",
-      icon: <FaSeedling className="text-2xl text-amber-600" />,
+      icon: <FaSeedling className="text-2xl text-highlight" />,
       color: "bg-amber-50"
     },
     {
       title: "Grown Local. Trusted More",
       description: "We offer our support to Indian farmers by sourcing the milk locally from them to give you purified milk.",
-      icon: <FaMapMarkerAlt className="text-2xl text-purple-500" />,
-      color: "bg-purple-50"
+      icon: <FaMapMarkerAlt className="text-2xl text-primary" />,
+      color: "bg-primary"
     },
     {
       title: "Immunity-Boosting Goodness",
       description: "Gaualla milk contains vitamins and minerals, it supports your family's health and keeps their immune defences strong.",
-      icon: <FaFirstAid className="text-2xl text-teal-500" />,
-      color: "bg-teal-50"
+      icon: <FaFirstAid className="text-2xl text-primary" />,
+      color: "bg-primary"
     },
   ];
 
   return (
     <div className="relative overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#62371f]/10 opacity-30"></div>
+      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[var(--primary)]/10 opacity-30"></div>
       <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-amber-100 opacity-30"></div>
 
       <div className="container mx-auto px-0 py-12 lg:py-16">
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-[#62371f]/10">
+        <div className="bg-background rounded-3xl shadow-xl overflow-hidden border border-[var(--primary)]/10">
           <div className="flex flex-col lg:flex-row">
             {/* Left side - Image with offer badge */}
-            <div className="relative lg:w-2/5 p-8 lg:p-16 bg-gradient-to-br from-[#fdf5f0] to-amber-50 flex items-center justify-center">
+            <div className="relative lg:w-2/5 p-8 lg:p-16 bg-gradient-to-br from-[var(--background)] to-amber-50 flex items-center justify-center">
               <div className="relative w-full max-w-sm">
                 <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
                   <Image
@@ -159,26 +159,26 @@ export default function OfferProductValid() {
 
                 {/* Countdown timer */}
                 {loadingOffer ? (
-                  <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg text-center">
+                  <div className="mt-8 bg-background rounded-2xl p-6 shadow-lg text-center">
                     <div className="animate-pulse">
-                      <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                      <div className="h-6 bg-background00 rounded mb-4"></div>
                       <div className="flex justify-between gap-2">
                         {Array.from({ length: 4 }).map((_, i) => (
-                          <div key={i} className="flex-1 h-14 bg-gray-200 rounded-lg"></div>
+                          <div key={i} className="flex-1 h-14 bg-background00 rounded-lg"></div>
                         ))}
                       </div>
                     </div>
                   </div>
                 ) : currentOffer ? (
-                  <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg">
-                    <h3 className="text-center text-lg font-semibold text-gray-800 mb-4">Offer Ends In:</h3>
+                  <div className="mt-8 bg-background rounded-2xl p-6 shadow-lg">
+                    <h3 className="text-center text-lg font-semibold text-text mb-4">Offer Ends In:</h3>
                     <div className="flex justify-between">
                       {Object.entries(timeLeft).map(([unit, value]) => (
                         <div key={unit} className="flex flex-col items-center">
-                          <div className="w-14 h-14 flex items-center justify-center bg-[#fdf5f0] rounded-lg">
-                            <span className="text-xl font-bold text-[#62371f]">{value}</span>
+                          <div className="w-14 h-14 flex items-center justify-center bg-[var(--background)] rounded-lg">
+                            <span className="text-xl font-bold text-[var(--primary)]">{value}</span>
                           </div>
-                          <span className="text-xs mt-2 text-gray-600 capitalize">{unit}</span>
+                          <span className="text-xs mt-2 text-text capitalize">{unit}</span>
                         </div>
                       ))}
                     </div>
@@ -193,22 +193,22 @@ export default function OfferProductValid() {
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex gap-1">
                   {Array.from({ length: 3 }, (_, i) => (
-                    <div key={i} className="rounded-full h-2 w-2 bg-[#62371f]"></div>
+                    <div key={i} className="rounded-full h-2 w-2 bg-[var(--primary)]"></div>
                   ))}
                 </div>
-                <span className="text-[#62371f] font-bold text-sm uppercase tracking-wider">
+                <span className="text-[var(--primary)] font-bold text-sm uppercase tracking-wider">
                   The Soul of Desi Cow Milk - Gaualla
                 </span>
               </div>
 
               {/* Heading */}
-              <h1 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-3xl lg:text-4xl font-serif font-bold text-text mb-6 leading-tight">
                 Hamara A2 desi cow milk <br />
-                <span className="text-[#62371f]">Shuddh Bharatiya Parampara</span>
+                <span className="text-[var(--primary)]">Shuddh Bharatiya Parampara</span>
               </h1>
 
               {/* Description */}
-              <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+              <p className="text-text text-lg mb-8 leading-relaxed">
                 Hamara A2 desi cow milk shuddh Bharatiya gaayon se prapt hota
                 hai—yeh sirf ek drink nahi, ek parampara hai. Poshan se bharpoor,
                 prakritik kheti se utpaadit, aur har boond mein shuddhata aur
@@ -218,14 +218,14 @@ export default function OfferProductValid() {
               {/* Features grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
                 {features.map((feature, index) => (
-                  <div key={index} className={`p-4 rounded-xl ${feature.color} border border-transparent hover:border-[#62371f]/20 transition-all duration-300`}>
+                  <div key={index} className={`p-4 rounded-xl ${feature.color} border border-transparent hover:border-[var(--primary)]/20 transition-all duration-300`}>
                     <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-lg bg-white shadow-sm">
+                      <div className="p-2 rounded-lg bg-background shadow-sm">
                         {feature.icon}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 mb-1">{feature.title}</h3>
-                        <p className="text-sm text-gray-600">{feature.description}</p>
+                        <h3 className="font-semibold text-text mb-1">{feature.title}</h3>
+                        <p className="text-sm text-text">{feature.description}</p>
                       </div>
                     </div>
                   </div>
@@ -236,14 +236,14 @@ export default function OfferProductValid() {
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <Link
                   href="/product?name=all"
-                  className="group flex items-center gap-3 bg-[#62371f] hover:bg-[#4a2917] text-white font-semibold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-fit"
+                  className="group flex items-center gap-3 bg-[var(--primary)] hover:bg-[#4a2917] text-white font-semibold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-fit"
                 >
                   Order Now
                   <FaLongArrowAltRight className="group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
 
-                <div className="flex items-center text-sm text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#62371f] mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <div className="flex items-center text-sm text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[var(--primary)] mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   Free delivery on orders above ₹499

@@ -1,5 +1,5 @@
 .product-premium-story {
-    background-color: #fdfaf7;
+    background-color: var(--background) !important;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
 }
@@ -9,7 +9,7 @@
 }
 
 .product-main-card {
-    background: white;
+    background: var(--background) !important;
     border-radius: 40px;
     padding: 40px;
     box-shadow: 0 20px 50px rgba(98, 55, 31, 0.05);
@@ -21,13 +21,13 @@
 }
 
 .v-thumb.active {
-    border-color: #62371f;
+    border-color: var(--primary) !important;
     transform: scale(1.05);
     opacity: 1;
 }
 
 .brand-tag {
-    color: #62371f;
+    color: var(--primary) !important;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -39,7 +39,7 @@
 }
 
 .save-badge {
-    background: #62371f;
+    background: var(--primary) !important;
     color: white;
     padding: 4px 12px;
     border-radius: 99px;
@@ -52,7 +52,7 @@
 .price-tag {
     font-size: 2.5rem;
     font-weight: 900;
-    color: #1a1a1a;
+    color: var(--text) !important;
 }
 
 .old-price-tag {
@@ -64,14 +64,14 @@
 .unit-tag {
     font-size: 0.9rem;
     color: #666;
-    background: #f3f4f6;
+    background: var(--background) !important;
     padding: 2px 8px;
     border-radius: 4px;
     font-weight: 600;
 }
 
 .cta-button {
-    background: #62371f;
+    background: var(--primary) !important;
     color: white;
     width: 100%;
     padding: 18px;
@@ -99,8 +99,8 @@
 .quantity-selector {
     display: flex;
     align-items: center;
-    background: #f9f9f9;
-    border: 1px solid #eee;
+    background: var(--background) !important;
+    border: 1px solid var(--highlight);
     border-radius: 12px;
     padding: 4px;
 }
@@ -116,7 +116,7 @@
 }
 
 .q-btn:hover {
-    background: white;
+    background: var(--background) !important;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
@@ -132,19 +132,19 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #fdf5f0;
-    color: #62371f;
+    background: var(--background) !important;
+    color: var(--primary) !important;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .description-highlight {
-    border-left: 4px solid #62371f;
+    border-left: 4px solid var(--primary);
     padding-left: 20px;
     margin: 20px 0;
     font-style: italic;
-    color: #4a4a4a;
+    color: var(--text) !important;
 }
 
 .lifestyle-img {

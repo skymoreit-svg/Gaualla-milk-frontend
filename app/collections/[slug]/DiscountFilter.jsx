@@ -39,7 +39,7 @@ const DiscountFilter = ({ setSortedProducts }) => {
             type="checkbox"
             checked={selectedDiscounts.includes(id)}
             onChange={() => handleCheckboxChange(id)}
-            className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
+            className="w-4 h-4 text-primary border-highlight rounded focus:ring-primary"
           />
           <span className="text-base">{label}</span>
         </label>

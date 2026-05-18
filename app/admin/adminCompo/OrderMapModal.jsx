@@ -25,8 +25,8 @@ export default function OrderMapModal({ isOpen, onClose, latitude, longitude, ad
   if (!isLoaded) {
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <p className="text-gray-600">Loading map...</p>
+        <div className="bg-background p-6 rounded-xl shadow-lg">
+          <p className="text-text">Loading map...</p>
         </div>
       </div>
     );
@@ -46,20 +46,20 @@ export default function OrderMapModal({ isOpen, onClose, latitude, longitude, ad
       onClick={handleBackdropClick}
       className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
     >
-      <div className="bg-white rounded-xl w-full max-w-2xl shadow-2xl">
+      <div className="bg-background rounded-xl w-full max-w-2xl shadow-2xl">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+        <div className="flex justify-between items-center p-6 border-b border-highlight">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Delivery Location</h2>
-            <p className="text-sm text-gray-600 mt-1">
+            <h2 className="text-xl font-bold text-text">Delivery Location</h2>
+            <p className="text-sm text-text mt-1">
               Latitude: {latitude} | Longitude: {longitude}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className="p-2 hover:bg-background00 rounded-lg transition"
           >
-            <X className="w-6 h-6 text-gray-600" />
+            <X className="w-6 h-6 text-text" />
           </button>
         </div>
 
@@ -72,19 +72,19 @@ export default function OrderMapModal({ isOpen, onClose, latitude, longitude, ad
 
         {/* Address Details */}
         {address && (
-          <div className="px-6 pb-6 bg-gray-50 rounded-b-xl">
-            <h3 className="font-semibold text-gray-900 mb-3">Address Details</h3>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <p className="font-semibold text-gray-900">
+          <div className="px-6 pb-6 bg-background rounded-b-xl">
+            <h3 className="font-semibold text-text mb-3">Address Details</h3>
+            <div className="bg-background p-4 rounded-lg border border-highlight">
+              <p className="font-semibold text-text">
                 {address.first_name} {address.last_name}
               </p>
-              <p className="text-gray-700 mt-2">{address.street}</p>
-              <p className="text-gray-700">
+              <p className="text-text mt-2">{address.street}</p>
+              <p className="text-text">
                 {address.city}, {address.state} {address.zip_code}
               </p>
-              <p className="text-gray-700">{address.country}</p>
+              <p className="text-text">{address.country}</p>
               {address.phone && (
-                <p className="text-gray-700 mt-2">
+                <p className="text-text mt-2">
                   <span className="font-medium">Phone:</span> {address.phone}
                 </p>
               )}
@@ -93,10 +93,10 @@ export default function OrderMapModal({ isOpen, onClose, latitude, longitude, ad
         )}
 
         {/* Actions */}
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+        <div className="px-6 py-4 border-t border-highlight flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-primary transition"
           >
             Close
           </button>

@@ -8,22 +8,22 @@ import SuccessStory from '../components/Testmonails';
 
 const features = [
   {
-    icon: <FaLeaf size={28} className="text-[#62371f]" />,
+    icon: <FaLeaf size={28} className="text-[var(--primary)]" />,
     title: "Certified A2 Milk",
     description: "This milk is certified A2 and is sourced exclusively from indigenous Indian cow breeds raised with ethical care.",
   },
   {
-    icon: <FaFlask size={28} className="text-[#62371f]" />,
+    icon: <FaFlask size={28} className="text-[var(--primary)]" />,
     title: "Zero Chemicals, No Adulteration",
     description: "We strictly avoid synthetic antibiotics, hormones, and preservatives to give you only pure and natural nutrition.",
   },
   {
-    icon: <FaRecycle size={28} className="text-[#62371f]" />,
+    icon: <FaRecycle size={28} className="text-[var(--primary)]" />,
     title: "Sustainable & Ethical Farming",
     description: "Cow dung and urine naturally enrich the soil, ensuring chemical-free, fertile land where cows thrive.",
   },
   {
-    icon: <FaSeedling size={28} className="text-[#62371f]" />,
+    icon: <FaSeedling size={28} className="text-[var(--primary)]" />,
     title: "Tradition Meets Purity",
     description: "We blend time-honoured practices with modern cleanliness to deliver milk and ghee filled with natural goodness.",
   },
@@ -37,23 +37,23 @@ export default function page() {
 
       <Aboutus />
 
-      <div className="pb-16 px-5 md:px-16 xl:px-32 bg-white">
-        <h3 className="text-3xl font-bold text-center text-gray-800 mb-12">
+      <div className="pb-16 px-5 md:px-16 xl:px-32 bg-background">
+        <h3 className="text-3xl font-bold text-center text-text mb-12">
           Our Commitment to Quality
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl p-6 border border-[#62371f]/10 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-2"
+              className="bg-background rounded-xl p-6 border border-[var(--primary)]/10 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-2"
             >
-              <div className="bg-[#62371f]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-[var(--primary)]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 {feature.icon}
               </div>
-              <h4 className="text-xl font-semibold text-gray-800 mb-3">
+              <h4 className="text-xl font-semibold text-text mb-3">
                 {feature.title}
               </h4>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-text leading-relaxed">
                 {feature.description}
               </p>
             </div>

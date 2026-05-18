@@ -105,19 +105,19 @@ const AddressForm = ({ onCancel, mapLocation, onSuccess }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+    <div className="bg-background p-6 rounded-xl shadow-lg border border-highlight">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-bold text-gray-800">Add New Address</h3>
+        <h3 className="text-xl font-bold text-text">Add New Address</h3>
         <button onClick={onCancel} disabled={isSubmitting}>
-          <FaTimes className="text-gray-500 hover:text-red-500" />
+          <FaTimes className="text-gray-700 hover:text-red-500" />
         </button>
       </div>
 
       {/* 📍 Map indicator */}
       {mapLocation?.formattedAddress && (
-        <div className="mb-4 p-3 bg-[#62371f]/5 border border-[#62371f]/10 rounded-lg">
-          <p className="text-sm font-medium text-[#62371f]">📍 Location from map</p>
-          <p className="text-sm text-gray-700 mt-1">
+        <div className="mb-4 p-3 bg-[var(--primary)]/5 border border-[var(--primary)]/10 rounded-lg">
+          <p className="text-sm font-medium text-[var(--primary)]">📍 Location from map</p>
+          <p className="text-sm text-text mt-1">
             {mapLocation.formattedAddress}
           </p>
         </div>
@@ -155,7 +155,7 @@ const AddressForm = ({ onCancel, mapLocation, onSuccess }) => {
 
         <div className="md:col-span-2 flex gap-4 mt-4">
           <button type="submit"
-            className="flex-1 bg-[#62371f] text-white py-2.5 rounded-lg font-semibold">
+            className="flex-1 bg-[var(--primary)] text-white py-2.5 rounded-lg font-semibold">
             {isSubmitting ? "Saving..." : "Save Address"}
           </button>
 

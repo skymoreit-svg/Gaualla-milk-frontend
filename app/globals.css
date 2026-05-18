@@ -2,18 +2,41 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
 @import "tailwindcss";
 
+@theme {
+  --color-primary: var(--primary);
+  --color-background: var(--background);
+  --color-accent: var(--accent);
+  --color-highlight: var(--highlight);
+  --color-text: var(--text);
+  --font-geist: var(--font-geist-sans);
+  --font-geistMono: var(--font-geist-mono);
+  --font-oswald: 'Oswald', sans-serif;
+}
 
+:root {
+  --primary: #62371f;
+  --background: #ECE4BD;
+  --accent: #6B8E4E;
+  --highlight: #D4A373;
+  --text: #2E1A12;
+}
 
 body {
+  background-color: var(--background) !important;
+  color: var(--text) !important;
   font-family: var(--font-geist-sans), sans-serif; /* default body font */
 }
 
 
 
-h1, h2, h3, h4 {
-  font-family: var(--font-geist-sans), sans-serif; /* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 
@@ -63,11 +86,11 @@ code, pre {
   content: "";
   position: absolute;
   z-index: -10;
-  color: #62371f;
+  color: var(--primary);
   top: 69%;
   right: 6px;
   height: 1px;
-  border: 1px dotted #62371f;
+  border: 1px dotted var(--primary);
   width: 61%;
   transform: rotate(5deg);
 }
@@ -76,11 +99,11 @@ code, pre {
   content: "";
   position: absolute;
   z-index: -10;
-  color: #62371f;
+  color: var(--primary);
   top: 90%;
   left: -285px;
   height: 1px;
-  border: 1px dotted #62371f;
+  border: 1px dotted var(--primary);
   width: 230%;
   transform: rotate(-5deg);
 }
@@ -116,7 +139,7 @@ code, pre {
   0% {
     opacity: 0.5;
     transform: translateY(-10px);
-    color: #62371f;
+    color: var(--primary);
   }
   50% {
     opacity: 1;
@@ -172,7 +195,7 @@ blockquote:after {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #62371f;
+  background-color: var(--primary);
 }
 
 .widget-title:before {
@@ -193,7 +216,7 @@ blockquote:after {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #62371f;
+  background-color: var(--primary);
 }
 
 /* styles/globals.css or wherever you add global styles */
@@ -250,6 +273,61 @@ blockquote:after {
   }
 }
 
+
 .animate-popup-in {
   animation: popup-in 0.2s ease-out forwards;
+}
+
+/* Luxury Organic Design for Gaualla */
+.luxury-card {
+  position: relative;
+  background: white;
+  border-radius: 60px 10px 60px 10px; /* Unique asymmetrical shape */
+  border: 1px solid rgba(98, 55, 31, 0.1);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow: visible;
+}
+
+.luxury-card:hover {
+  border-radius: 10px 60px 10px 60px;
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(98, 55, 31, 0.1);
+}
+
+.luxury-card::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 1px solid var(--highlight);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.luxury-card:hover::after {
+  opacity: 1;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+
+.organic-glow {
+  background: radial-gradient(circle at center, var(--highlight) 0%, transparent 70%);
+  opacity: 0.1;
+  filter: blur(20px);
+}
+
+.luxury-title-main {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.05em;
+  background: linear-gradient(to bottom, var(--text), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  text-transform: uppercase;
 }

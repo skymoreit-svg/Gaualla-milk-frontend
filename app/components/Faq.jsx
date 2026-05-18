@@ -14,7 +14,7 @@ const faqs = [
     number: "02",
     question: "How fresh is the milk delivered by Gaualla?",
     answer:
-      "You receive milk within 24 hours of milking, ensuring maximum freshness with no artificial additives or preservatives.",
+      "You receive milk within 12 hours of milking, ensuring maximum freshness with no artificial additives or preservatives.",
   },
   {
     number: "03",
@@ -40,10 +40,10 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="w-full bg-[#fdfaf7] py-24 lg:py-32 overflow-hidden relative">
+    <section className="w-full bg-[var(--background)] py-24 lg:py-32 overflow-hidden relative">
       {/* Decorative Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#62371f]/5 rounded-full blur-3xl -mr-48 -mt-48" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#62371f]/5 rounded-full blur-3xl -ml-48 -mb-48" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -mr-48 -mt-48" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -ml-48 -mb-48" />
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-20 items-start">
@@ -52,14 +52,14 @@ export default function FAQSection() {
           <div className="lg:w-2/5 space-y-8 lg:sticky lg:top-32">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <span className="w-10 h-px bg-[#62371f]" />
-                <span className="text-[#62371f] text-xs font-black uppercase tracking-[0.3em]">Common Queries</span>
+                <span className="w-10 h-px bg-[var(--primary)]" />
+                <span className="text-[var(--primary)] text-xs font-black uppercase tracking-[0.3em]">Common Queries</span>
               </div>
-              <h2 className="text-5xl lg:text-6xl font-black text-gray-900 leading-tight font-serif">
+              <h2 className="text-5xl lg:text-6xl font-black text-text leading-tight font-serif">
                 Purity <br />
-                <span className="text-[#62371f]">Explained.</span>
+                <span className="text-[var(--primary)]">Explained.</span>
               </h2>
-              <p className="text-gray-500 text-lg font-medium max-w-md">
+              <p className="text-gray-700 text-lg font-medium max-w-md">
                 Everything you need to know about our farm-fresh A2 dairy products and delivery process.
               </p>
             </div>
@@ -72,11 +72,11 @@ export default function FAQSection() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-white p-8 rounded-3xl shadow-xl border border-gray-50 max-w-[200px] animate-bounce-slow">
-                <MessageCircle className="text-[#62371f] mb-3" size={32} />
-                <p className="text-xs font-bold text-gray-900 leading-relaxed">
+              <div className="absolute -bottom-6 -right-6 bg-background p-8 rounded-3xl shadow-xl border border-gray-50 max-w-[200px] animate-bounce-slow">
+                <MessageCircle className="text-[var(--primary)] mb-3" size={32} />
+                <p className="text-xs font-bold text-text leading-relaxed">
                   Have more questions? <br />
-                  <span className="text-[#62371f] cursor-pointer hover:underline">Contact Support</span>
+                  <span className="text-[var(--primary)] cursor-pointer hover:underline">Contact Support</span>
                 </p>
               </div>
             </div>
@@ -93,8 +93,8 @@ export default function FAQSection() {
                 key={index}
                 className={`group rounded-[2rem] transition-all duration-500 overflow-hidden ${
                   openIndex === index 
-                    ? "bg-white shadow-2xl shadow-[#62371f]/5 border border-[#62371f]/10" 
-                    : "bg-white/50 hover:bg-white border border-transparent"
+                    ? "bg-background shadow-2xl shadow-[var(--primary)]/5 border border-[var(--primary)]/10" 
+                    : "bg-background/50 hover:bg-background border border-transparent"
                 }`}
               >
                 <button
@@ -102,14 +102,14 @@ export default function FAQSection() {
                   className="w-full px-8 py-10 text-left flex items-start gap-6"
                 >
                   <span className={`text-2xl font-black transition-colors duration-300 ${
-                    openIndex === index ? "text-[#62371f]" : "text-gray-300"
+                    openIndex === index ? "text-[var(--primary)]" : "text-gray-600"
                   }`}>
                     {elm.number}
                   </span>
                   
                   <div className="flex-1">
                     <h6 className={`text-xl font-bold transition-colors duration-300 ${
-                      openIndex === index ? "text-gray-900" : "text-gray-700"
+                      openIndex === index ? "text-text" : "text-text"
                     }`}>
                       {elm.question}
                     </h6>
@@ -122,8 +122,8 @@ export default function FAQSection() {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.4, ease: "circOut" }}
                         >
-                          <div className="pt-6 border-t border-gray-100 mt-6">
-                            <p className="text-gray-500 leading-relaxed font-medium">
+                          <div className="pt-6 border-t border-highlight mt-6">
+                            <p className="text-gray-700 leading-relaxed font-medium">
                               {elm.answer}
                             </p>
                           </div>
@@ -133,7 +133,7 @@ export default function FAQSection() {
                   </div>
 
                   <div className={`mt-1 p-2 rounded-full transition-all duration-500 ${
-                    openIndex === index ? "bg-[#62371f] text-white rotate-180" : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                    openIndex === index ? "bg-[var(--primary)] text-white rotate-180" : "bg-background00 text-gray-[#252729b8] group-hover:bg-background00"
                   }`}>
                     <ChevronDown size={20} />
                   </div>

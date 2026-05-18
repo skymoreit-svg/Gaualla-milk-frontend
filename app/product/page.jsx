@@ -57,7 +57,7 @@ const page = ({ searchParams }) => {
       
       {loading && (
         <div className='flex justify-center items-center py-20'>
-          <p className='text-lg text-gray-600'>Loading products...</p>
+          <p className='text-lg text-text'>Loading products...</p>
         </div>
       )}
 
@@ -77,7 +77,7 @@ const page = ({ searchParams }) => {
 
       {!loading && product.length === 0 && !error && (
         <div className='flex justify-center items-center py-20'>
-          <p className='text-lg text-gray-600'>No products available</p>
+          <p className='text-lg text-text'>No products available</p>
         </div>
       )}
     </>

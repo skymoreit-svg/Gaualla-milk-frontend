@@ -19,11 +19,11 @@ export default function TopBar() {
       {langPop && <LanguagePop langPop={langPop} setLangPop={setLangPop} />}
 
       <div>
-        <div className="bg-[#62371f] text-center text-sm text-white py-2">
+        <div className="bg-[var(--primary)] text-center text-sm text-white py-2">
           Gaualla Milk - Purity At It's Best
         </div>
 
-        <div className="px-5 md:px-12 xl:px-32 hidden xl:flex justify-between border-b py-2 border-gray-200">
+        <div className="px-5 md:px-12 xl:px-32 hidden xl:flex justify-between border-b py-2 border-highlight">
           <ul className="flex items-center gap-x-4 text-sm">
             <li>
               <Link href="/about">About Us</Link>
@@ -32,8 +32,8 @@ export default function TopBar() {
             <li className="relative">
               <Link href="/wishlist">Wishlist</Link>
               <span className="absolute -top-2">
-                {/* <LuMessageCircleHeart  className="text-[#62371f] text-lg lg:text-xl"  /> */}
-                <span className="bg-[#62371f] text-white text-xs absolute -right-5 top-2 rounded-full w-4 h-4 flex items-center justify-center ">
+                {/* <LuMessageCircleHeart  className="text-[var(--primary)] text-lg lg:text-xl"  /> */}
+                <span className="bg-[var(--primary)] text-white text-xs absolute -right-5 top-2 rounded-full w-4 h-4 flex items-center justify-center ">
                   {wishList.length}
                 </span>
               </span>
@@ -48,17 +48,17 @@ export default function TopBar() {
            
 
             <li>
-              <span className="border-l-2 h-6 mx-3 border-gray-200"></span>
+              <span className="border-l-2 h-6 mx-3 border-highlight"></span>
             </li>
 
             <li>
-              <a href="tel:+91-8378-000052" className="text-[#62371f]">
+              <a href="tel:+91-8378-000052" className="text-[var(--primary)]">
              Contact us today ! : <span>+91-8378-000052</span>
               </a>
             </li>
 
             <li>
-              <span className="border-l-2 h-6 mx-3 border-gray-200"></span>
+              <span className="border-l-2 h-6 mx-3 border-highlight"></span>
             </li>
 
           </ul>

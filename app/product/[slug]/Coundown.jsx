@@ -50,7 +50,7 @@ export default function Countdown() {
     <div className="flex flex-col items-center justify-center p-4">
       {timeLeft > 0 ? (
         <>
-          <div className="text-sm text-gray-600 mb-2 font-medium"> SEPTEMBER 15TH</div>
+          <div className="text-sm text-text mb-2 font-medium"> SEPTEMBER 15TH</div>
           <div className="flex gap-2 mb-4">
             <TimeUnit value={two(days)} label="DAYS" />
             <TimeUnit value={two(hours)} label="HOURS" />
@@ -71,20 +71,20 @@ export default function Countdown() {
           px-8 py-4 rounded-xl font-bold text-lg
           transition-all duration-300 transform
           ${timeLeft === 0 
-            ? "bg-gray-300 text-gray-500 cursor-not-allowed scale-95" 
-            : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl"
+            ? "bg-gray-300 text-gray-700 cursor-not-allowed scale-95" 
+            : "bg-gradient-to-r from-primary to-primary text-white hover:from-primary hover:to-primary hover:scale-105 shadow-lg hover:shadow-xl"
           }
         `}
       >
         {timeLeft === 0 ? "OFFER EXPIRED" : "BUY NOW"}
         
         {timeLeft > 0 && (
-          <span className="absolute inset-0 bg-white bg-opacity-20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+          <span className="absolute inset-0 bg-background bg-opacity-20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         )}
       </button> */}
       
       {timeLeft > 0 && (
-        <p className="text-xs text-gray-500 mt-3">
+        <p className="text-xs text-gray-700 mt-3">
          Start on {formattedDate}
         </p>
       )}
@@ -96,10 +96,10 @@ export default function Countdown() {
 function TimeUnit({ value, label }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-gray-800 text-white rounded-lg w-14 h-14 flex items-center justify-center shadow-md">
+      <div className="bg-text text-white rounded-lg w-14 h-14 flex items-center justify-center shadow-md">
         <span className="text-xl font-mono font-bold">{value}</span>
       </div>
-      <span className="text-xs text-gray-600 mt-1">{label}</span>
+      <span className="text-xs text-text mt-1">{label}</span>
     </div>
   );
 }

@@ -45,9 +45,9 @@ const BlogPage = ({ blogs }) => {
                     className="w-full h-48 sm:h-56 md:h-64 object-cover"
                   />
                 </Link>
-                <div className="bg-white rounded-md py-2  shadow-lg text-black h-max lg:h-max mx-[5px] p-5 relative top-[-10px] transition-all duration-500 z-50">
+                <div className="bg-background rounded-md py-2  shadow-lg text-text h-max lg:h-max mx-[5px] p-5 relative top-[-10px] transition-all duration-500 z-50">
                   <p className="text-lg text-left text-[#7a7e9a]">
-                    <span className="text-[#62371f] "> By: {blog.author} </span>
+                    <span className="text-[var(--primary)] "> By: {blog.author} </span>
                     / {blog.category} / {blog.date}
                   </p>
                   <Link
@@ -72,10 +72,10 @@ const BlogPage = ({ blogs }) => {
                       .trim()
                       .split(/\s+/)
                       .join("-")}`}
-                    className="text-[#62371f] text-lg mt-2 flex items-center"
+                    className="text-[var(--primary)] text-lg mt-2 flex items-center"
                   >
                     Read More{" "}
-                    <span className="ml-2 border border-[#62371f] hover:bg-[#62371f] hover:text-white rounded-full p-1">
+                    <span className="ml-2 border border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white rounded-full p-1">
                       <FaArrowRight />
                     </span>
                   </Link>
@@ -90,7 +90,7 @@ const BlogPage = ({ blogs }) => {
                 <li className="page-item">
                   <Link
                     href="#"
-                    className="page-link page-links flex items-center justify-center w-10 h-10  bg-white custom-shadow hover:bg-[#62371f] hover:text-white"
+                    className="page-link page-links flex items-center justify-center w-10 h-10  bg-background custom-shadow hover:bg-[var(--primary)] hover:text-white"
                   >
                     <MdKeyboardDoubleArrowLeft />
                   </Link>
@@ -98,7 +98,7 @@ const BlogPage = ({ blogs }) => {
                 <li className="page-item">
                   <Link
                     href="#"
-                    className="page-link flex items-center justify-center custom-shadow w-10 h-10  bg-[#62371f] text-white"
+                    className="page-link flex items-center justify-center custom-shadow w-10 h-10  bg-[var(--primary)] text-white"
                   >
                     1
                   </Link>
@@ -106,7 +106,7 @@ const BlogPage = ({ blogs }) => {
                 <li className="page-item">
                   <Link
                     href="#"
-                    className="page-link flex items-center justify-center w-10 h-10  bg-white custom-shadow hover:bg-[#62371f] hover:text-white"
+                    className="page-link flex items-center justify-center w-10 h-10  bg-background custom-shadow hover:bg-[var(--primary)] hover:text-white"
                   >
                     2
                   </Link>
@@ -114,7 +114,7 @@ const BlogPage = ({ blogs }) => {
                 <li className="page-item">
                   <Link
                     href="#"
-                    className="page-link flex items-center justify-center w-10 h-10  bg-white custom-shadow hover:bg-[#62371f] hover:text-white"
+                    className="page-link flex items-center justify-center w-10 h-10  bg-background custom-shadow hover:bg-[var(--primary)] hover:text-white"
                   >
                     3
                   </Link>
@@ -122,7 +122,7 @@ const BlogPage = ({ blogs }) => {
                 <li className="page-item">
                   <Link
                     href="#"
-                    className="page-link page-links flex items-center justify-center w-10 h-10  bg-white custom-shadow hover:bg-[#62371f] hover:text-white"
+                    className="page-link page-links flex items-center justify-center w-10 h-10  bg-background custom-shadow hover:bg-[var(--primary)] hover:text-white"
                   >
                     <MdKeyboardDoubleArrowLeft className="rotate-180" />
                   </Link>

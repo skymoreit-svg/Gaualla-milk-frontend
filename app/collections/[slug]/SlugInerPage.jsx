@@ -1367,7 +1367,7 @@ export default function SlugInerPage({ slug }) {
               </h1>
 
               <div className="flex items-center justify-center gap-x-2 mt-4 text-sm md:text-base">
-                <Link href="/" className="hover:text-gray-300 transition">
+                <Link href="/" className="hover:text-gray-600 transition">
                   Home
                 </Link>
                 <FaGreaterThan className="text-xs opacity-70" />
@@ -1400,15 +1400,15 @@ export default function SlugInerPage({ slug }) {
             </div>
             <div className="lg:w-[70%] xl:w-[70%]">
               <div className="flex flex-col sm:flex-row justify-between items-left lg:items-center p-4 rounded-lg">
-                <p className="text-sm md:text-lg text-gray-400 ">
+                <p className="text-sm md:text-lg text-gray-[#252729b8] ">
                   Displaying <span className="font-semibold">1 - 12</span> out
                   of <span className="font-semibold">146</span> products.
                 </p>
                 <div className="flex items-center gap-2">
-                  <p className="text-sm md:text-lg text-gray-400">Sort by:</p>
+                  <p className="text-sm md:text-lg text-gray-[#252729b8]">Sort by:</p>
                   <select
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="border border-gray-300 rounded px-2 py-1 text-sm md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="border border-highlight rounded px-2 py-1 text-sm md:text-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="oldest">Newest to Oldest</option>
                     <option value="price-high">Price High to Low</option>
@@ -1443,14 +1443,14 @@ export default function SlugInerPage({ slug }) {
             <h1 className="text-3xl md:text-4xl lg:text-7xl drop-shadow-lg">
               Crafted by Vajra Jewels{" "}
             </h1>
-            <button className="mt-6 bg-white text-black hover:text-white hover:bg-transparent border border-white duration-300 transition-all text-xl px-6 py-2 shadow-md">
+            <button className="mt-6 bg-background text-text hover:text-white hover:bg-transparent border border-white duration-300 transition-all text-xl px-6 py-2 shadow-md">
               Learn More
             </button>
           </div>
         </div>
 
         <div className="px-5 md:px-12 xl:px-32 py-10 lg:py-16">
-          <h5 className="text-3xl md:text-4xl lg:text-5xl text-gray-500">
+          <h5 className="text-3xl md:text-4xl lg:text-5xl text-gray-700">
             Vajra classic
           </h5>
 
@@ -1464,16 +1464,16 @@ export default function SlugInerPage({ slug }) {
 
         <div className="px-5 md:px-12 xl:px-32 pt-5 pb-10 md:py-10  xl:py-16 text-center">
           <div className="flex flex-col items-center gap-y-4">
-            <h6 className="text-2xl md:text-3xl lg:text-5xl italic font-semibold text-gray-800">
+            <h6 className="text-2xl md:text-3xl lg:text-5xl italic font-semibold text-text">
               Visit Our Store
             </h6>
-            <p className="text-gray-600 max-w-2xl text-center">
+            <p className="text-text max-w-2xl text-center">
               Choosing diamond jewelry is a cherished experience. Visit our
               Bengaluru store and find the perfect piece that resonates with
               your elegance.
             </p>
 
-            <button className="mt-6 bg-[#13353F] text-white hover:bg-[#13313f] hover:text-black border border-black duration-300 transition-all text-lg px-6 py-2 shadow-md hover">
+            <button className="mt-6 bg-[#13353F] text-white hover:bg-[#13313f] hover:text-text border border-black duration-300 transition-all text-lg px-6 py-2 shadow-md hover">
               Check Store Location
             </button>
           </div>
@@ -1486,10 +1486,10 @@ export default function SlugInerPage({ slug }) {
             <h4 className="text-2xl md:text-3xl lg:text-5xl uppercase">
               Vajra J ewels {slugProduct.heading}
             </h4>
-            <p className="text-gray-600 text-lg text-justify lg:text-start">
+            <p className="text-text text-lg text-justify lg:text-start">
               {slugProduct.para1}
             </p>
-            <p className="text-gray-600 text-lg text-justify lg:text-start">
+            <p className="text-text text-lg text-justify lg:text-start">
               {slugProduct.para2}
             </p>
           </div>

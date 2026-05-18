@@ -167,13 +167,13 @@ const SignUpPage = () => {
         </div>
 
         {/* Right Panel */}
-        <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-white">
+        <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-background">
           <div className="w-full max-w-sm">
             <div className="text-left mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+              <h2 className="text-2xl font-bold text-text tracking-tight">
                 Create an Account
               </h2>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-gray-700 text-sm mt-2">
                 Start your journey with us today.
               </p>
             </div>
@@ -183,12 +183,12 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-xs font-medium text-gray-600"
+                  className="block text-xs font-medium text-text"
                 >
                   Full Name
                 </label>
                 <div className="mt-1 relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                   <input
                     id="name"
                     name="name"
@@ -196,7 +196,7 @@ const SignUpPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Full Name"
-                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.name ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-3 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition ${errors.name ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                 </div>
@@ -209,12 +209,12 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-xs font-medium text-gray-600"
+                  className="block text-xs font-medium text-text"
                 >
                   Email
                 </label>
                 <div className="mt-1 relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                   <input
                     id="email"
                     name="email"
@@ -222,7 +222,7 @@ const SignUpPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email"
-                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.email ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-3 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition ${errors.email ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                 </div>
@@ -235,12 +235,12 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-xs font-medium text-gray-600"
+                  className="block text-xs font-medium text-text"
                 >
                   Phone Number
                 </label>
                 <div className="mt-1 relative">
-                  <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                   <input
                     id="phone"
                     name="phone"
@@ -248,7 +248,7 @@ const SignUpPage = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Mobile Number"
-                    className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.phone ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-3 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition ${errors.phone ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                 </div>
@@ -261,12 +261,12 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-xs font-medium text-gray-600"
+                  className="block text-xs font-medium text-text"
                 >
                   Password
                 </label>
                 <div className="mt-1 relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                   <input
                     id="password"
                     name="password"
@@ -274,13 +274,13 @@ const SignUpPage = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.password ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-10 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition ${errors.password ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-text"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -298,12 +298,12 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-xs font-medium text-gray-600"
+                  className="block text-xs font-medium text-text"
                 >
                   Confirm Password
                 </label>
                 <div className="mt-1 relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -311,13 +311,13 @@ const SignUpPage = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition ${errors.confirmPassword ? "ring-2 ring-red-500" : ""
+                    className={`w-full py-3 pl-10 pr-10 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition ${errors.confirmPassword ? "ring-2 ring-red-500" : ""
                       }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-text"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -337,7 +337,7 @@ const SignUpPage = () => {
               <button
                 type="submit"
                 disabled={loader}
-                className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#62371f] hover:bg-[#4a2917] focus:ring-2 focus:ring-offset-2 focus:ring-[#62371f] transition-all"
+                className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[var(--primary)] hover:bg-[#4a2917] focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)] transition-all"
               >
                 {loader ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -352,11 +352,11 @@ const SignUpPage = () => {
 
             {/* Sign In */}
             <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-text">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-[#62371f] hover:underline transition"
+                  className="font-medium text-[var(--primary)] hover:underline transition"
                 >
                   Sign in
                 </Link>

@@ -70,18 +70,18 @@ export default function MapModal({ onClose, onConfirm, initialLocation }) {
   if (!isLoaded) {
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-xl">Loading map...</div>
+        <div className="bg-background p-6 rounded-xl">Loading map...</div>
       </div>
     );
   }
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-xl w-full max-w-2xl p-4 shadow-xl">
+      <div className="bg-background rounded-xl w-full max-w-2xl p-4 shadow-xl">
 
         {/* HEADER */}
         <div className="flex justify-between items-center mb-3">
-          <h3 className="text-lg font-semibold text-gray-800">
+          <h3 className="text-lg font-semibold text-text">
             Select Delivery Location
           </h3>
           <button onClick={onClose} className="text-xl">✕</button>
@@ -103,11 +103,11 @@ export default function MapModal({ onClose, onConfirm, initialLocation }) {
 
         {/* ADDRESS PREVIEW */}
         {addressData && (
-          <div className="mt-4 p-4 bg-[#62371f]/5 border border-[#62371f]/10 rounded-lg">
-            <p className="text-sm font-medium text-[#62371f] mb-1">
+          <div className="mt-4 p-4 bg-[var(--primary)]/5 border border-[var(--primary)]/10 rounded-lg">
+            <p className="text-sm font-medium text-[var(--primary)] mb-1">
               Selected Address:
             </p>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-text">
               {addressData.formattedAddress}
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function MapModal({ onClose, onConfirm, initialLocation }) {
               );
             }}
             disabled={!addressData || isLoadingAddress}
-            className="px-4 py-2 bg-[#62371f] text-white rounded-lg disabled:bg-gray-400"
+            className="px-4 py-2 bg-[var(--primary)] text-white rounded-lg disabled:bg-gray-400"
           >
             {isLoadingAddress ? "Loading..." : "Use This Location"}
           </button>

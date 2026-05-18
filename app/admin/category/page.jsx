@@ -100,13 +100,13 @@ export default function CategoryPage() {
 
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
-          <p className="text-gray-900 text-sm mt-1">Manage product categories</p>
+          <h1 className="text-3xl font-bold text-text">Categories</h1>
+          <p className="text-text text-sm mt-1">Manage product categories</p>
         </div>
 
         <Link
           href="/admin/category/create"
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
+          className="flex items-center gap-2 bg-accent hover:bg-accent text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
         >
           <Plus size={20} />
           Add Category
@@ -114,23 +114,23 @@ export default function CategoryPage() {
       </div>
 
       {/* Search + Filters */}
-      <div className="bg-white border border-gray-400 rounded-lg p-4 mb-6">
+      <div className="bg-background border border-gray-400 rounded-lg p-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-[#252729b8] w-5 h-5" />
             <input
               type="text"
               placeholder="Search categories by name or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-12 pr-5 py-3 bg-background border border-highlight rounded-lg text-text placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
 
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            className="px-4 py-3 bg-background border border-highlight rounded-lg text-text font-medium focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -142,8 +142,8 @@ export default function CategoryPage() {
       {/* CONTENT */}
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <p className="mt-2 text-gray-600">Loading categories...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="mt-2 text-text">Loading categories...</p>
         </div>
       ) : error ? (
         <div className="text-center py-12 bg-red-50 rounded-lg">
@@ -157,26 +157,26 @@ export default function CategoryPage() {
         </div>
       ) : (
         <>
-          <p className="text-gray-600 mb-6">
+          <p className="text-text mb-6">
             Showing <strong>{filtered.length}</strong> of {categories.length} categories
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.length === 0 ? (
-              <div className="col-span-3 text-center py-12 bg-white rounded-2xl shadow">
+              <div className="col-span-3 text-center py-12 bg-background rounded-2xl shadow">
                 No categories found
               </div>
             ) : (
               filtered.map((cat) => (
                 <div
                   key={cat.id}
-                  className="bg-white rounded-lg shadow p-5 relative border border-gray-100"
+                  className="bg-background rounded-lg shadow p-5 relative border border-highlight"
                 >
                   <div className="absolute top-3 right-3 flex items-center gap-2">
                     <Link
                       href={`/admin/category/edit/${cat.id}`}
                       title="Edit"
-                      className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                      className="p-1 text-primary hover:bg-primary rounded"
                     >
                       <Edit2 className="w-5 h-5" />
                     </Link>
@@ -200,12 +200,12 @@ export default function CategoryPage() {
                     />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-text mb-2">
                     {cat.name}
                   </h3>
 
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span className="text-green-600 font-medium">Active</span>
+                  <div className="flex items-center justify-between text-sm text-text">
+                    <span className="text-accent font-medium">Active</span>
                   </div>
                 </div>
               ))

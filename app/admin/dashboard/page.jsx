@@ -95,12 +95,12 @@ const DashboardPage = () => {
 
   const getStatusColor = (status) => {
     const lowerStatus = (status || "").toLowerCase();
-    if (lowerStatus.includes("completed")) return "bg-green-100 text-green-700";
-    if (lowerStatus.includes("pending")) return "bg-yellow-100 text-yellow-700";
-    if (lowerStatus.includes("out") || lowerStatus.includes("delivery")) return "bg-blue-100 text-blue-700";
-    if (lowerStatus.includes("processing")) return "bg-purple-100 text-purple-700";
+    if (lowerStatus.includes("completed")) return "bg-green-100 text-accent";
+    if (lowerStatus.includes("pending")) return "bg-yellow-100 text-highlight";
+    if (lowerStatus.includes("out") || lowerStatus.includes("delivery")) return "bg-primary text-primary";
+    if (lowerStatus.includes("processing")) return "bg-primary text-primary";
     if (lowerStatus.includes("cancelled")) return "bg-red-100 text-red-700";
-    return "bg-gray-100 text-gray-700";
+    return "bg-background00 text-text";
   };
 
   const statsCards = [
@@ -108,25 +108,25 @@ const DashboardPage = () => {
       label: "Total Users", 
       value: stats.totalUsers.toString(), 
       icon: Users, 
-      color: "bg-blue-500" 
+      color: "bg-primary" 
     },
     { 
       label: "Total Products", 
       value: stats.totalProducts.toString(), 
       icon: Package, 
-      color: "bg-green-500" 
+      color: "bg-accent" 
     },
     { 
       label: "Total Orders", 
       value: stats.totalOrders.toString(), 
       icon: ShoppingCart, 
-      color: "bg-purple-500" 
+      color: "bg-primary" 
     },
     { 
       label: "Today's Revenue", 
       value: formatCurrency(stats.todayRevenue), 
       icon: TrendingUp, 
-      color: "bg-orange-500" 
+      color: "bg-highlight" 
     },
   ];
 
@@ -140,26 +140,26 @@ const DashboardPage = () => {
 
   if (loading) {
     return (
-      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="p-8 bg-background min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+          <p className="text-text">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       {/* Header */}
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Overview of your store</p>
+          <h1 className="text-3xl font-bold text-text">Dashboard</h1>
+          <p className="text-text mt-1">Overview of your store</p>
         </div>
         <button
           onClick={fetchDashboardData}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary transition"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh
@@ -171,11 +171,11 @@ const DashboardPage = () => {
         {statsCards.map((stat, idx) => {
           const Icon = stat.icon;
           return (
-            <div key={idx} className="bg-white rounded-lg shadow p-6 border border-gray-200">
+            <div key={idx} className="bg-background rounded-lg shadow p-6 border border-highlight">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-gray-800 text-lg font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+                  <p className="text-text text-lg font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-text mt-2">{stat.value}</p>
                 </div>
                 <div className={`${stat.color} p-3 rounded-lg text-white`}>
                   <Icon className="w-6 h-6" />
@@ -189,45 +189,45 @@ const DashboardPage = () => {
       {/* Order Breakdown & Low Stock */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         {/* Order Status Breakdown */}
-        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Order Status Breakdown</h2>
+        <div className="bg-background rounded-lg shadow p-6 border border-highlight">
+          <h2 className="text-lg font-bold text-text mb-6">Order Status Breakdown</h2>
           <div className="space-y-4">
             {orderBreakdownItems.map((item, idx) => (
               <div key={idx} className="flex items-center justify-between">
-                <p className="text-gray-700 font-medium">{item.status}</p>
-                <span className="text-gray-900 font-bold text-lg">{item.count}</span>
+                <p className="text-text font-medium">{item.status}</p>
+                <span className="text-text font-bold text-lg">{item.count}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Low Stock Products */}
-        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Low Stock Products</h2>
+        <div className="bg-background rounded-lg shadow p-6 border border-highlight">
+          <h2 className="text-lg font-bold text-text mb-6">Low Stock Products</h2>
           {lowStockProducts.length > 0 ? (
             <div className="space-y-4">
               {lowStockProducts.map((product, idx) => (
                 <div key={idx} className="flex items-center justify-between">
-                  <p className="text-gray-700 font-medium">{product.name}</p>
-                  <span className={`font-bold text-lg ${product.stock === 0 ? "text-red-600" : "text-orange-600"}`}>
+                  <p className="text-text font-medium">{product.name}</p>
+                  <span className={`font-bold text-lg ${product.stock === 0 ? "text-red-600" : "text-highlight"}`}>
                     {product.stock}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-600">All products are well stocked</p>
+            <p className="text-text">All products are well stocked</p>
           )}
         </div>
       </div>
 
       {/* Recent Orders */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="bg-background rounded-lg shadow border border-highlight p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
+          <h2 className="text-lg font-bold text-text">Recent Orders</h2>
           <Link 
             href="/admin/orders" 
-            className="text-green-600 hover:text-green-700 font-semibold text-sm"
+            className="text-accent hover:text-accent font-semibold text-sm"
           >
             View all
           </Link>
@@ -236,34 +236,34 @@ const DashboardPage = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Order Number</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Customer</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Status</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Payment</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Amount</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Date</th>
+              <tr className="border-b border-highlight">
+                <th className="text-left px-4 py-3 text-sm font-semibold text-text">Order Number</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold text-text">Customer</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold text-text">Status</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold text-text">Payment</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold text-text">Amount</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold text-text">Date</th>
               </tr>
             </thead>
             <tbody>
               {recentOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-500">
+                  <td colSpan={6} className="text-center py-8 text-gray-700">
                     No recent orders
                   </td>
                 </tr>
               ) : (
                 recentOrders.map((order, idx) => (
-                  <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="px-4 py-4 text-sm font-medium text-gray-900">
+                  <tr key={idx} className="border-b border-highlight hover:bg-background">
+                    <td className="px-4 py-4 text-sm font-medium text-text">
                       <Link 
                         href={`/admin/orders/${order.id}`}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-primary hover:text-primary"
                       >
                         #{order.id}
                       </Link>
                     </td>
-                    <td className="px-4 py-4 text-sm text-gray-700">{order.user_name || "N/A"}</td>
+                    <td className="px-4 py-4 text-sm text-text">{order.user_name || "N/A"}</td>
                     <td className="px-4 py-4">
                       <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
                         {order.status}
@@ -272,18 +272,18 @@ const DashboardPage = () => {
                     <td className="px-4 py-4">
                       <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${
                         order.payment_status === "paid" 
-                          ? "bg-green-100 text-green-700" 
+                          ? "bg-green-100 text-accent" 
                           : order.payment_status === "pending"
-                          ? "bg-yellow-100 text-yellow-700"
+                          ? "bg-yellow-100 text-highlight"
                           : "bg-red-100 text-red-700"
                       }`}>
                         {order.payment_status || "pending"}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-sm text-gray-900 font-semibold">
+                    <td className="px-4 py-4 text-sm text-text font-semibold">
                       {formatCurrency(order.amount)}
                     </td>
-                    <td className="px-4 py-4 text-sm text-gray-600">{formatDate(order.date)}</td>
+                    <td className="px-4 py-4 text-sm text-text">{formatDate(order.date)}</td>
                   </tr>
                 ))
               )}

@@ -85,7 +85,7 @@ export default function SuccessStory() {
         className="absolute left-0 top-0"
       />
 
-      <div className="relative z-10  bg-cover  bg-center space-y-10 lg:space-y-16 text-black  ">
+      <div className="relative z-10  bg-cover  bg-center space-y-10 lg:space-y-16 text-text  ">
         <div className="px-5 md:px-16 xl:px-32 grid grid-cols-1 lg:grid-cols-3 gap-y-10 lg:gap-y-0 gap-x-5 justify-center items-center">
           {/* Left Section */}
           <div className="col-span-1 space-y-5">
@@ -100,13 +100,13 @@ export default function SuccessStory() {
             <div className="relative space-x-2 flex justify-start">
               <button
                 ref={prevRef}
-                className="w-10 h-10 md:w-12 md:h-12 text-[#62371F] hover:bg-[#62371F] hover:text-white flex items-center justify-center text-lg md:text-2xl bg-white group rounded-full transition-all duration-500 ease-in-out"
+                className="w-10 h-10 md:w-12 md:h-12 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white flex items-center justify-center text-lg md:text-2xl bg-background group rounded-full transition-all duration-500 ease-in-out"
               >
                 <IoArrowBack className="group-hover:-translate-x-1 transition-all duration-100 ease-in-out" />
               </button>
               <button
                 ref={nextRef}
-                className="w-10 h-10 md:w-12 md:h-12 text-[#62371F] hover:bg-[#62371F] hover:text-white flex items-center justify-center text-lg md:text-2xl bg-white group rounded-full transition-all duration-500 ease-in-out"
+                className="w-10 h-10 md:w-12 md:h-12 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white flex items-center justify-center text-lg md:text-2xl bg-background group rounded-full transition-all duration-500 ease-in-out"
               >
                 <IoArrowForward className="group-hover:translate-x-1 transition-all duration-100 ease-in-out" />
               </button>
@@ -140,12 +140,12 @@ export default function SuccessStory() {
             >
               {testimonials.map((member, index) => (
                 <SwiperSlide key={index} className="pb-10 md:pb-0">
-                  <div className="bg-white shadow-xl text-black h-max lg:h-[280px] border border-gray-200 rounded-xl p-6 transition-all  hover:border-gray-300">
-                    <h5 className="font-bold text-xl md:text-2xl text-gray-800">
+                  <div className="bg-background shadow-xl text-text h-max lg:h-[280px] border border-highlight rounded-xl p-6 transition-all  hover:border-highlight">
+                    <h5 className="font-bold text-xl md:text-2xl text-text">
                       {member.heading}
                     </h5>
 
-                    <div className="flex items-center gap-x-2 text-yellow-500 mb-2">
+                    <div className="flex items-center gap-x-2 text-highlight mb-2">
                       <FaStar />
                       <FaStar />
                       <FaStar />
@@ -153,9 +153,9 @@ export default function SuccessStory() {
                       <FaStar />
                     </div>
 
-                    <p className="text-gray-600 text-sm mb-4">{member.desc}</p>
+                    <p className="text-text text-sm mb-4">{member.desc}</p>
 
-                    <hr className="border-gray-200 mb-4" />
+                    <hr className="border-highlight mb-4" />
 
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-x-3">
@@ -165,15 +165,15 @@ export default function SuccessStory() {
                           className="h-10 w-10 rounded-full object-cover"
                         />
                         <div>
-                          <h6 className="font-semibold text-gray-700">
+                          <h6 className="font-semibold text-text">
                             {member.name}
                           </h6>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-700">
                             {member.position}
                           </p>
                         </div>
                       </div>
-                      <div className="text-gray-400 text-sm">
+                      <div className="text-gray-[#252729b8] text-sm">
                         {/* Any additional content can go here */}
                       </div>
                     </div>

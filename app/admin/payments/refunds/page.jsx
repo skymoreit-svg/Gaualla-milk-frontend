@@ -123,38 +123,38 @@ const RefundsPage = () => {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || "";
     if (statusLower === "processed") {
-      return "bg-green-100 text-green-700";
+      return "bg-green-100 text-accent";
     }
     if (statusLower === "pending") {
-      return "bg-yellow-100 text-yellow-700";
+      return "bg-yellow-100 text-highlight";
     }
     if (statusLower === "failed") {
       return "bg-red-100 text-red-700";
     }
-    return "bg-gray-100 text-gray-700";
+    return "bg-background00 text-text";
   };
 
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       {/* Header */}
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Refunds</h1>
-          <p className="text-gray-600 mt-1">Manage and process refunds</p>
+          <h1 className="text-3xl font-bold text-text">Refunds</h1>
+          <p className="text-text mt-1">Manage and process refunds</p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary transition flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
             Create Refund
           </button>
           <Link
             href="/admin/payments"
-            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-primary transition"
           >
             Back to Dashboard
           </Link>
@@ -162,12 +162,12 @@ const RefundsPage = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-gray-300 rounded-lg p-5 mb-6">
+      <div className="bg-background border border-highlight rounded-lg p-5 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <select
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Status</option>
             <option value="processed">Processed</option>
@@ -180,7 +180,7 @@ const RefundsPage = () => {
             placeholder="Transaction ID"
             value={filters.transaction_id}
             onChange={(e) => setFilters({ ...filters, transaction_id: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
           <input
@@ -188,7 +188,7 @@ const RefundsPage = () => {
             placeholder="Order ID"
             value={filters.order_id}
             onChange={(e) => setFilters({ ...filters, order_id: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
           <button
@@ -202,7 +202,7 @@ const RefundsPage = () => {
               });
               setCurrentPage(1);
             }}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            className="px-4 py-2 text-text border border-highlight rounded-lg hover:bg-background transition"
           >
             Clear Filters
           </button>
@@ -214,67 +214,67 @@ const RefundsPage = () => {
             placeholder="Start Date"
             value={filters.start_date}
             onChange={(e) => setFilters({ ...filters, start_date: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
             type="date"
             placeholder="End Date"
             value={filters.end_date}
             onChange={(e) => setFilters({ ...filters, end_date: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
 
       {/* Refunds Table */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+      <div className="bg-background rounded-lg shadow border border-highlight overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
-            <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading refunds...</p>
+            <RefreshCw className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-text">Loading refunds...</p>
           </div>
         ) : refunds.length === 0 ? (
           <div className="p-12 text-center">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No refunds found</p>
+            <AlertCircle className="w-12 h-12 text-gray-[#252729b8] mx-auto mb-4" />
+            <p className="text-text">No refunds found</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-background border-b border-highlight">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Refund ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Payment ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">User</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Amount</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Order ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Date</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Refund ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Payment ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">User</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Amount</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Order ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {refunds.map((refund) => (
-                    <tr key={refund.id} className="hover:bg-gray-50 transition">
+                    <tr key={refund.id} className="hover:bg-background transition">
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-text">
                           {refund.razorpay_refund_id?.substring(0, 20) || refund.id}...
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-700">
+                        <div className="text-sm text-text">
                           {refund.razorpay_payment_id?.substring(0, 20) || "N/A"}...
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm">
-                          <div className="font-medium text-gray-900">{refund.user_name || "N/A"}</div>
-                          <div className="text-gray-500 text-xs">{refund.user_email || ""}</div>
+                          <div className="font-medium text-text">{refund.user_name || "N/A"}</div>
+                          <div className="text-gray-700 text-xs">{refund.user_email || ""}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-semibold text-gray-900">
+                        <div className="text-sm font-semibold text-text">
                           {formatCurrency(refund.amount || 0)}
                         </div>
                       </td>
@@ -284,11 +284,11 @@ const RefundsPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-700">
+                        <div className="text-sm text-text">
                           {refund.order_id_ref ? (
                             <Link
                               href={`/admin/orders`}
-                              className="text-blue-600 hover:underline"
+                              className="text-primary hover:underline"
                             >
                               #{refund.order_id_ref}
                             </Link>
@@ -297,13 +297,13 @@ const RefundsPage = () => {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text">
                         {formatDate(refund.created_at)}
                       </td>
                       <td className="px-6 py-4">
                         <Link
                           href={`/admin/payments/transactions/${refund.transaction_id}`}
-                          className="text-blue-600 hover:text-blue-800 transition"
+                          className="text-primary hover:text-primary transition"
                           title="View Transaction"
                         >
                           <Eye className="w-5 h-5" />
@@ -317,8 +317,8 @@ const RefundsPage = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
-                <div className="text-sm text-gray-600">
+              <div className="px-6 py-4 border-t border-highlight flex justify-between items-center">
+                <div className="text-sm text-text">
                   Showing {((currentPage - 1) * pagination.limit) + 1} to{" "}
                   {Math.min(currentPage * pagination.limit, pagination.total)} of{" "}
                   {pagination.total} refunds
@@ -327,14 +327,14 @@ const RefundsPage = () => {
                   <button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-highlight rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-highlight rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition"
                   >
                     Next
                   </button>
@@ -348,11 +348,11 @@ const RefundsPage = () => {
       {/* Create Refund Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Create Refund</h2>
+          <div className="bg-background rounded-lg shadow-xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-text mb-4">Create Refund</h2>
             <form onSubmit={handleCreateRefund} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text mb-2">
                   Payment ID (Razorpay Payment ID) *
                 </label>
                 <input
@@ -360,13 +360,13 @@ const RefundsPage = () => {
                   required
                   value={createForm.payment_id}
                   onChange={(e) => setCreateForm({ ...createForm, payment_id: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="pay_xxx"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text mb-2">
                   Refund Amount *
                 </label>
                 <input
@@ -376,19 +376,19 @@ const RefundsPage = () => {
                   min="0.01"
                   value={createForm.amount}
                   onChange={(e) => setCreateForm({ ...createForm, amount: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="0.00"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text mb-2">
                   Refund Speed
                 </label>
                 <select
                   value={createForm.speed}
                   onChange={(e) => setCreateForm({ ...createForm, speed: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="normal">Normal (5-7 days)</option>
                   <option value="optimum">Optimum (3-5 days)</option>
@@ -396,27 +396,27 @@ const RefundsPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text mb-2">
                   Notes
                 </label>
                 <textarea
                   value={createForm.notes}
                   onChange={(e) => setCreateForm({ ...createForm, notes: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   rows="3"
                   placeholder="Refund reason..."
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-text mb-2">
                   Receipt Number
                 </label>
                 <input
                   type="text"
                   value={createForm.receipt}
                   onChange={(e) => setCreateForm({ ...createForm, receipt: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Optional"
                 />
               </div>
@@ -424,14 +424,14 @@ const RefundsPage = () => {
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary transition"
                 >
                   Create Refund
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                  className="flex-1 px-4 py-2 bg-gray-300 text-text rounded-lg hover:bg-gray-400 transition"
                 >
                   Cancel
                 </button>

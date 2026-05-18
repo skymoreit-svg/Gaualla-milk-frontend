@@ -72,7 +72,7 @@ const Superdropdown = () => {
     <>
       <div className="lg:hidden fixed inset-x-0 bottom-0 z-[99999999] bg-[#0c2e39] text-white px-5 md:px-12 py-6 md:py-4  flex justify-between items-center shadow-md">
         <button
-          className="flex items-center gap-2 text-base font-medium hover:text-gray-300 transition"
+          className="flex items-center gap-2 text-base font-medium hover:text-gray-600 transition"
           onClick={() => toggleDropdown("categories")}
         >
           <BiCategory className="text-lg" />
@@ -80,7 +80,7 @@ const Superdropdown = () => {
         </button>
 
         <button
-          className="flex items-center gap-2 text-base font-medium hover:text-gray-300 transition"
+          className="flex items-center gap-2 text-base font-medium hover:text-gray-600 transition"
           onClick={() => toggleDropdown("sort")}
         >
           <MdSort className="text-lg" />
@@ -88,7 +88,7 @@ const Superdropdown = () => {
         </button>
 
         <button
-          className="flex items-center gap-2 text-base font-medium hover:text-gray-300 transition"
+          className="flex items-center gap-2 text-base font-medium hover:text-gray-600 transition"
           onClick={() => toggleDropdown("filter")}
         >
           <IoColorFilterSharp className="text-lg" />
@@ -100,16 +100,16 @@ const Superdropdown = () => {
         <div className="inset-0 fixed bg-black/50  z-[9999]">
           <div
             data-aos="fade-up"
-            className="lg:hidden fixed z-[10000] bottom-0 inset-x-0  shadow-md rounded-t-2xl bg-white pb-20"
+            className="lg:hidden fixed z-[10000] bottom-0 inset-x-0  shadow-md rounded-t-2xl bg-background pb-20"
           >
-            <h3 className="text-center bg-gray-100 text-gray-700 font-semibold rounded-t-[20px] p-4">
+            <h3 className="text-center bg-background00 text-text font-semibold rounded-t-[20px] p-4">
               Sort Designs By
             </h3>
             <button onClick={() => toggleDropdown("sort")} className="absolute right-5 top-5 font-bold">
               <RxCross2 />
 
             </button>
-            <ul className="mt-2 text-gray-800">
+            <ul className="mt-2 text-text">
               {[
                 "Latest",
                 "Discount",
@@ -120,7 +120,7 @@ const Superdropdown = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="py-2 px-4 text-base hover:bg-gray-100 cursor-pointer opacity-90 transition-opacity duration-300"
+                  className="py-2 px-4 text-base hover:bg-background00 cursor-pointer opacity-90 transition-opacity duration-300"
                 >
                   {item}
                 </li>
@@ -134,9 +134,9 @@ const Superdropdown = () => {
         <div className=" fixed inset-0  z-[9999]  bg-black/50">
           <div
             data-aos="fade-up"
-            className="lg:hidden fixed inset-x-0 bottom-0 z-[10000] shadow-md rounded-t-2xl bg-white pb-20 "
+            className="lg:hidden fixed inset-x-0 bottom-0 z-[10000] shadow-md rounded-t-2xl bg-background pb-20 "
           >
-            <h3 className="text-center bg-gray-100 text-gray-700 font-semibold rounded-t-[20px] p-4">
+            <h3 className="text-center bg-background00 text-text font-semibold rounded-t-[20px] p-4">
               Select Category
             </h3>
 
@@ -148,14 +148,14 @@ const Superdropdown = () => {
               {categoriesData.map((category, index) => (
                 <div
                   key={index}
-                  className="bg-gray-100 rounded-lg p-2 shadow-md cursor-pointer hover:shadow-lg transition"
+                  className="bg-background00 rounded-lg p-2 shadow-md cursor-pointer hover:shadow-lg transition"
                 >
                   <img
                     src={category.image}
                     alt={category.name}
                     className="w-full h-24 object-cover rounded-lg"
                   />
-                  <p className="text-center mt-2 font-medium text-gray-700">
+                  <p className="text-center mt-2 font-medium text-text">
                     {category.title}
                   </p>
                 </div>
@@ -169,13 +169,13 @@ const Superdropdown = () => {
         <div className="fixed inset-0 bg-black/15  z-[9999]">
           <div
             data-aos="fade-in"
-            className="lg:hidden fixed inset-x-0 bottom-16  bg-white flex flex-col p-4 overflow-y-auto"
+            className="lg:hidden fixed inset-x-0 bottom-16  bg-background flex flex-col p-4 overflow-y-auto"
           >
             <div className="flex justify-between items-center pb-4 border-b">
               {selectedCategory ? (
                 <button
                   onClick={() => setSelectedCategory(null)}
-                  className="text-gray-600 text-xl flex items-center gap-2"
+                  className="text-text text-xl flex items-center gap-2"
                 >
                   <IoArrowBack /> Back
                 </button>
@@ -191,7 +191,7 @@ const Superdropdown = () => {
 
             <div className="flex-1 mt-4">
               {selectedCategory ? (
-                <ul className="text-gray-800">
+                <ul className="text-text">
                   {filterOptionsData[selectedCategory]?.map((option, index) => (
                     <li
                       key={index}
@@ -203,7 +203,7 @@ const Superdropdown = () => {
                   ))}
                 </ul>
               ) : (
-                <ul className="text-gray-800">
+                <ul className="text-text">
                   {filterCategories.map((category, index) => (
                     <li
                       key={index}
@@ -211,7 +211,7 @@ const Superdropdown = () => {
                       onClick={() => setSelectedCategory(category.name)}
                     >
                       <span>{category.name}</span>
-                      <span className="text-gray-500">{category.options[0]}</span>
+                      <span className="text-gray-700">{category.options[0]}</span>
                     </li>
                   ))}
                 </ul>

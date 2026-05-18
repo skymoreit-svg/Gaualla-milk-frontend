@@ -51,13 +51,13 @@ export default function SignUp() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-white">
+      <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-background">
         <div className="w-full max-w-sm">
           <div className="text-left mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-text tracking-tight">
               Create an Account
             </h2>
-            <p className="text-gray-500 text-sm mt-2">
+            <p className="text-gray-700 text-sm mt-2">
               Start your journey with us today.
             </p>
           </div>
@@ -65,16 +65,16 @@ export default function SignUp() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name Input */}
             <div>
-              <label className="block text-xs font-medium text-gray-600">Name</label>
+              <label className="block text-xs font-medium text-text">Name</label>
               <div className="mt-1 relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                 <input
                   type="text"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   required
-                  className="w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
+                  className="w-full py-3 pl-10 pr-3 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
                   placeholder="Enter your name"
                 />
               </div>
@@ -82,16 +82,16 @@ export default function SignUp() {
 
             {/* Email Input */}
             <div>
-              <label className="block text-xs font-medium text-gray-600">Email</label>
+              <label className="block text-xs font-medium text-text">Email</label>
               <div className="mt-1 relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                 <input
                   type="email"
                   name="email"
                   value={form.email}
                   onChange={handleChange}
                   required
-                  className="w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
+                  className="w-full py-3 pl-10 pr-3 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
                   placeholder="Enter your email"
                 />
               </div>
@@ -99,22 +99,22 @@ export default function SignUp() {
 
             {/* Password Input */}
             <div>
-              <label className="block text-xs font-medium text-gray-600">Password</label>
+              <label className="block text-xs font-medium text-text">Password</label>
               <div className="mt-1 relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={form.password}
                   onChange={handleChange}
                   required
-                  className="w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
+                  className="w-full py-3 pl-10 pr-10 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-text"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -123,22 +123,22 @@ export default function SignUp() {
 
             {/* Confirm Password Input */}
             <div>
-              <label className="block text-xs font-medium text-gray-600">Confirm Password</label>
+              <label className="block text-xs font-medium text-text">Confirm Password</label>
               <div className="mt-1 relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={form.confirmPassword}
                   onChange={handleChange}
                   required
-                  className="w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
+                  className="w-full py-3 pl-10 pr-10 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#7F5539] transition"
                   placeholder="Confirm your password"
                 />
                  <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-text"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -163,7 +163,7 @@ export default function SignUp() {
           </form>
 
           {/* Login Link */}
-          <p className="text-center text-xs text-gray-600 mt-6">
+          <p className="text-center text-xs text-text mt-6">
             Already have an account?{" "}
             <Link href="/login" className="text-[#7F5539] hover:underline font-medium">
               Login

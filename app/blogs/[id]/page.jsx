@@ -23,10 +23,10 @@
 
 //   if (!blog)
 //     return (
-//       <div className="py-20 px-6 text-center">
+//       <div className="py-10 sm:py-10 md:py -12 lg:py-14px-6 text-center">
 //         <p className="text-lg">Blog not found.</p>
 //         <div className="mt-6">
-//           <Link href="/blogs" className="px-4 py-2 bg-gray-100 rounded-md">
+//           <Link href="/blogs" className="px-4 py-2 bg-background00 rounded-md">
 //             Go back to blogs
 //           </Link>
 //         </div>
@@ -36,16 +36,16 @@
 //   return (
 //     <main className="max-w-4xl mx-auto py-12 px-6">
 //       <div className="mb-6">
-//         <Link href="/blogs" className="text-sm text-gray-700 hover:underline">
+//         <Link href="/blogs" className="text-sm text-text hover:underline">
 //           ← Back to blogs
 //         </Link>
 //       </div>
 
-//       <article className="bg-white p-8 rounded-lg shadow">
+//       <article className="bg-background p-8 rounded-lg shadow">
 //         <header className="mb-4">
 //           <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
-//           <div className="flex items-center gap-3 text-sm text-gray-600">
-//             <span className="inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+//           <div className="flex items-center gap-3 text-sm text-text">
+//             <span className="inline-block bg-yellow-100 text-highlight px-2 py-1 rounded">
 //               {blog.category || blog.tag || "General"}
 //             </span>
 //             <span className="flex items-center gap-2">
@@ -119,7 +119,7 @@ export default async function Page({ params }) {
   return (
     <div className="premium-blog-container relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#62371f]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
       <div className="absolute bottom-1/4 left-0 w-[30rem] h-[30rem] bg-[#a1887f]/5 rounded-full blur-3xl -translate-x-1/2"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4">
@@ -129,7 +129,7 @@ export default async function Page({ params }) {
       </div>
 
       <main className="blog-wrapper">
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#62371f] to-[#a1887f]">
+        <div className="relative overflow-hidden bg-gradient-to-br from-[var(--primary)] to-[#a1887f]">
           <img
             src={
                 ((blog.image && !blog.image.includes('placeholder')) || (blog.imageUrl && !blog.imageUrl.includes('placeholder'))) 
@@ -159,7 +159,7 @@ export default async function Page({ params }) {
                 </div>
                 <div>
                   <p className="author-name">{blog.writer || blog.author || "Vivek Sharma"}</p>
-                  <p className="text-xs text-gray-500 uppercase tracking-widest">Expert Contributor</p>
+                  <p className="text-xs text-gray-700 uppercase tracking-widest">Expert Contributor</p>
                 </div>
               </div>
 
@@ -184,9 +184,9 @@ export default async function Page({ params }) {
             }}
           />
 
-          <footer className="premium-footer mt-12 border-t border-gray-100">
+          <footer className="premium-footer mt-12 border-t border-highlight">
             <div className="share-section">
-              <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Share this story</p>
+              <p className="text-sm font-bold text-gray-[#252729b8] uppercase tracking-widest mb-4">Share this story</p>
               <div className="share-buttons">
                 <div className="share-btn"><FaFacebookF /></div>
                 <div className="share-btn"><FaTwitter /></div>
@@ -196,7 +196,7 @@ export default async function Page({ params }) {
             </div>
 
             <div className="hidden md:block">
-              <Link href="/products" className="px-8 py-3 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-all">
+              <Link href="/products" className="px-8 py-3 bg-black text-white rounded-full font-bold hover:bg-text transition-all">
                 Shop Fresh Milk
               </Link>
             </div>
@@ -206,10 +206,10 @@ export default async function Page({ params }) {
       
       <section className="max-w-4xl mx-auto mt-16 px-4 text-center">
         <h3 className="text-2xl font-serif mb-4">Subscribe to our Wellness Newsletter</h3>
-        <p className="text-gray-600 mb-8">Get the latest health tips and dairy facts delivered to your inbox.</p>
+        <p className="text-text mb-8">Get the latest health tips and dairy facts delivered to your inbox.</p>
         <div className="flex max-w-md mx-auto gap-2">
-            <input type="email" placeholder="your@email.com" className="flex-1 px-6 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brown-500" />
-            <button className="px-8 py-3 bg-[#62371f] text-white rounded-full font-bold shadow-lg">Join</button>
+            <input type="email" placeholder="your@email.com" className="flex-1 px-6 py-3 rounded-full border border-highlight focus:outline-none focus:ring-2 focus:ring-brown-500" />
+            <button className="px-8 py-3 bg-[var(--primary)] text-white rounded-full font-bold shadow-lg">Join</button>
         </div>
       </section>
     </div>

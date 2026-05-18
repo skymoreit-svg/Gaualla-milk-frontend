@@ -240,14 +240,14 @@ export default function OffersPage() {
     <div className="container mx-auto px-6 py-8 font-sans">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Offers</h1>
-          <p className="text-sm text-gray-600 mt-1">Create, update, and manage active offers</p>
+          <h1 className="text-3xl font-bold text-text">Offers</h1>
+          <p className="text-sm text-text mt-1">Create, update, and manage active offers</p>
         </div>
 
         <button
           type="button"
           onClick={fetchOffers}
-          className="inline-flex items-center gap-2 bg-white border border-gray-300 px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
+          className="inline-flex items-center gap-2 bg-background border border-highlight px-4 py-2 rounded-lg font-semibold text-text hover:bg-background transition"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh
@@ -255,13 +255,13 @@ export default function OffersPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 h-fit sticky top-4">
+        <div className="bg-background rounded-2xl border border-highlight shadow-sm p-6 h-fit sticky top-4">
           <div className="flex items-center justify-between gap-3 mb-5">
             <div>
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-text">
                 {formMode === "edit" ? "Edit Offer" : "Create Offer"}
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-700">
                 {formMode === "edit" ? "Update the selected offer" : "Add a new promotional offer"}
               </p>
             </div>
@@ -270,7 +270,7 @@ export default function OffersPage() {
               <button
                 type="button"
                 onClick={resetForm}
-                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="text-sm font-medium text-text hover:text-text"
               >
                 Cancel
               </button>
@@ -279,18 +279,18 @@ export default function OffersPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Offer title</label>
+              <label className="block text-sm font-medium text-text mb-1">Offer title</label>
               <input
                 name="offer_title"
                 value={formData.offer_title}
                 onChange={handleFormChange}
                 placeholder="Summer Sale"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-lg border border-highlight px-4 py-3 outline-none focus:border-primary"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Offer percent</label>
+              <label className="block text-sm font-medium text-text mb-1">Offer percent</label>
               <input
                 type="number"
                 name="offer_percent"
@@ -299,40 +299,40 @@ export default function OffersPage() {
                 placeholder="20"
                 min="0"
                 max="100"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-lg border border-highlight px-4 py-3 outline-none focus:border-primary"
               />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Start time</label>
+                <label className="block text-sm font-medium text-text mb-1">Start time</label>
                 <input
                   type="datetime-local"
                   name="start_time"
                   value={formData.start_time}
                   onChange={handleFormChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full rounded-lg border border-highlight px-4 py-3 outline-none focus:border-primary"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">End time</label>
+                <label className="block text-sm font-medium text-text mb-1">End time</label>
                 <input
                   type="datetime-local"
                   name="end_time"
                   value={formData.end_time}
                   onChange={handleFormChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full rounded-lg border border-highlight px-4 py-3 outline-none focus:border-primary"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-text mb-1">Status</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleFormChange}
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 bg-white"
+                className="w-full rounded-lg border border-highlight px-4 py-3 outline-none focus:border-primary bg-background"
               >
                 {statusOptions.map((status) => (
                   <option key={status} value={status}>
@@ -345,7 +345,7 @@ export default function OffersPage() {
             <button
               type="submit"
               disabled={saving || fetchingSingle}
-              className="inline-flex items-center justify-center gap-2 w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-70 disabled:cursor-not-allowed transition"
+              className="inline-flex items-center justify-center gap-2 w-full rounded-lg bg-primary px-4 py-3 font-semibold text-white hover:bg-primary disabled:opacity-70 disabled:cursor-not-allowed transition"
             >
               {saving || fetchingSingle ? (
                 <Loader className="w-4 h-4 animate-spin" />
@@ -358,23 +358,23 @@ export default function OffersPage() {
         </div>
 
         <div className="space-y-4">
-          <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+          <div className="bg-background border border-highlight rounded-2xl p-4 shadow-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="relative flex-1 max-w-xl">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-[#252729b8] w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search by title or status..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 outline-none focus:border-blue-500"
+                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-highlight outline-none focus:border-primary"
                 />
               </div>
 
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="rounded-lg border border-gray-300 px-4 py-3 bg-white outline-none focus:border-blue-500"
+                className="rounded-lg border border-highlight px-4 py-3 bg-background outline-none focus:border-primary"
               >
                 {statusOptions.map((status) => (
                   <option key={status} value={status}>
@@ -385,28 +385,28 @@ export default function OffersPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="bg-background rounded-2xl border border-highlight shadow-sm overflow-hidden">
             {loading ? (
               <div className="p-12 text-center">
-                <Loader className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600">Loading offers...</p>
+                <Loader className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+                <p className="text-text">Loading offers...</p>
               </div>
             ) : filteredOffers.length === 0 ? (
               <div className="p-12 text-center">
-                <CheckCircle2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-600 text-lg">No offers found</p>
-                <p className="text-gray-500">Create an offer or adjust your filters</p>
+                <CheckCircle2 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                <p className="text-text text-lg">No offers found</p>
+                <p className="text-gray-700">Create an offer or adjust your filters</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-background border-b border-highlight">
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Title</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Percent</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Schedule</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-text">Title</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-text">Percent</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-text">Schedule</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-text">Status</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-text">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -414,18 +414,18 @@ export default function OffersPage() {
                       const offerId = offer.id;
 
                       return (
-                        <tr key={offerId} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <tr key={offerId} className="border-b border-highlight hover:bg-background transition-colors">
                           <td className="px-6 py-4">
-                            <div className="font-semibold text-gray-900">{offer.offer_title || offer.title}</div>
+                            <div className="font-semibold text-text">{offer.offer_title || offer.title}</div>
                           </td>
-                          <td className="px-6 py-4 text-gray-700">{offer.offer_percent ?? offer.percent}%</td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-text">{offer.offer_percent ?? offer.percent}%</td>
+                          <td className="px-6 py-4 text-sm text-text">
                             <div className="flex items-center gap-2 mb-1">
-                              <Calendar className="w-4 h-4 text-gray-400" />
+                              <Calendar className="w-4 h-4 text-gray-[#252729b8]" />
                               <span>{formatDateTime(offer.start_time)}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-gray-400" />
+                              <Calendar className="w-4 h-4 text-gray-[#252729b8]" />
                               <span>{formatDateTime(offer.end_time)}</span>
                             </div>
                           </td>
@@ -434,7 +434,7 @@ export default function OffersPage() {
                               value={offer.status || "active"}
                               onChange={(e) => handleStatusChange(offerId, e.target.value)}
                               disabled={updatingStatusId === offerId}
-                              className="rounded-full border border-gray-300 px-3 py-2 bg-white text-sm outline-none disabled:opacity-60"
+                              className="rounded-full border border-highlight px-3 py-2 bg-background text-sm outline-none disabled:opacity-60"
                             >
                               {statusOptions.map((status) => (
                                 <option key={status} value={status}>
@@ -448,7 +448,7 @@ export default function OffersPage() {
                               <button
                                 type="button"
                                 onClick={() => handleEdit(offerId)}
-                                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-blue-600 hover:bg-blue-50 transition"
+                                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-primary hover:bg-primary transition"
                               >
                                 <Edit2 className="w-4 h-4" />
                                 Edit
@@ -477,7 +477,7 @@ export default function OffersPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-4 text-sm text-gray-600">
+          <div className="flex items-center justify-between gap-4 text-sm text-text">
             <p>
               Showing <strong>{filteredOffers.length}</strong> of {pagination.total} offers
             </p>
@@ -486,7 +486,7 @@ export default function OffersPage() {
                 type="button"
                 onClick={handlePrevPage}
                 disabled={pagination.offset === 0}
-                className="rounded-lg border border-gray-300 px-4 py-2 bg-white disabled:opacity-60"
+                className="rounded-lg border border-highlight px-4 py-2 bg-background disabled:opacity-60"
               >
                 Previous
               </button>
@@ -497,7 +497,7 @@ export default function OffersPage() {
                 type="button"
                 onClick={handleNextPage}
                 disabled={pagination.offset + pagination.limit >= pagination.total}
-                className="rounded-lg border border-gray-300 px-4 py-2 bg-white disabled:opacity-60"
+                className="rounded-lg border border-highlight px-4 py-2 bg-background disabled:opacity-60"
               >
                 Next
               </button>

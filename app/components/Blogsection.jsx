@@ -37,13 +37,13 @@ export default function BlogCardsGrid() {
 
     if (loading)
         return (
-            <div className="py-24 bg-white">
+            <div className="py-24 bg-background">
                 <LogoLoader text="Gathering Fresh Stories..." />
             </div>
         );
     
     if (!blogs.length)
-        return <div className="py-20 text-center text-lg text-gray-500">Our storytellers are busy at work. Check back soon!</div>;
+        return <div className="py-10 sm:py-10 md:py -12 lg:py-14text-center text-lg text-gray-700">Our storytellers are busy at work. Check back soon!</div>;
 
     const visibleBlogs = blogs.slice(0, visibleCount);
 
@@ -71,15 +71,15 @@ export default function BlogCardsGrid() {
     return (
         <section
             id="blog-section"
-            className="py-20 px-5 md:px-16 xl:px-32 bg-gradient-to-b from-white to-[#f9f5f2]"
+            className="py-10 sm:py-10 md:py -12 lg:py-14px-5 md:px-16 xl:px-32 bg-gradient-to-b from-white to-[#f9f5f2]"
         >
             {/* HEADING */}
             <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-serif font-black text-[#2d3436] mb-4">
                     Gaualla Stories
                 </h2>
-                <div className="w-24 h-1 bg-[#62371f] mx-auto rounded-full"></div>
-                <p className="mt-6 text-gray-600 max-w-2xl mx-auto text-lg">
+                <div className="w-24 h-1 bg-[var(--primary)] mx-auto rounded-full"></div>
+                <p className="mt-6 text-text max-w-2xl mx-auto text-lg">
                     Discover the science of dairy, wellness rituals, and the journey of our pure milk from farm to your table.
                 </p>
             </div>
@@ -89,28 +89,28 @@ export default function BlogCardsGrid() {
                 {visibleBlogs.map((blog) => (
                     <article
                         key={blog.id}
-                        className="group bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 flex flex-col p-8"
+                        className="group bg-background rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-highlight flex flex-col p-8"
                     >
                         {/* CONTENT SECTION */}
                         <div className="flex flex-col flex-1">
                             <div className="flex items-center justify-between mb-6">
-                                <span className="bg-[#f9f5f2] text-[#62371f] text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest">
+                                <span className="bg-[#f9f5f2] text-[var(--primary)] text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest">
                                     {blog.category || blog.tag || "Dairy"}
                                 </span>
-                                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-[#252729b8] uppercase tracking-widest">
                                     <span className="flex items-center gap-1">
-                                        <FaRegCalendarAlt className="text-[#62371f]" />
+                                        <FaRegCalendarAlt className="text-[var(--primary)]" />
                                         {formatDate(blog.createdAt || blog.created_at || blog.date)}
                                     </span>
                                 </div>
                             </div>
 
-                            <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4 line-clamp-2 leading-tight group-hover:text-[#62371f] transition-colors">
+                            <h3 className="text-2xl font-serif font-bold text-text mb-4 line-clamp-2 leading-tight group-hover:text-[var(--primary)] transition-colors">
                                 {blog.title}
                             </h3>
 
                             <div
-                                className="text-gray-600 line-clamp-3 leading-relaxed mb-8 flex-1"
+                                className="text-text line-clamp-3 leading-relaxed mb-8 flex-1"
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         blog.short_description ||
@@ -123,18 +123,18 @@ export default function BlogCardsGrid() {
                             <div className="flex items-center justify-between mt-auto">
                                 <Link
                                     href={`/blogs/${blog.id}`}
-                                    className="inline-flex items-center gap-2 font-bold text-[#62371f] group-hover:gap-4 transition-all"
+                                    className="inline-flex items-center gap-2 font-bold text-[var(--primary)] group-hover:gap-4 transition-all"
                                 >
                                     READ STORY <span className="text-lg">→</span>
                                 </Link>
 
                                 <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#62371f] to-[#a1887f] flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[#a1887f] flex items-center justify-center text-white text-xs font-bold shadow-sm">
                                         {(blog.writer || blog.author || "V").charAt(0)}
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Written By</p>
-                                        <p className="text-xs font-bold text-gray-700">{blog.writer || blog.author || "Vivek Sharma"}</p>
+                                        <p className="text-[10px] font-bold text-gray-[#252729b8] uppercase tracking-tighter">Written By</p>
+                                        <p className="text-xs font-bold text-text">{blog.writer || blog.author || "Vivek Sharma"}</p>
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@ export default function BlogCardsGrid() {
                 <div className="text-center mt-16">
                     <button
                         onClick={toggleBlogs}
-                        className="px-10 py-4 bg-[#62371f] text-white font-bold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                        className="px-10 py-4 bg-[var(--primary)] text-white font-bold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
                     >
                         {visibleCount === BLOGS_LIMIT ? "Discover More Stories" : "Show Less"}
                     </button>

@@ -28,7 +28,7 @@ const ProductCard = ({ product, bg }) => {
     <>
       <div className="group h-[500px] transition-shadow duration-500 ease-in-out overflow-hidden relative">
         <div className="relative h-[300px] transition-all duration-500 ease-in-out">
-          <div className="discount h-12 text-xs text-center flex items-center justify-center text-black w-12 absolute z-10 left-5 top-4 bg-white rounded-full">
+          <div className="discount h-12 text-xs text-center flex items-center justify-center text-text w-12 absolute z-10 left-5 top-4 bg-background rounded-full">
             {discount}%
           </div>
 
@@ -44,11 +44,11 @@ const ProductCard = ({ product, bg }) => {
               alt={name}
               className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
             />
-            <div className="absolute inset-0 translate-x-8 group-hover:translate-x-0 duration-500 ease-in-out transition-transform flex flex-col gap-y-4 items-end py-4 px-2 text-black text-lg">
-              <div className="p-2 bg-white hover:text-amber-700 rounded-full w-fit transition-all duration-300">
+            <div className="absolute inset-0 translate-x-8 group-hover:translate-x-0 duration-500 ease-in-out transition-transform flex flex-col gap-y-4 items-end py-4 px-2 text-text text-lg">
+              <div className="p-2 bg-background hover:text-highlight rounded-full w-fit transition-all duration-300">
                 <FaRegHeart />
               </div>
-              <div className="p-2 bg-white hover:text-amber-700 rounded-full w-fit transition-all duration-300">
+              <div className="p-2 bg-background hover:text-highlight rounded-full w-fit transition-all duration-300">
                 <IoMdEye />
               </div>
             </div>
@@ -56,13 +56,13 @@ const ProductCard = ({ product, bg }) => {
         </div>
 
         <div
-          className={`${bg == "bg-black" ? "bg-black text-white" : "bg-[#F3F1EC] text-black"} 
+          className={`${bg == "bg-black" ? "bg-black text-white" : "bg-[#F3F1EC] text-text"} 
         absolute bottom-0 left-0 w-full flex flex-col items-center gap-y-4 py-4 
         overflow-hidden transition-transform duration-500 ease-in-out 
         translate-y-16 group-hover:translate-y-0`}
         >
           <h6 className="text-center text-lg">{title}</h6>
-          <div className="flex items-center text-yellow-500 text-2xl">
+          <div className="flex items-center text-highlight text-2xl">
             {[...Array(fullStars)].map((_, i) => (
               <FaStar key={`full-${i}`} />
             ))}
@@ -76,7 +76,7 @@ const ProductCard = ({ product, bg }) => {
             <span className="text-xl font-bold text-[#CE967E]">
               ₹ {product.price}
             </span>
-            <span className="text-gray-400 line-through">
+            <span className="text-gray-[#252729b8] line-through">
               ₹ {product.price + 400}
             </span>
           </div>
@@ -89,8 +89,8 @@ const ProductCard = ({ product, bg }) => {
               .join("-")}`}
             className={`${
               bg == "bg-black"
-                ? "bg-[#F3F1EC] hover:bg-[#f0ebdf] hover:text-gray-400 text-black"
-                : "bg-black hover:bg-gray-800 text-white hover:text-gray-100"
+                ? "bg-[#F3F1EC] hover:bg-[#f0ebdf] hover:text-gray-[#252729b8] text-text"
+                : "bg-black hover:bg-text text-white hover:text-gray-100"
             } w-fit duration-500 ease-in-out px-8 py-2 mx-auto block capitalize`}
           >
             View product

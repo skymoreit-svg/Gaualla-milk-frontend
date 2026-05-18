@@ -40,13 +40,13 @@ export default function LoginPage() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-white">
+      <div className="flex items-center justify-center p-6 sm:p-12 w-full bg-background">
         <div className="w-full max-w-sm">
           <div className="text-left mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-text tracking-tight">
               Sign In
             </h2>
-            <p className="text-gray-500 text-sm mt-2">
+            <p className="text-gray-700 text-sm mt-2">
               Enter your credentials to access your account.
             </p>
           </div>
@@ -55,12 +55,12 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-xs font-medium text-gray-600"
+                className="block text-xs font-medium text-text"
               >
                 Email address
               </label>
               <div className="mt-1 relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                 <input
                   id="email"
                   name="email"
@@ -68,7 +68,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className={`w-full py-3 pl-10 pr-3 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition`}
+                  className={`w-full py-3 pl-10 pr-3 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition`}
                 />
               </div>
             </div>
@@ -76,12 +76,12 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-xs font-medium text-gray-600"
+                className="block text-xs font-medium text-text"
               >
                 Password
               </label>
               <div className="mt-1 relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-[#252729b8] h-5 w-5" />
                 <input
                   id="password"
                   name="password"
@@ -89,12 +89,12 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full py-3 pl-10 pr-10 bg-slate-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[#62371f] transition`}
+                  className={`w-full py-3 pl-10 pr-10 bg-primary border-transparent rounded-lg text-sm focus:ring-2 focus:ring-[var(--primary)] transition`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 hover:text-text"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -109,13 +109,13 @@ export default function LoginPage() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 text-[#62371f] border-gray-300 rounded focus:ring-[#62371f]"
+                  className="h-4 w-4 text-[var(--primary)] border-highlight rounded focus:ring-[var(--primary)]"
                 />
-                <span className="text-gray-700">Remember me</span>
+                <span className="text-text">Remember me</span>
               </label>
               <Link
                 href="/forgot-password"
-                className="text-[#62371f] hover:underline font-medium"
+                className="text-[var(--primary)] hover:underline font-medium"
               >
                 Forgot password?
               </Link>
@@ -124,7 +124,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[#62371f] hover:bg-[#4a2917] focus:ring-2 focus:ring-offset-2 focus:ring-[#62371f] transition-all"
+              className="w-full group flex items-center justify-center gap-2 py-2.5 px-4 text-white font-semibold rounded-lg shadow-md bg-[var(--primary)] hover:bg-[#4a2917] focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)] transition-all"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -137,11 +137,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-xs text-gray-600 mt-6">
+          <p className="text-center text-xs text-text mt-6">
             Don’t have an account?{" "}
             <Link
               href="/signup"
-              className="text-[#62371f] hover:underline font-medium"
+              className="text-[var(--primary)] hover:underline font-medium"
             >
               Sign up
             </Link>

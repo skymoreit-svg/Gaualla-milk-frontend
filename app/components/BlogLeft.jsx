@@ -6,7 +6,7 @@ const BlogLeft = () => {
   return (
     <>
       <aside>
-        <div className="widget mb-6 custom-shadow bg-white">
+        <div className="widget mb-6 custom-shadow bg-background">
           <h3
             className="widget-title relative text-[20px] mb-0 bg-[#073439] px-5 py-2 text-white capitalize"
             style={{ clipPath: "polygon(0 0, 100% 0, 90% 100%, 0% 100%)" }}
@@ -18,7 +18,7 @@ const BlogLeft = () => {
               <label className="sr-only">Search for:</label>
               <input
                 type="search"
-                className="bg-transparent h-12 p-1.5 pl-4 border border-gray-200 focus:border-[#62371f] focus:outline-none w-full block outline-none transition duration-500"
+                className="bg-transparent h-12 p-1.5 pl-4 border border-highlight focus:border-[var(--primary)] focus:outline-none w-full block outline-none transition duration-500"
                 placeholder="Search..."
               />
               <button
@@ -126,7 +126,7 @@ const BlogLeft = () => {
             ].map(({ month, year }, index, arr) => (
               <li
                 key={index}
-                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[#62371f] before:content-['']  ${index !== arr.length - 1
+                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[var(--primary)] before:content-['']  ${index !== arr.length - 1
                   ? "border-b border-[#efefef] mb-2.5"
                   : ""
                   }`}
@@ -164,7 +164,7 @@ const BlogLeft = () => {
             ].map(({ category, count }, index, arr) => (
               <li
                 key={index}
-                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[#62371f] before:content-['']  ${index !== arr.length - 1
+                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[var(--primary)] before:content-['']  ${index !== arr.length - 1
                   ? "border-b border-[#efefef] mb-2.5"
                   : ""
                   }`}
@@ -202,7 +202,7 @@ const BlogLeft = () => {
               <Link
                 href={`/`}
                 key={index}
-                className="inline-block text-gray-600 font-normal text-sm lg:text-base py-2 px-3 border border-dashed border-gray-200 mt-2 mr-2 hover:bg-[#62371f] hover:text-white"
+                className="inline-block text-text font-normal text-sm lg:text-base py-2 px-3 border border-dashed border-highlight mt-2 mr-2 hover:bg-[var(--primary)] hover:text-white"
               >
                 {tag.name} ({tag.count})
               </Link>

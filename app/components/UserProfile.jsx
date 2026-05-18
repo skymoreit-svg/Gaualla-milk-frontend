@@ -103,16 +103,16 @@ export default function UserProfile() {
 
   /** ---------------- Profile Empty ---------------- **/
   const ProfileEmpty = () => (
-    <div className="flex flex-col items-center text-center space-y-4 p-6 bg-white rounded-xl shadow-lg">
+    <div className="flex flex-col items-center text-center space-y-4 p-6 bg-background rounded-xl shadow-lg">
       <img
         src="/img/logos/logo.webp"
         alt="Profile Placeholder"
         className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-4 border-yellow-500"
       />
-      <h6 className="font-semibold text-2xl lg:text-3xl text-gray-800">
+      <h6 className="font-semibold text-2xl lg:text-3xl text-text">
         Your Profile Awaits! ✨
       </h6>
-      <p className="text-gray-600">
+      <p className="text-text">
         Complete your profile now to unlock exclusive collections, personalized
         recommendations, and special offers.
       </p>
@@ -144,7 +144,7 @@ export default function UserProfile() {
             </p>
           </div>
           <div className="text-center mt-5 md:text-left">
-            <h5 className="text-2xl lg:text-4xl text-gray-800">
+            <h5 className="text-2xl lg:text-4xl text-text">
               {user.name || "Guest"}
             </h5>
             <p className="text-lg lg:text-xl">{user.email || "No email"}</p>
@@ -156,7 +156,7 @@ export default function UserProfile() {
           <ProfileEmpty />
         ) : (
           <div className="w-full flex flex-col md:flex-row items-start gap-x-5 p-5 bg-gradient-to-br from-gray-200 to-gray-100 backdrop-blur-3xl rounded-2xl">
-            <div className="h-auto w-full rounded-2xl bg-white p-3 flex flex-col gap-1 lg:flex-row">
+            <div className="h-auto w-full rounded-2xl bg-background p-3 flex flex-col gap-1 lg:flex-row">
 
 
               {tablles.map((item, index) => {
@@ -165,7 +165,7 @@ export default function UserProfile() {
                   <Link
                     key={index}
                     href={item.link}
-                    className={`flex items-center gap-3 px-4 py-3 text-gray-700 transition  hover:text-blue-600 border-b border-gray-200 last:border-b-0
+                    className={`flex items-center gap-3 px-4 py-3 text-text transition  hover:text-primary border-b border-highlight last:border-b-0
       `}
                   >
                     <span className="text-lg">{item.icon}</span>
@@ -177,7 +177,7 @@ export default function UserProfile() {
 
               <button
                 onClick={() => setCart(true)}
-                className={`flex items-center gap-3 px-4 py-3 text-gray-700 transition  hover:text-blue-600 border-b border-gray-200 last:border-b-0
+                className={`flex items-center gap-3 px-4 py-3 text-text transition  hover:text-primary border-b border-highlight last:border-b-0
       `}
               >
                 <span className="text-lg"><FaOpencart /></span>
@@ -185,7 +185,7 @@ export default function UserProfile() {
               </button>
               <button
                 onClick={handleLogout}
-                className={`flex items-center gap-3 px-4 py-3 text-gray-700 transition  hover:text-blue-600 border-b border-gray-200 last:border-b-0
+                className={`flex items-center gap-3 px-4 py-3 text-text transition  hover:text-primary border-b border-highlight last:border-b-0
       `}
               >
                 <span className="text-lg"><MdLogout /></span>

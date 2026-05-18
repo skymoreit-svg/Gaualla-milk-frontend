@@ -87,7 +87,7 @@ export default function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-300 hover:text-white transition"
+        className="relative p-2 text-gray-600 hover:text-white transition"
       >
         <FaBell size={18} />
         {unreadCount > 0 && (
@@ -98,27 +98,27 @@ export default function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border z-50 max-h-[400px] overflow-y-auto">
-          <div className="flex justify-between items-center p-3 border-b sticky top-0 bg-white">
-            <h3 className="font-bold text-gray-800">Notifications</h3>
+        <div className="absolute right-0 mt-2 w-80 bg-background rounded-xl shadow-2xl border z-50 max-h-[400px] overflow-y-auto">
+          <div className="flex justify-between items-center p-3 border-b sticky top-0 bg-background">
+            <h3 className="font-bold text-text">Notifications</h3>
             {unreadCount > 0 && (
-              <button onClick={handleMarkRead} className="text-xs text-blue-600 hover:underline">
+              <button onClick={handleMarkRead} className="text-xs text-primary hover:underline">
                 Mark all read
               </button>
             )}
           </div>
 
           {notifications.length === 0 ? (
-            <p className="text-center text-gray-400 py-6 text-sm">No notifications</p>
+            <p className="text-center text-gray-[#252729b8] py-6 text-sm">No notifications</p>
           ) : (
             notifications.map((n) => (
               <div
                 key={n.id}
-                className={`p-3 border-b last:border-0 hover:bg-gray-50 ${!n.is_read ? "bg-blue-50" : ""}`}
+                className={`p-3 border-b last:border-0 hover:bg-background ${!n.is_read ? "bg-primary" : ""}`}
               >
-                <p className="text-sm font-medium text-gray-800">{n.title}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{n.body}</p>
-                <p className="text-xs text-gray-400 mt-1">{formatTime(n.created_at)}</p>
+                <p className="text-sm font-medium text-text">{n.title}</p>
+                <p className="text-xs text-gray-700 mt-0.5">{n.body}</p>
+                <p className="text-xs text-gray-[#252729b8] mt-1">{formatTime(n.created_at)}</p>
               </div>
             ))
           )}

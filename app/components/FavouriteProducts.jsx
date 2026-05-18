@@ -154,94 +154,47 @@ const products = [
   // Add more...
 ];
 
-const tabs = ["Brst Sellers", "Newly launched", "Sets and combos"];
+const tabs = ["BEST SELLERS", "Newly launched", "Sets and combos"];
+
+import ProductAyurvedCard from "./ProductAyurvedCard";
 
 const FavouriteProducts = () => {
-
   const [activeTab, setActiveTab] = useState("BEST SELLERS");
 
-
   const filteredProducts = products.filter(
-    (product) => product.label === activeTab
+    (product) => product.label.toLowerCase() === activeTab.toLowerCase()
   );
 
   return (
-    <div className="mt-20">
+    <div className="mt-16 lg:mt-24">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-7xl">
-        {/* Tabs */}
-        <div className="flex justify-between">
-          <h6 className="text-center text-lg lg:text-4xl mb-3">Our all time Favourites</h6>
-          <div className="flex justify-center space-x-4  mb-6">
+        {/* Title & Tabs section matching Barosi screenshot */}
+        <div className="flex flex-col items-center justify-center mb-8 sm:mb-12">
+          <h2 className="text-center text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wide mb-6 text-text">
+            Our All Time Favourites
+          </h2>
+          
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 border-b border-gray-200 pb-2 w-full max-w-3xl">
             {tabs.map((tab) => (
-              <div
+              <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`cursor-pointer px-3 py-2 border-2 border-black rounded-full shadow-lg font-medium ${activeTab === tab
-                  ? "  border-[#62371f] text-[#62371f]"
-                  : "text-gray-500"
-                  }`}
+                className={`cursor-pointer px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all ${
+                  activeTab.toLowerCase() === tab.toLowerCase()
+                    ? "bg-[var(--primary)] text-white shadow-md"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
               >
                 {tab}
-              </div>
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
+        {/* Cards Grid matching 2 in a row phone, 4 desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
           {filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="card shadow-lg relative hover:shadow-xl transition-shadow duration-300  overflow-hidden"
-            >
-              <div className="relative">
-                <span className="absolute top-5 left-5 z-10 bg-[#62371f] text-white text-xs font-semibold py-1 px-3 rounded-full">
-                  -{product.discount}%
-                </span>
-                <img
-                  src={product.img}
-                  alt={product.heading}
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-
-              <div className="p-4 space-y-2">
-                <div className="flex justify-between">
-                  <p className="font-semibold text-lg text-gray-800">{product.heading}</p>
-                </div>
-
-
-                <hr className="text-gray-300" />
-
-                <div className="flex flex-col gap-1.5 sm:gap-2 min-w-0">
-                  <div className="flex items-center gap-x-1 text-sm sm:text-base lg:text-lg font-semibold text-gray-700 flex-shrink-0 min-w-0">
-                    <span className="text-base sm:text-lg lg:text-xl whitespace-nowrap">₹ {product.price}</span>
-                    <span className="line-through font-normal text-xs sm:text-sm lg:text-base text-gray-700 whitespace-nowrap">
-                      ₹ {product.price + 50}
-                    </span>
-                  </div>
-                  <div className="flex text-yellow-400 items-center gap-x-0.5 flex-shrink-0">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} className="flex-shrink-0 w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-x-4 items-center">
-
-
-                  <Link
-                    href={`/product/${product.title.toLowerCase().replace(/,/g, "").split(" ").join("-")}`}
-                    className="font-semibold text-white w-full py-2 text-center flex items-center justify-center  border border-gray-200 bg-[#62371f]  transition duration-300"
-                  >
-                    <IoMdCart className="mr-1" />
-                    <span>View product</span>
-                  </Link>
-                </div>
-              </div>
-
-              
-            </div>
+            <ProductAyurvedCard key={product.id} product={product} />
           ))}
         </div>
       </div>
@@ -250,3 +203,4 @@ const FavouriteProducts = () => {
 };
 
 export default FavouriteProducts;
+

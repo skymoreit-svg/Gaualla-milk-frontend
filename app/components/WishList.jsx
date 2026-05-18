@@ -23,20 +23,20 @@ export default function WishList() {
       <div className="relative text-white">
       <OtherBanner  text="Wishlist"/>
       </div>
-      <div className=" p-5 md:px-12 xl:px-32 bg-gray-50">
+      <div className=" p-5 md:px-12 xl:px-32 bg-background">
 
         {wishList.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center py-20 bg-white rounded-xl shadow-sm">
+          <div className="flex flex-col items-center justify-center text-center py-10 sm:py-10 md:py -12 lg:py-14bg-background rounded-xl shadow-sm">
             <FaHeartBroken className="text-5xl text-red-400 mb-4 space-y-4 lg:space-y-6" />
-            <p className="text-gray-500 text-lg">Your wishlist is empty!</p>
-            <p className="text-sm text-gray-400">Start adding items you love.</p>
-            <Link href="/product?name=all" className="bg-[#62371f] mt-4 lg:mt-8 px-6 lg:px-8 py-1   md:py-2 lg:py-3 rounded text-white text-base lg:text-lg font-semibold">  Continue Shopping</Link>
+            <p className="text-gray-700 text-lg">Your wishlist is empty!</p>
+            <p className="text-sm text-gray-[#252729b8]">Start adding items you love.</p>
+            <Link href="/product?name=all" className="bg-[var(--primary)] mt-4 lg:mt-8 px-6 lg:px-8 py-1   md:py-2 lg:py-3 rounded text-white text-base lg:text-lg font-semibold">  Continue Shopping</Link>
           </div>
         ) : (
           <>
             <button
               onClick={() => dispatch(clearWishlist())}
-              className=" font-semibold text-white  w-fit px-5 py-2 text-center flex items-center justify-center rounded-md border border-gray-200 bg-[#62371f] hover:bg-[#4a2917] transition duration-300"
+              className=" font-semibold text-white  w-fit px-5 py-2 text-center flex items-center justify-center rounded-md border border-highlight bg-[var(--primary)] hover:bg-[#4a2917] transition duration-300"
             >
               Remove All from Wishlist
             </button>
@@ -49,8 +49,8 @@ export default function WishList() {
             </div>
 
             {/* <div className="overflow-x-auto">
-      <table className="w-full text-nowrap border-collapse bg-white shadow-md rounded-md">
-        <thead className="bg-[#62371f] text-white">
+      <table className="w-full text-nowrap border-collapse bg-background shadow-md rounded-md">
+        <thead className="bg-[var(--primary)] text-white">
           <tr>
             <th className="text-left px-4 py-3">Image</th>
             <th className="text-left px-4 py-3">Product</th>
@@ -64,7 +64,7 @@ export default function WishList() {
           {wishlistItems.map((item, index) => (
             <tr
               key={index}
-              className="border-t hover:bg-gray-50 transition duration-200"
+              className="border-t hover:bg-background transition duration-200"
             >
               <td className="px-4 py-3">
                 <img
@@ -74,15 +74,15 @@ export default function WishList() {
                 />
               </td>
               <td className="px-4 py-3">
-                <h5 className="text-sm font-medium text-gray-700">
+                <h5 className="text-sm font-medium text-text">
                   {item.heading}
                 </h5>
               </td>
-              <td className="px-4 py-3 text-gray-600">
+              <td className="px-4 py-3 text-text">
                 <h5 className="text-sm">{item.price}</h5>
               </td>
               <td className="px-4 py-3">
-                <button className="bg-[#62371f] px-4 py-2 rounded text-white text-sm font-medium hover:bg-[#4a2917] transition">
+                <button className="bg-[var(--primary)] px-4 py-2 rounded text-white text-sm font-medium hover:bg-[#4a2917] transition">
                   Add to Cart
                 </button>
               </td>

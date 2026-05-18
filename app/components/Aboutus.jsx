@@ -27,51 +27,51 @@ const features = [
 
 const AboutSection = () => {
   return (
-    <section className="py-20 lg:py-32 bg-white overflow-hidden">
+    <section className="py-10 sm:py-12 md:py-16 lg:py-32 bg-background overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           
           {/* Left: Professional Image */}
           <div className="w-full lg:w-1/2 relative">
-            <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-xl">
+            <div className="rounded-2xl overflow-hidden shadow-xl">
               <img
                 src="/img1.webp"
                 alt="Gaualla Farm"
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-contain"
               />
             </div>
             {/* Subtle Accent */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#62371f] rounded-2xl -z-10 hidden md:block" />
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[var(--primary)] rounded-2xl -z-10 hidden md:block" />
           </div>
 
           {/* Right: Content */}
           <div className="w-full lg:w-1/2 space-y-10">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="w-10 h-px bg-[#62371f]" />
-                <span className="text-[#62371f] text-xs font-bold uppercase tracking-widest">About Gaualla</span>
+                <span className="w-10 h-px bg-[var(--primary)]" />
+                <span className="text-[var(--primary)] text-xs font-bold uppercase tracking-widest">About Gaualla</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              <h2 className="text-4xl lg:text-5xl font-bold text-text leading-tight">
                 Bringing You the <br />
-                <span className="text-[#62371f]">Purity of Nature.</span>
+                <span className="text-[var(--primary)]">Purity of Nature.</span>
               </h2>
-              <p className="text-lg text-gray-500 leading-relaxed font-medium">
+              <p className="text-lg text-gray-700 leading-relaxed font-medium">
                 Our journey started with a simple goal: to provide families with the same pure, unadulterated A2 milk that our grandparents enjoyed. Today, we stand as a symbol of trust, quality, and ethical farming.
               </p>
             </div>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+            {/* Features Grid (2x2 on mobile & desktop) */}
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 pt-4">
               {features.map((item, index) => (
-                <div key={index} className="space-y-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#fdf5f0] text-[#62371f] flex items-center justify-center">
+                <div key={index} className="space-y-2 sm:space-y-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[var(--background)] text-[var(--primary)] flex items-center justify-center shadow-sm">
                     {item.icon}
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-gray-900 mb-1">
+                    <h4 className="text-sm sm:text-base font-bold text-text mb-1">
                       {item.title}
                     </h4>
-                    <p className="text-sm text-gray-400 font-medium leading-relaxed">
+                    <p className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">
                       {item.description}
                     </p>
                   </div>
@@ -86,4 +86,4 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
-
+

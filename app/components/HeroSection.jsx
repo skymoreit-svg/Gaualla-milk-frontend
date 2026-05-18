@@ -101,7 +101,7 @@ export default function HeroSection() {
           className="text-4xl md:text-6xl lg:text-8xl font-black text-white mb-6 drop-shadow-2xl font-serif tracking-tight"
         >
           Purely Fresh. <br />
-          <span className="text-[#62371f]">Purely Gaualla.</span>
+          <span className="text-[var(--primary)]">Purely Gaualla.</span>
         </motion.h1>
         
         <motion.p
@@ -120,7 +120,7 @@ export default function HeroSection() {
         >
           <Link 
             href="/product?name=all"
-            className="px-12 py-5 bg-[#62371f] text-white rounded-full font-black uppercase tracking-[0.2em] text-sm shadow-2xl hover:bg-[#4a2917] hover:scale-105 transition-all duration-300"
+            className="px-12 py-5 bg-[var(--primary)] text-white rounded-full font-black uppercase tracking-[0.2em] text-sm shadow-2xl hover:bg-[#4a2917] hover:scale-105 transition-all duration-300"
           >
             Shop The Purity
           </Link>
@@ -130,7 +130,7 @@ export default function HeroSection() {
       {/* Mute / Unmute Button */}
       <button
         onClick={toggleMute}
-        className="absolute bottom-10 right-10 z-20 bg-white/20 backdrop-blur-md text-white p-4 rounded-full border border-white/30 hover:bg-white/40 transition-all shadow-xl"
+        className="absolute bottom-10 right-10 z-20 bg-background/20 backdrop-blur-md text-white p-4 rounded-full border border-white/30 hover:bg-background/40 transition-all shadow-xl"
       >
         {muted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
       </button>

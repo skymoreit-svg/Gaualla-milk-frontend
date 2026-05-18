@@ -110,78 +110,78 @@ const NewsletterSubscribersPage = () => {
 
   if (loading) {
     return (
-      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="p-8 bg-background min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading newsletter subscribers...</p>
+          <Loader className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-text">Loading newsletter subscribers...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+    <div className="p-4 md:p-8 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Users className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <Users className="w-8 h-8 text-primary" />
+            <h1 className="text-3xl md:text-4xl font-bold text-text">
               Newsletter Subscribers
             </h1>
           </div>
-          <p className="text-gray-600">Manage your newsletter email subscribers</p>
+          <p className="text-text">Manage your newsletter email subscribers</p>
         </div>
 
         {/* Stats Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-background rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-center">
-              <Users className="w-10 h-10 text-blue-500 mr-4" />
+              <Users className="w-10 h-10 text-primary mr-4" />
               <div>
-                <p className="text-gray-600 text-sm">Total Subscribers</p>
-                <p className="text-2xl font-bold text-gray-900">{pagination.total}</p>
+                <p className="text-text text-sm">Total Subscribers</p>
+                <p className="text-2xl font-bold text-text">{pagination.total}</p>
               </div>
             </div>
             <div className="flex items-center">
-              <Mail className="w-10 h-10 text-green-500 mr-4" />
+              <Mail className="w-10 h-10 text-accent mr-4" />
               <div>
-                <p className="text-gray-600 text-sm">Page</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-text text-sm">Page</p>
+                <p className="text-2xl font-bold text-text">
                   {totalPages > 0 ? currentPage : 0} / {totalPages}
                 </p>
               </div>
             </div>
             <div className="flex items-center">
-              <Calendar className="w-10 h-10 text-purple-500 mr-4" />
+              <Calendar className="w-10 h-10 text-primary mr-4" />
               <div>
-                <p className="text-gray-600 text-sm">Per Page</p>
-                <p className="text-2xl font-bold text-gray-900">{pagination.limit}</p>
+                <p className="text-text text-sm">Per Page</p>
+                <p className="text-2xl font-bold text-text">{pagination.limit}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Subscribers Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-background rounded-lg shadow-md overflow-hidden">
           {subscribers.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-100 border-b border-gray-200">
+                <thead className="bg-background00 border-b border-highlight">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-text">
                       Email
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-text">
                       Phone
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-text">
                       Subscribed On
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-text">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-text">
                       Actions
                     </th>
                   </tr>
@@ -190,32 +190,32 @@ const NewsletterSubscribersPage = () => {
                   {subscribers.map((subscriber) => (
                     <tr
                       key={subscriber.id}
-                      className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                      className="border-b border-highlight hover:bg-background transition-colors"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-900 font-medium">
+                          <Mail className="w-4 h-4 text-gray-[#252729b8]" />
+                          <span className="text-text font-medium">
                             {subscriber.email}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-700">{subscriber.phone || "N/A"}</span>
+                          <Phone className="w-4 h-4 text-gray-[#252729b8]" />
+                          <span className="text-text">{subscriber.phone || "N/A"}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-700">
+                          <Calendar className="w-4 h-4 text-gray-[#252729b8]" />
+                          <span className="text-text">
                             {formatDate(subscriber.created_at)}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-accent">
                           {subscriber.status || "Active"}
                         </span>
                       </td>
@@ -242,9 +242,9 @@ const NewsletterSubscribersPage = () => {
             </div>
           ) : (
             <div className="p-12 text-center">
-              <Mail className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg">No subscribers yet</p>
-              <p className="text-gray-500">Newsletter subscribers will appear here</p>
+              <Mail className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+              <p className="text-text text-lg">No subscribers yet</p>
+              <p className="text-gray-700">Newsletter subscribers will appear here</p>
             </div>
           )}
         </div>
@@ -252,7 +252,7 @@ const NewsletterSubscribersPage = () => {
         {/* Pagination */}
         {subscribers.length > 0 && (
           <div className="mt-8 flex items-center justify-between">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-text">
               Showing {pagination.offset + 1} to{" "}
               {Math.min(pagination.offset + pagination.limit, pagination.total)} of{" "}
               {pagination.total} subscribers
@@ -261,18 +261,18 @@ const NewsletterSubscribersPage = () => {
               <button
                 onClick={handlePrevPage}
                 disabled={pagination.offset === 0}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-background border border-highlight rounded-lg text-text hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Previous
               </button>
-              <span className="flex items-center px-4 py-2 text-gray-700">
+              <span className="flex items-center px-4 py-2 text-text">
                 Page {currentPage} of {totalPages}
               </span>
               <button
                 onClick={handleNextPage}
                 disabled={pagination.offset + pagination.limit >= pagination.total}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-background border border-highlight rounded-lg text-text hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Next
                 <ChevronRight className="w-4 h-4" />

@@ -177,33 +177,33 @@ if (!form.stock) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <p className="mt-2 text-gray-600">Loading product...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="mt-2 text-text">Loading product...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-background rounded-2xl shadow-xl p-8">
           <div className="flex items-center gap-4 mb-6">
             <Link
               href="/admin/products"
-              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all duration-200"
+              className="flex items-center gap-2 bg-background00 hover:bg-background00 text-text px-4 py-2 rounded-lg font-semibold transition-all duration-200"
             >
               <ArrowLeft size={20} />
               Back to Products
             </Link>
-            <h2 className="text-3xl font-bold text-gray-800">Edit Product</h2>
+            <h2 className="text-3xl font-bold text-text">Edit Product</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Category */}
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                <FaTag className="text-blue-600" /> Category <span className="text-red-500">*</span>
+                <FaTag className="text-primary" /> Category <span className="text-red-500">*</span>
               </label>
               <select
                 name="category_id"
@@ -222,9 +222,9 @@ if (!form.stock) {
             </div>
 
             {/* Product Name */}
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                <FaSignature className="text-blue-600" /> Product Name <span className="text-red-500">*</span>
+                <FaSignature className="text-primary" /> Product Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -238,26 +238,26 @@ if (!form.stock) {
             </div>
 
             {/* Slug */}
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                <FaLink className="text-blue-600" /> Slug (URL)
+                <FaLink className="text-primary" /> Slug (URL)
               </label>
               <input
                 type="text"
                 name="slug"
                 value={form.slug}
                 onChange={handleChange}
-                className="w-full border p-3 rounded-lg bg-gray-50"
+                className="w-full border p-3 rounded-lg bg-background"
                 placeholder="auto-generated-slug"
                 readOnly
               />
-              <p className="text-xs text-gray-500 mt-1">Auto-generated from product name</p>
+              <p className="text-xs text-gray-700 mt-1">Auto-generated from product name</p>
             </div>
 
             {/* Description */}
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                <FaAlignLeft className="text-blue-600" /> Description
+                <FaAlignLeft className="text-primary" /> Description
               </label>
               <textarea
                 name="description"
@@ -271,9 +271,9 @@ if (!form.stock) {
 
             {/* Price and Old Price */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border border-gray-200 rounded-lg p-4">
+              <div className="border border-highlight rounded-lg p-4">
                 <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                  <FaDollarSign className="text-blue-600" /> Price <span className="text-red-500">*</span>
+                  <FaDollarSign className="text-primary" /> Price <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -287,9 +287,9 @@ if (!form.stock) {
                   required
                 />
               </div>
-              <div className="border border-gray-200 rounded-lg p-4">
+              <div className="border border-highlight rounded-lg p-4">
                 <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                  <FaRegMoneyBillAlt className="text-blue-600" /> Old Price
+                  <FaRegMoneyBillAlt className="text-primary" /> Old Price
                 </label>
                 <input
                   type="number"
@@ -306,9 +306,9 @@ if (!form.stock) {
 
             {/* Stock and Unit Quantity */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border border-gray-200 rounded-lg p-4">
+              <div className="border border-highlight rounded-lg p-4">
                 <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                  <FaBoxes className="text-blue-600" /> Stock <span className="text-red-500">*</span>
+                  <FaBoxes className="text-primary" /> Stock <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -321,9 +321,9 @@ if (!form.stock) {
                   required
                 />
               </div>
-              <div className="border border-gray-200 rounded-lg p-4">
+              <div className="border border-highlight rounded-lg p-4">
                 <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                  <FaWeight className="text-blue-600" /> Unit Quantity
+                  <FaWeight className="text-primary" /> Unit Quantity
                 </label>
                 <input
                   type="text"
@@ -337,9 +337,9 @@ if (!form.stock) {
             </div>
 
             {/* Details */}
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
-                <FaInfoCircle className="text-blue-600" /> Additional Details
+                <FaInfoCircle className="text-primary" /> Additional Details
               </label>
               <textarea
                 name="details"
@@ -352,30 +352,30 @@ if (!form.stock) {
             </div>
 
             {/* One Time Product Checkbox */}
-            <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <div className="flex items-center space-x-3 p-4 bg-primary rounded-lg border border-primary">
               <div className="flex items-center h-5">
                 <input
                   type="checkbox"
                   name="one_time"
                   checked={form.one_time}
                   onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-primary border-highlight rounded focus:ring-primary"
                 />
               </div>
               <div className="flex items-center gap-2">
-                <FaExclamationCircle className="text-blue-600" />
-                <label className="text-sm font-medium text-gray-700">One Time Product</label>
+                <FaExclamationCircle className="text-primary" />
+                <label className="text-sm font-medium text-text">One Time Product</label>
               </div>
-              <span className="text-xs text-blue-600 ml-auto bg-blue-100 px-2 py-1 rounded-full">Optional</span>
+              <span className="text-xs text-primary ml-auto bg-primary px-2 py-1 rounded-full">Optional</span>
             </div>
 
             {/* Images */}
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <label className="block text-sm font-medium text-gray-700 flex items-center justify-center gap-2 mb-2">
-                <FaImages className="text-blue-600 text-lg" /> Product Images
+            <div className="border-2 border-dashed border-highlight rounded-lg p-6 text-center">
+              <label className="block text-sm font-medium text-text flex items-center justify-center gap-2 mb-2">
+                <FaImages className="text-primary text-lg" /> Product Images
               </label>
-              <p className="text-xs text-gray-500 mb-4">Upload new images to replace existing ones (optional)</p>
-              <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2">
+              <p className="text-xs text-gray-700 mb-4">Upload new images to replace existing ones (optional)</p>
+              <label className="cursor-pointer bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors inline-flex items-center gap-2">
                 <FaUpload className="inline" /> Choose Files
                 <input
                   type="file"
@@ -385,7 +385,7 @@ if (!form.stock) {
                   className="hidden"
                 />
               </label>
-              <p className="text-xs text-gray-500 mt-3">PNG, JPG, GIF up to 10MB each</p>
+              <p className="text-xs text-gray-700 mt-3">PNG, JPG, GIF up to 10MB each</p>
             </div>
 
             {/* Submit Button */}
@@ -393,7 +393,7 @@ if (!form.stock) {
               <button
                 type="submit"
                 disabled={saving}
-                className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-primary to-primary text-white px-6 py-3 rounded-lg hover:from-primary hover:to-primary transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? (
                   <>

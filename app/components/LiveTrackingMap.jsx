@@ -49,7 +49,7 @@ export default function LiveTrackingMap({ orderId, riderLocation, deliveryAddres
   }, [riderLocation]);
 
   if (!isLoaded) {
-    return <div className="bg-gray-100 rounded-xl h-[300px] flex items-center justify-center text-gray-500">Loading map...</div>;
+    return <div className="bg-background00 rounded-xl h-[300px] flex items-center justify-center text-gray-700">Loading map...</div>;
   }
 
   const deliveryPos = deliveryAddress?.latitude && deliveryAddress?.longitude
@@ -59,7 +59,7 @@ export default function LiveTrackingMap({ orderId, riderLocation, deliveryAddres
   const center = riderPos || deliveryPos || { lat: 28.6139, lng: 77.209 };
 
   return (
-    <div className="rounded-xl overflow-hidden border border-gray-200">
+    <div className="rounded-xl overflow-hidden border border-highlight">
       <GoogleMap mapContainerStyle={mapStyle} center={center} zoom={14}>
         {riderPos && (
           <Marker
@@ -106,7 +106,7 @@ export default function LiveTrackingMap({ orderId, riderLocation, deliveryAddres
       </GoogleMap>
 
       {riderPos && (
-        <div className="bg-blue-50 px-4 py-2 text-sm text-blue-700 text-center">
+        <div className="bg-primary px-4 py-2 text-sm text-primary text-center">
           Live tracking active - rider location updates in real-time
         </div>
       )}

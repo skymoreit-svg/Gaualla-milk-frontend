@@ -19,7 +19,7 @@ export default function BottomfixLinks() {
 
   return (
     <div className="">
-      <div className="mobile-links fixed z-10 bottom-0 inset-x-0 md:hidden bg-[#62371f]">
+      <div className="mobile-links fixed z-10 bottom-0 inset-x-0 md:hidden bg-[var(--primary)]">
         <div className="flex items-center px-5 justify-between text-white h-14 text-sm">
           <Link href="/" className="w-1/4 flex flex-col items-center">
             <FaHome size={24} />
@@ -31,7 +31,7 @@ export default function BottomfixLinks() {
 
           <button
             onClick={() => setCart(true)}
-            className="w-[18%] flex flex-col items-center justify-center relative -top-6 bg-[#62371f] rounded-full p-[18px] scale-110 shadow-md border-[3px] border-white"
+            className="w-[18%] flex flex-col items-center justify-center relative -top-6 bg-[var(--primary)] rounded-full p-[18px] scale-110 shadow-md border-[3px] border-white"
           >
 
             <FaCartPlus size={20} className="" />

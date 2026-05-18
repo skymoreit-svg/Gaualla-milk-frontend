@@ -32,17 +32,17 @@ export default function CompleteProfileForm({ setCompleteProfileForm }) {
 
   return (
     <div className="fixed  inset-0 overflow-y-auto bg-black/50 py-4 lg:py-10 z-[99999] pt-25">
-      <div className="lg:w-[60%] h-full rounded bg-white mx-auto">
+      <div className="lg:w-[60%] h-full rounded bg-background mx-auto">
         <div className="p-4 border-b border-gray-500 flex items-center justify-between">
           <h5 className="text-xl lg:text-2xl">Complete Your Profile</h5>
           <IoCloseSharp
-            className="text-2xl text-gray-700 cursor-pointer"
+            className="text-2xl text-text cursor-pointer"
             onClick={() => setCompleteProfileForm(false)}
           />
         </div>
 
-        <form className="bg-white space-y-4 p-4" onSubmit={handleSubmit}>
-          <div className="bg-gray-100 mx-auto flex items-center justify-center h-28 w-28 rounded-full">
+        <form className="bg-background space-y-4 p-4" onSubmit={handleSubmit}>
+          <div className="bg-background00 mx-auto flex items-center justify-center h-28 w-28 rounded-full">
             {formData.profileImage ? (
               <img
                 src={URL.createObjectURL(formData.profileImage)}
@@ -50,7 +50,7 @@ export default function CompleteProfileForm({ setCompleteProfileForm }) {
                 className="h-full w-full rounded-full object-cover"
               />
             ) : (
-              <h6 className="text-sm text-gray-500">Upload Image</h6>
+              <h6 className="text-sm text-gray-700">Upload Image</h6>
             )}
           </div>
           <div className="flex flex-col items-center space-y-4 mt-4">
@@ -58,7 +58,7 @@ export default function CompleteProfileForm({ setCompleteProfileForm }) {
               Upload Image
               <input type="file" className="hidden" onChange={handleFileChange} />
             </label>
-            <p className="text-gray-600 text-sm">
+            <p className="text-text text-sm">
               Upload a high-quality image to personalize your profile.
             </p>
           </div>

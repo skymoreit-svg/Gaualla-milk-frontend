@@ -88,15 +88,15 @@ const TransactionsPage = () => {
   const getStatusBadge = (status) => {
     const statusLower = status?.toLowerCase() || "";
     if (statusLower === "captured" || statusLower === "authorized") {
-      return "bg-green-100 text-green-700";
+      return "bg-green-100 text-accent";
     }
     if (statusLower === "failed") {
       return "bg-red-100 text-red-700";
     }
     if (statusLower === "pending") {
-      return "bg-yellow-100 text-yellow-700";
+      return "bg-yellow-100 text-highlight";
     }
-    return "bg-gray-100 text-gray-700";
+    return "bg-background00 text-text";
   };
 
   const getPaymentMethodIcon = (method) => {
@@ -111,39 +111,39 @@ const TransactionsPage = () => {
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       {/* Header */}
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
-          <p className="text-gray-600 mt-1">View and manage all payment transactions</p>
+          <h1 className="text-3xl font-bold text-text">Transactions</h1>
+          <p className="text-text mt-1">View and manage all payment transactions</p>
         </div>
         <Link
           href="/admin/payments"
-          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-primary transition"
         >
           Back to Dashboard
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-gray-300 rounded-lg p-5 mb-6">
+      <div className="bg-background border border-highlight rounded-lg p-5 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-[#252729b8] w-5 h-5" />
             <input
               type="text"
               placeholder="Search by payment ID..."
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <select
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Status</option>
             <option value="captured">Captured</option>
@@ -155,7 +155,7 @@ const TransactionsPage = () => {
           <select
             value={filters.payment_method}
             onChange={(e) => setFilters({ ...filters, payment_method: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Methods</option>
             <option value="upi">UPI</option>
@@ -169,7 +169,7 @@ const TransactionsPage = () => {
             placeholder="Order ID"
             value={filters.order_id}
             onChange={(e) => setFilters({ ...filters, order_id: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -179,14 +179,14 @@ const TransactionsPage = () => {
             placeholder="Start Date"
             value={filters.start_date}
             onChange={(e) => setFilters({ ...filters, start_date: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
             type="date"
             placeholder="End Date"
             value={filters.end_date}
             onChange={(e) => setFilters({ ...filters, end_date: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <button
             onClick={() => {
@@ -201,7 +201,7 @@ const TransactionsPage = () => {
               });
               setCurrentPage(1);
             }}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            className="px-4 py-2 text-text border border-highlight rounded-lg hover:bg-background transition"
           >
             Clear Filters
           </button>
@@ -209,49 +209,49 @@ const TransactionsPage = () => {
       </div>
 
       {/* Transactions Table */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+      <div className="bg-background rounded-lg shadow border border-highlight overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
-            <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading transactions...</p>
+            <RefreshCw className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-text">Loading transactions...</p>
           </div>
         ) : transactions.length === 0 ? (
           <div className="p-12 text-center">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No transactions found</p>
+            <AlertCircle className="w-12 h-12 text-gray-[#252729b8] mx-auto mb-4" />
+            <p className="text-text">No transactions found</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-background border-b border-highlight">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Payment ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">User</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Amount</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Method</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Order ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Date</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Payment ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">User</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Amount</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Method</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Order ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {transactions.map((txn) => (
-                    <tr key={txn.id} className="hover:bg-gray-50 transition">
+                    <tr key={txn.id} className="hover:bg-background transition">
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-text">
                           {txn.razorpay_payment_id?.substring(0, 20) || txn.id}...
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm">
-                          <div className="font-medium text-gray-900">{txn.user_name || "N/A"}</div>
-                          <div className="text-gray-500 text-xs">{txn.user_email || ""}</div>
+                          <div className="font-medium text-text">{txn.user_name || "N/A"}</div>
+                          <div className="text-gray-700 text-xs">{txn.user_email || ""}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-semibold text-gray-900">
+                        <div className="text-sm font-semibold text-text">
                           {formatCurrency(txn.amount || 0)}
                         </div>
                         {txn.amount_refunded > 0 && (
@@ -263,7 +263,7 @@ const TransactionsPage = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <span className="text-lg">{getPaymentMethodIcon(txn.payment_method)}</span>
-                          <span className="text-sm text-gray-700 capitalize">
+                          <span className="text-sm text-text capitalize">
                             {txn.payment_method || "N/A"}
                           </span>
                         </div>
@@ -274,11 +274,11 @@ const TransactionsPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-700">
+                        <div className="text-sm text-text">
                           {txn.order_id_ref ? (
                             <Link
                               href={`/admin/orders`}
-                              className="text-blue-600 hover:underline"
+                              className="text-primary hover:underline"
                             >
                               #{txn.order_id_ref}
                             </Link>
@@ -287,13 +287,13 @@ const TransactionsPage = () => {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text">
                         {formatDate(txn.created_at)}
                       </td>
                       <td className="px-6 py-4">
                         <Link
                           href={`/admin/payments/transactions/${txn.id}`}
-                          className="text-blue-600 hover:text-blue-800 transition"
+                          className="text-primary hover:text-primary transition"
                           title="View Details"
                         >
                           <Eye className="w-5 h-5" />
@@ -307,8 +307,8 @@ const TransactionsPage = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
-                <div className="text-sm text-gray-600">
+              <div className="px-6 py-4 border-t border-highlight flex justify-between items-center">
+                <div className="text-sm text-text">
                   Showing {((currentPage - 1) * pagination.limit) + 1} to{" "}
                   {Math.min(currentPage * pagination.limit, pagination.total)} of{" "}
                   {pagination.total} transactions
@@ -317,14 +317,14 @@ const TransactionsPage = () => {
                   <button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-highlight rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-highlight rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition"
                   >
                     Next
                   </button>

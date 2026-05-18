@@ -14,7 +14,7 @@ export default function ImageMagnifier({ activeImg }) {
 
   return (
     <div
-      className="relative  sm:w-[450px] h-[250px] sm:h-[400px] md:h-[500px] w-full md:w-[600px] lg:w-[500px]  border border-[#62371f] overflow-hidden"
+      className="relative  sm:w-[450px] h-[250px] sm:h-[400px] md:h-[500px] w-full md:w-[600px] lg:w-[500px]  border border-[var(--primary)] overflow-hidden"
       onMouseEnter={() => setZoom(true)}
       onMouseLeave={() => setZoom(false)}
       onMouseMove={handleMouseMove}

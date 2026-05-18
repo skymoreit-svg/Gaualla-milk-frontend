@@ -119,36 +119,36 @@ export default function ProductsPage() {
 
 			<div className="flex justify-between items-start mb-8">
 				<div>
-					<h1 className="text-3xl font-bold text-gray-900">Products</h1>
-					<p className="text-gray-900 text-sm mt-1">Manage your product inventory</p>
+					<h1 className="text-3xl font-bold text-text">Products</h1>
+					<p className="text-text text-sm mt-1">Manage your product inventory</p>
 				</div>
 
 				<Link
 					href="/admin/products/create"
-					className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
+					className="flex items-center gap-2 bg-accent hover:bg-accent text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
 				>
 					<Plus size={20} />
 					Add Product
 				</Link>
 			</div>
 
-			<div className="bg-white border border-gray-400 rounded-lg p-4 mb-6">
+			<div className="bg-background border border-gray-400 rounded-lg p-4 mb-6">
 				<div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
 					<div className="relative flex-1">
-						<Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+						<Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-[#252729b8] w-5 h-5" />
 						<input
 							type="text"
 							placeholder="Search products by name, description, or category..."
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
-							className="w-full pl-12 pr-5 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							className="w-full pl-12 pr-5 py-3 bg-background border border-highlight rounded-lg text-text placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 						/>
 					</div>
 
 					<select
 						value={selectedCategory}
 						onChange={(e) => setSelectedCategory(e.target.value)}
-						className="px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+						className="px-4 py-3 bg-background border border-highlight rounded-lg text-text font-medium focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
 						style={{ backgroundImage: 'none' }}
 					>
 						<option value="all">All Categories</option>
@@ -163,8 +163,8 @@ export default function ProductsPage() {
 
 			{loading ? (
 				<div className="text-center py-12">
-					<div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-					<p className="mt-2 text-gray-600">Loading products...</p>
+					<div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+					<p className="mt-2 text-text">Loading products...</p>
 				</div>
 			) : error ? (
 				<div className="text-center py-12 bg-red-50 rounded-lg">
@@ -178,15 +178,15 @@ export default function ProductsPage() {
 				</div>
 			) : (
 				<>
-					<p className="text-gray-600 mb-6">
+					<p className="text-text mb-6">
 						Showing <strong>{filtered.length}</strong> of {products.length} products
 					</p>
 
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 						{filtered.length === 0 ? (
-							<div className="col-span-full text-center py-12 bg-white rounded-2xl shadow">
-								<Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-								<p className="text-gray-500 text-lg">No products found</p>
+							<div className="col-span-full text-center py-12 bg-background rounded-2xl shadow">
+								<Package className="w-16 h-16 text-gray-[#252729b8] mx-auto mb-4" />
+								<p className="text-gray-700 text-lg">No products found</p>
 							</div>
 						) : (
 							filtered.map((product) => {
@@ -194,9 +194,9 @@ export default function ProductsPage() {
 								const firstImage = images.length > 0 ? images[0] : null;
 
 								return (
-									<div key={product.id} className="bg-white rounded-lg shadow p-5 relative border border-gray-100">
+									<div key={product.id} className="bg-background rounded-lg shadow p-5 relative border border-highlight">
 										<div className="absolute top-3 right-3 flex items-center gap-2">
-											<Link href={`/admin/products/edit/${product.id}`} className="text-blue-600 transition" title="Edit">
+											<Link href={`/admin/products/edit/${product.id}`} className="text-primary transition" title="Edit">
 												<Edit2 className="w-5 h-5" />
 											</Link>
 											<button
@@ -219,31 +219,31 @@ export default function ProductsPage() {
 													className="w-40 h-40 rounded-lg object-cover border  mx-auto"
 												/>
 											) : (
-												<div className="w-full h-32 bg-gray-200 rounded-lg flex items-center justify-center">
-													<Package className="w-8 h-8 text-gray-400" />
+												<div className="w-full h-32 bg-background00 rounded-lg flex items-center justify-center">
+													<Package className="w-8 h-8 text-gray-[#252729b8]" />
 												</div>
 											)}
 										</div>
 
-										<h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+										<h3 className="text-lg font-semibold text-text mb-2 line-clamp-2">
 											{product.name}
 										</h3>
 
-										<p className="text-sm text-gray-600 mb-2">{product.category}</p>
+										<p className="text-sm text-text mb-2">{product.category}</p>
 
 										<div className="flex items-center justify-between">
 											<div className="flex flex-col">
-												<span className="text-lg font-bold text-green-600">₹{product.price}</span>
+												<span className="text-lg font-bold text-accent">₹{product.price}</span>
 												{product.old_price && (
-													<span className="text-sm text-gray-500 line-through">₹{product.old_price}</span>
+													<span className="text-sm text-gray-700 line-through">₹{product.old_price}</span>
 												)}
 											</div>
 											<div className="text-right">
-												<span className={`text-sm font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+												<span className={`text-sm font-medium ${product.stock > 0 ? 'text-accent' : 'text-red-600'}`}>
 													{product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
 												</span>
 												{product.unit_quantity && (
-													<div className="text-xs text-gray-500 mt-1">
+													<div className="text-xs text-gray-700 mt-1">
 														{product.unit_quantity}
 													</div>
 												)}

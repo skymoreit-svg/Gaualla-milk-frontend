@@ -499,7 +499,7 @@ export default function MyCart({ cart, setCart }) {
           user_id: info?.user?.id
         },
         theme: {
-          color: "#62371f",
+          color: "var(--primary)",
         },
         modal: {
           ondismiss: function () {
@@ -593,11 +593,11 @@ export default function MyCart({ cart, setCart }) {
 
   if (loading) {
     return (
-      <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
+      <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-background z-[9999] overflow-y-auto`}>
         <div className="flex justify-center items-center h-full">
           <div className="text-center">
-            <FaSpinner className="animate-spin text-4xl text-[#62371f] mx-auto mb-4" />
-            <p className="text-lg text-gray-600">Loading your cart...</p>
+            <FaSpinner className="animate-spin text-4xl text-[var(--primary)] mx-auto mb-4" />
+            <p className="text-lg text-text">Loading your cart...</p>
           </div>
         </div>
       </div>
@@ -607,22 +607,22 @@ export default function MyCart({ cart, setCart }) {
   if (!cartData || cartData.length === 0) {
     if (orderSuccessOpen) {
       return (
-        <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
+        <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-background z-[9999] overflow-y-auto`}>
           <div className="container mx-auto px-4 py-8">
             <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold text-gray-800">Order Placed</h1>
-              <button onClick={() => setCart(false)} className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer">
+              <h1 className="text-3xl font-bold text-text">Order Placed</h1>
+              <button onClick={() => setCart(false)} className="text-text hover:text-text text-2xl cursor-pointer">
                 <RxCross2 />
               </button>
             </div>
             <div className="text-center flex flex-col items-center py-20">
-              <div className="w-20 h-20 bg-[#62371f]/10 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-[#62371f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-20 h-20 bg-[var(--primary)]/10 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-10 h-10 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <h2 className="text-3xl font-bold mb-4">Thank You!</h2>
-              <p className="text-lg text-gray-600 mb-8 text-center max-w-md">Your order has been placed successfully. You can view your order status in the orders section.</p>
+              <p className="text-lg text-text mb-8 text-center max-w-md">Your order has been placed successfully. You can view your order status in the orders section.</p>
               <div className="flex flex-col gap-3 w-full max-w-xs">
                  <button
                   onClick={() => {
@@ -630,7 +630,7 @@ export default function MyCart({ cart, setCart }) {
                     setCart(false);
                     window.location.href = '/orders/';
                   }}
-                  className="w-full py-4 rounded-xl bg-[#62371f] text-white text-lg font-bold hover:bg-[#4a2917] transition-all"
+                  className="w-full py-4 rounded-xl bg-[var(--primary)] text-white text-lg font-bold hover:bg-[#4a2917] transition-all"
                 >
                   View My Orders
                 </button>
@@ -639,7 +639,7 @@ export default function MyCart({ cart, setCart }) {
                     setOrderSuccessOpen(false);
                     setCart(false);
                   }}
-                  className="w-full py-3 rounded-xl border-2 border-gray-100 text-gray-600 font-semibold hover:bg-gray-50 transition-all"
+                  className="w-full py-3 rounded-xl border-2 border-highlight text-text font-semibold hover:bg-background transition-all"
                 >
                   Close
                 </button>
@@ -661,22 +661,22 @@ export default function MyCart({ cart, setCart }) {
     }
 
     return (
-      <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-white z-[9999] overflow-y-auto`}>
+      <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-background z-[9999] overflow-y-auto`}>
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
-            <button onClick={() => setCart(false)} className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer">
+            <h1 className="text-3xl font-bold text-text">Your Cart</h1>
+            <button onClick={() => setCart(false)} className="text-text hover:text-text text-2xl cursor-pointer">
               <RxCross2 />
             </button>
           </div>
 
           <div className="text-center flex flex-col items-center py-20">
             <h2 className="text-3xl font-semibold mb-4">Cart is Empty</h2>
-            <p className="text-lg text-gray-500 mb-8">Looks like you haven't added anything to your cart yet.</p>
+            <p className="text-lg text-gray-700 mb-8">Looks like you haven't added anything to your cart yet.</p>
              <Link
               href="/product?name=all"
               onClick={() => setCart(false)}
-              className="uppercase font-medium text-base text-white px-8 py-3 rounded-md bg-[#62371f] hover:bg-[#4a2917] transition-all duration-300 shadow-md"
+              className="uppercase font-medium text-base text-white px-8 py-3 rounded-md bg-[var(--primary)] hover:bg-[#4a2917] transition-all duration-300 shadow-md"
             >
               Continue Shopping
             </Link>
@@ -688,16 +688,16 @@ export default function MyCart({ cart, setCart }) {
 
   // Main render (cart has items) - Full screen experience
   return (
-    <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-gray-50 z-[9999] overflow-y-auto`}>
+    <div className={`${cart ? "translate-y-0" : "translate-y-full"} duration-400 transition-transform fixed inset-0 bg-background z-[9999] overflow-y-auto`}>
       <div className="min-h-screen">
         {/* Header */}
-        <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
+        <div className="bg-background border-b sticky top-0 z-10 shadow-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Checkout</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-text">Checkout</h1>
               <button
                 onClick={() => setCart(false)}
-                className="text-gray-600 hover:text-gray-800 text-2xl cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="text-text hover:text-text text-2xl cursor-pointer p-2 hover:bg-background00 rounded-full transition-colors"
               >
                 <RxCross2 />
               </button>
@@ -727,13 +727,13 @@ export default function MyCart({ cart, setCart }) {
             {/* Left Column - Cart Items & Address */}
             <div className="lg:col-span-2 space-y-6">
               {/* Cart Items Section */}
-              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">
+              <div className="bg-background p-6 rounded-xl shadow-lg border border-highlight">
+                <h3 className="text-2xl font-bold text-text border-b pb-4 mb-6">
                   Cart Items ({itemCount || 0})
                 </h3>
                 <div className="space-y-4">
                   {cartData?.map((item, index) => (
-                    <div key={index} className="border border-gray-300 bg-[#ebede57c] p-4 rounded-lg shadow-sm flex flex-row items-start md:items-center justify-between gap-4">
+                    <div key={index} className="border border-highlight bg-[#ebede57c] p-4 rounded-lg shadow-sm flex flex-row items-start md:items-center justify-between gap-4">
                       <div className="shrink-0">
                         <img
                           src={`${imageurl}/${JSON.parse(item?.images || '[]')[0]}` || "/img/product/default-product.webp"}
@@ -743,24 +743,24 @@ export default function MyCart({ cart, setCart }) {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h5 className="text-lg md:text-xl font-semibold text-gray-800">
+                        <h5 className="text-lg md:text-xl font-semibold text-text">
                           {item?.name}
                         </h5>
                         <div className="flex justify-between items-center mt-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-xl font-bold text-[#62371f]">₹{item?.total_price}</span>
+                            <span className="text-xl font-bold text-[var(--primary)]">₹{item?.total_price}</span>
                           </div>
-                           <div className="flex items-center gap-3 bg-white px-2 rounded-2xl">
+                           <div className="flex items-center gap-3 bg-background px-2 rounded-2xl">
                             <button
                               onClick={() => handelcartquentity(false, item.cart_id)}
-                              className="rounded-2xl bg-[#62371f]/5 text-gray-600 hover:text-[#62371f] transition border border-gray-400 p-1"
+                              className="rounded-2xl bg-[var(--primary)]/5 text-text hover:text-[var(--primary)] transition border border-gray-400 p-1"
                             >
                               <FaMinus className="text-xs" />
                             </button>
                             <span className="text-lg font-medium">{item?.quantity}</span>
                             <button
                               onClick={() => handelcartquentity(true, item.cart_id)}
-                              className="rounded-2xl bg-[#62371f]/5 text-gray-600 hover:text-[#62371f] transition border border-gray-400 p-1"
+                              className="rounded-2xl bg-[var(--primary)]/5 text-text hover:text-[var(--primary)] transition border border-gray-400 p-1"
                             >
                               <FaPlus className="text-xs" />
                             </button>
@@ -779,10 +779,10 @@ export default function MyCart({ cart, setCart }) {
               </div>
 
               {/* Address Section */}
-              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center justify-between">
+              <div className="bg-background p-6 rounded-xl shadow-lg border border-highlight">
+                <h3 className="text-2xl font-bold text-text border-b pb-4 mb-6 flex items-center justify-between">
                   <div className="flex items-center">
-                    <FaMapMarkerAlt className="mr-3 text-blue-500" />
+                    <FaMapMarkerAlt className="mr-3 text-primary" />
                     Delivery Address
                   </div>
 
@@ -808,7 +808,7 @@ export default function MyCart({ cart, setCart }) {
                           }
                         );
                       }}
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-4 rounded-lg text-sm flex items-center shadow-md"
+                      className="bg-primary hover:bg-primary text-white py-1.5 px-4 rounded-lg text-sm flex items-center shadow-md"
                     >
                       📍 Set on Map
                     </button>
@@ -819,14 +819,14 @@ export default function MyCart({ cart, setCart }) {
                   <>
                     <button
                       onClick={() => setShowNewAddress(true)}
-                      className="mb-6 bg-[#62371f] hover:bg-[#4a2917] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
+                      className="mb-6 bg-[var(--primary)] hover:bg-[#4a2917] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
                     >
                       <FaPlus className="mr-2" /> Add New Address
                     </button>
 
                     {addressLoading ? (
                       <div className="flex justify-center py-10">
-                        <FaSpinner className="animate-spin text-2xl text-blue-500" />
+                        <FaSpinner className="animate-spin text-2xl text-primary" />
                       </div>
                     ) : (
                       <div className="grid gap-4">
@@ -834,53 +834,53 @@ export default function MyCart({ cart, setCart }) {
                           <div
                             key={addr.id}
                             className={`p-4 rounded-2xl shadow-md border transition cursor-pointer
-                ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
-                ${defaultAddress === addr.id ? "ring-2 ring-[#62371f]" : ""}`}
+                ${addr.is_default === 1 ? "border-yellow-400 bg-yellow-50" : "border-highlight bg-background"}
+                ${defaultAddress === addr.id ? "ring-2 ring-[var(--primary)]" : ""}`}
                             onClick={() => setDefaultAddress(addr.id)}
                           >
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-gray-700">
+                              <div className="flex items-center gap-2 text-text">
                                 {addr.address_type === "home" ? (
-                                  <FaHome className="text-blue-500" />
+                                  <FaHome className="text-primary" />
                                 ) : (
-                                  <FaBuilding className="text-[#62371f]" />
+                                  <FaBuilding className="text-[var(--primary)]" />
                                 )}
                                 <span className="font-medium capitalize">{addr.address_type}</span>
                               </div>
                               {addr.is_default === 1 ? (
-                                <MdOutlineStar className="text-yellow-500 text-xl" />
+                                <MdOutlineStar className="text-highlight text-xl" />
                               ) : (
                                 <MdOutlineStarBorder
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handelDefault(addr.id);
                                   }}
-                                  className="text-gray-400 text-xl cursor-pointer hover:text-yellow-500"
+                                  className="text-gray-[#252729b8] text-xl cursor-pointer hover:text-highlight"
                                 />
                               )}
                             </div>
 
-                            <p className="mt-2 font-semibold text-gray-800">
+                            <p className="mt-2 font-semibold text-text">
                               {addr.first_name} {addr.last_name}
                             </p>
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-text text-sm">
                               {addr.street}, {addr.city}
                             </p>
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-text text-sm">
                               {addr.state}, {addr.zip_code}
                             </p>
-                            <p className="text-gray-600 text-sm">{addr.country}</p>
-                            <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
+                            <p className="text-text text-sm">{addr.country}</p>
+                            <p className="text-text mt-1">📞 {addr.phone}</p>
                           </div>
                         ))}
                       </div>
                     )}
 
                     {allAddress?.length === 0 && !addressLoading && (
-                      <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
-                        <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
-                        <p className="text-gray-500">No addresses saved yet.</p>
-                        <p className="text-gray-400 text-sm mt-1">
+                      <div className="text-center py-8 border-2 border-dashed border-highlight rounded-xl">
+                        <FaMapMarkerAlt className="text-4xl text-gray-[#252729b8] mx-auto mb-3" />
+                        <p className="text-gray-700">No addresses saved yet.</p>
+                        <p className="text-gray-[#252729b8] text-sm mt-1">
                           Please add an address to continue with your order.
                         </p>
                       </div>
@@ -921,24 +921,24 @@ export default function MyCart({ cart, setCart }) {
                 {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS - Rendered at document root via portal */}
                 {showDatePicker && typeof document !== 'undefined' && createPortal(
                   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
-                    <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-                      <h3 className="text-xl font-bold text-gray-800 mb-4">Custom Delivery Schedule</h3>
+                    <div className="bg-background rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+                      <h3 className="text-xl font-bold text-text mb-4">Custom Delivery Schedule</h3>
 
 
                       {/* Month/Year Navigation */}
                       <div className="flex justify-between items-center mb-4">
                         <button
                           onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() - 1))}
-                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                          className="bg-background00 hover:bg-gray-300 text-text px-3 py-1 rounded"
                         >
                           ← Prev
                         </button>
-                        <span className="text-gray-800 font-semibold">
+                        <span className="text-text font-semibold">
                           {currentPickerMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                         </span>
                         <button
                           onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() + 1))}
-                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                          className="bg-background00 hover:bg-gray-300 text-text px-3 py-1 rounded"
                         >
                           Next →
                         </button>
@@ -947,7 +947,7 @@ export default function MyCart({ cart, setCart }) {
                       {/* Calendar Grid */}
                       <div className="grid grid-cols-7 gap-2 mb-4">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                          <div key={day} className="text-center text-xs font-bold text-gray-600">
+                          <div key={day} className="text-center text-xs font-bold text-text">
                             {day}
                           </div>
                         ))}
@@ -957,12 +957,12 @@ export default function MyCart({ cart, setCart }) {
                             onClick={() => date && handleDateSelect(date)}
                             disabled={!date}
                             className={`p-2 rounded text-sm font-medium transition-colors ${!date
-                              ? 'text-gray-300 cursor-default'
+                              ? 'text-gray-600 cursor-default'
                               : isDateSelected(date)
-                                ? 'bg-[#62371f] text-white'
+                                ? 'bg-[var(--primary)] text-white'
                                 : date < new Date()
-                                  ? 'text-gray-400 cursor-not-allowed'
-                                  : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
+                                  ? 'text-gray-[#252729b8] cursor-not-allowed'
+                                  : 'bg-background00 text-text hover:bg-primary'
                               }`}
                           >
                             {date ? date.getDate() : ''}
@@ -972,19 +972,19 @@ export default function MyCart({ cart, setCart }) {
 
                       {/* Selected Dates Display */}
                       {selectedDates && selectedDates.length > 0 ? (
-                        <div className="bg-blue-50 p-3 rounded-lg mb-4">
-                          <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
+                        <div className="bg-primary p-3 rounded-lg mb-4">
+                          <p className="text-sm text-text font-semibold">Selected Dates:</p>
                           {selectedDates
                             .slice()
                             .sort((a, b) => a.getTime() - b.getTime())
                             .map((d) => (
-                              <p key={d.getTime()} className="text-sm text-gray-600">{d.toLocaleDateString()}</p>
+                              <p key={d.getTime()} className="text-sm text-text">{d.toLocaleDateString()}</p>
                             ))}
                         </div>
                       ) : (
-                        <div className="bg-blue-50 p-3 rounded-lg mb-4">
-                          <p className="text-sm text-gray-700 font-semibold">Selected Dates:</p>
-                          <p className="text-sm text-gray-600">None</p>
+                        <div className="bg-primary p-3 rounded-lg mb-4">
+                          <p className="text-sm text-text font-semibold">Selected Dates:</p>
+                          <p className="text-sm text-text">None</p>
                         </div>
                       )}
 
@@ -996,14 +996,14 @@ export default function MyCart({ cart, setCart }) {
                             setSelectedDates([]);
                             setCurrentPickerMonth(new Date());
                           }}
-                          className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                          className="flex-1 bg-gray-300 hover:bg-gray-400 text-text py-2 rounded-lg font-medium transition-colors"
                         >
                           Cancel
                         </button>
 
                         <button
                           onClick={() => setSelectedDates([])}
-                          className="flex-1 bg-yellow-200 hover:bg-yellow-300 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                          className="flex-1 bg-yellow-200 hover:bg-yellow-300 text-text py-2 rounded-lg font-medium transition-colors"
                         >
                           Clear All
                         </button>
@@ -1011,7 +1011,7 @@ export default function MyCart({ cart, setCart }) {
                          <button
                           onClick={confirmDates}
                           disabled={selectedDates.length === 0}
-                          className="flex-1 bg-[#62371f] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-2 rounded-lg font-medium transition-colors"
+                          className="flex-1 bg-[var(--primary)] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-2 rounded-lg font-medium transition-colors"
                         >
                           Confirm
                         </button>
@@ -1026,15 +1026,15 @@ export default function MyCart({ cart, setCart }) {
 
             {/* Right Column - Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 sticky top-24">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">
+              <div className="bg-background p-6 rounded-xl shadow-lg border border-highlight sticky top-24">
+                <h3 className="text-2xl font-bold text-text border-b pb-4 mb-6">
                   Order Summary
                 </h3>
 
                 <div className="mb-5 pb-4 border-b space-y-4 max-h-[320px] overflow-auto pr-1">
                   {cartData.map((item) => (
                     <div key={item.cart_id} className="flex items-center">
-                      <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden mr-4 shrink-0">
+                      <div className="w-16 h-16 bg-background00 rounded-lg overflow-hidden mr-4 shrink-0">
                         <img
                           src={`${imageurl}/${item.product_image}`}
                           alt={item.product_name}
@@ -1045,11 +1045,11 @@ export default function MyCart({ cart, setCart }) {
                         />
                       </div>
                       <div className="flex-grow">
-                        <h4 className="font-semibold text-gray-800 truncate">{item.product_name}</h4>
-                        <p className="text-gray-600 text-sm mt-1">Quantity: {item.quantity}</p>
+                        <h4 className="font-semibold text-text truncate">{item.product_name}</h4>
+                        <p className="text-text text-sm mt-1">Quantity: {item.quantity}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-gray-800">
+                        <p className="font-bold text-text">
                           ₹{parseFloat(item?.total_price ?? 0).toFixed(2)}
                         </p>
                       </div>
@@ -1059,39 +1059,39 @@ export default function MyCart({ cart, setCart }) {
 
                 <div className="space-y-3 pb-4 border-b mb-4">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="text-gray-800">₹{parseFloat(derivedSubTotal || 0).toFixed(2)}</span>
+                    <span className="text-text">Subtotal</span>
+                    <span className="text-text">₹{parseFloat(derivedSubTotal || 0).toFixed(2)}</span>
                   </div>
                    <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
-                    <span className="text-[#62371f] font-medium">Free</span>
+                    <span className="text-text">Shipping</span>
+                    <span className="text-[var(--primary)] font-medium">Free</span>
                   </div>
                 </div>
 
                 {/* Subscription Options */}
                 {cartData.length > 1 ? (
                   <div className="mb-6">
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
-                      <span className="text-blue-700 font-medium">One-time purchase (multiple items)</span>
+                    <div className="bg-primary border border-primary rounded-lg py-2 px-4 text-center">
+                      <span className="text-primary font-medium">One-time purchase (multiple items)</span>
                     </div>
                   </div>
                 ) : (
                   <div className="mb-6">
-                    <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
+                    <p className="text-sm text-text mb-2">Select purchase option:</p>
                     <div className="flex flex-col space-y-2">
                        <button
                         onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
-                          ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                          ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/30'
+                          : 'bg-background00 text-text hover:bg-background00'}`}
                       >
                         One Time
                       </button>
                        <button
                         onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); setSelectedDates([]); setShowDatePicker(false); }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
-                          ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                          ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/30'
+                          : 'bg-background00 text-text hover:bg-background00'}`}
                       >
                         30 Days
                       </button>
@@ -1102,8 +1102,8 @@ export default function MyCart({ cart, setCart }) {
                           setShowDatePicker(true);
                         }}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
-                          ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                          ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/30'
+                          : 'bg-background00 text-text hover:bg-background00'}`}
                       >
                         Calendar Schedule
                       </button>
@@ -1112,8 +1112,8 @@ export default function MyCart({ cart, setCart }) {
                 )}
 
                 <div className="flex justify-between mb-6">
-                  <span className="text-lg font-semibold text-gray-800">Total</span>
-                  <span className="text-xl font-bold text-gray-800">
+                  <span className="text-lg font-semibold text-text">Total</span>
+                  <span className="text-xl font-bold text-text">
                     ₹{parseFloat(grandTotal || 0).toFixed(2)}
                   </span>
                 </div>
@@ -1121,7 +1121,7 @@ export default function MyCart({ cart, setCart }) {
                  <button
                   onClick={handlePlaceOrder}
                   disabled={!defaultAddress || isProcessingPayment || !hasItems}
-                  className="w-full bg-[#62371f] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center cursor-pointer"
+                  className="w-full bg-[var(--primary)] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center cursor-pointer"
                 >
                   {isProcessingPayment ? (
                     <>

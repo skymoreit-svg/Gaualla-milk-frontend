@@ -16,16 +16,16 @@ export default function DeletePopup({
                  transition-opacity duration-300 ease-out"
     >
       <div
-        className="bg-white w-full max-w-lg rounded-xl shadow-xl p-8
+        className="bg-background w-full max-w-lg rounded-xl shadow-xl p-8
                    transform scale-95 opacity-0 animate-popup-in"
       >
-        <h2 className="text-2xl font-bold mb-4 text-gray-900">{title}</h2>
-        <p className="text-gray-700 mb-6">{message}</p>
+        <h2 className="text-2xl font-bold mb-4 text-text">{title}</h2>
+        <p className="text-text mb-6">{message}</p>
 
         <div className="flex justify-end gap-4">
           <button
             onClick={onCancel}
-            className="px-5 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+            className="px-5 py-3 rounded-lg border border-highlight hover:bg-background00 transition"
           >
             Cancel
           </button>

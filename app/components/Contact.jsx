@@ -57,10 +57,10 @@ export default function Contact() {
           <div>
             <div className="flex flex-col items-center justify-center gap-y-4 text-center">
               <img src="/img/contact-us/1.webp" alt="" />
-              <h6 className="text-gray-400 text-lg lg:text-xl">
+              <h6 className="text-gray-[#252729b8] text-lg lg:text-xl">
                 Get in Touch With Us
               </h6>
-              <h5 className="font-semibold text-slate-700 text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+              <h5 className="font-semibold text-primary text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
                 Do You’ve Any Question? <br />
                 Write us a Message
               </h5>
@@ -77,34 +77,34 @@ export default function Contact() {
                       <input
                         type="text"
                         placeholder="Your Name"
-                        className="bg-white px-5 py-3 text-lg md:text-xl font-serif rounded outline-none"
+                        className="bg-background px-5 py-3 text-lg md:text-xl font-serif rounded outline-none"
                       />
                       <input
                         type="text"
                         placeholder="Email Address"
-                        className="bg-white px-5 py-3 text-lg lg:text-xl font-serif rounded outline-none"
+                        className="bg-background px-5 py-3 text-lg lg:text-xl font-serif rounded outline-none"
                       />
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
                       <input
                         type="text"
                         placeholder="Phone Number"
-                        className="bg-white px-5 py-3 text-lg md:text-xl font-serif rounded outline-none"
+                        className="bg-background px-5 py-3 text-lg md:text-xl font-serif rounded outline-none"
                       />
                       <input
                         type="text"
                         placeholder="Products"
-                        className="bg-white px-5 py-3 text-lg md:text-xl font-serif rounded outline-none"
+                        className="bg-background px-5 py-3 text-lg md:text-xl font-serif rounded outline-none"
                       />
                     </div>
 
                     <textarea
                       placeholder="Write your message"
-                      className="bg-white px-5 py-3 text-lg md:text-xl rounded h-40 lg:h-60 w-full mt-4 outline-none"
+                      className="bg-background px-5 py-3 text-lg md:text-xl rounded h-40 lg:h-60 w-full mt-4 outline-none"
                     ></textarea>
 
 
-                    <button className="bg-[#62371f] mt-3 px-6 lg:px-8 py-1  md:py-2 lg:py-3 rounded text-white text-lg lg:text-xl font-semibold">
+                    <button className="bg-[var(--primary)] mt-3 px-6 lg:px-8 py-1  md:py-2 lg:py-3 rounded text-white text-lg lg:text-xl font-semibold">
                       Send A Message
                     </button>
 
@@ -121,15 +121,15 @@ export default function Contact() {
                       className="contact-info  p-4 flex flex-col  lg:flex-row  gap-x-4 items-center text-center"
                     >
                       <div>
-                        <div className="icon text-[#62371f] h-20 w-20 lg:h-16 lg:w-16 bg-white rounded-full text-4xl flex items-center justify-center">
+                        <div className="icon text-[var(--primary)] h-20 w-20 lg:h-16 lg:w-16 bg-background rounded-full text-4xl flex items-center justify-center">
                           {info.icon}
                         </div>
                       </div>
                       <div className="content text-center lg:text-left">
-                        <h5 className="text-lg md:text-2xl font-semibold text-black mb-1">
+                        <h5 className="text-lg md:text-2xl font-semibold text-text mb-1">
                           {info.title}
                         </h5>
-                        <div className="text-xl font-light text-gray-800 md:text-nowrap">
+                        <div className="text-xl font-light text-text md:text-nowrap">
                           <Link href={info.link}>{info.text}</Link>
                           <p>{info.text1}</p>
 

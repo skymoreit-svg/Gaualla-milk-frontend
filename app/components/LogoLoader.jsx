@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const LogoLoader = ({ text = "Loading Pure Goodness..." }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-12 w-full min-h-[400px] bg-white">
+    <div className="flex flex-col items-center justify-center p-12 w-full min-h-[400px] bg-background">
       <div className="relative">
         {/* Animated Rings - Pure CSS/SVG style */}
         <motion.div
@@ -17,7 +17,7 @@ const LogoLoader = ({ text = "Loading Pure Goodness..." }) => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute inset-0 -m-6 rounded-full border-2 border-[#62371f]/20"
+          className="absolute inset-0 -m-6 rounded-full border-2 border-[var(--primary)]/20"
         />
         <motion.div
           animate={{
@@ -28,7 +28,7 @@ const LogoLoader = ({ text = "Loading Pure Goodness..." }) => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute inset-0 -m-10 rounded-full border-t-2 border-[#62371f]/40 border-b-2 border-transparent"
+          className="absolute inset-0 -m-10 rounded-full border-t-2 border-[var(--primary)]/40 border-b-2 border-transparent"
         />
 
         {/* Logo Container */}
@@ -36,7 +36,7 @@ const LogoLoader = ({ text = "Loading Pure Goodness..." }) => {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="relative bg-white p-6 rounded-full shadow-[0_20px_50px_rgba(98,55,31,0.12)] z-10 border border-gray-50"
+          className="relative bg-background p-6 rounded-full shadow-[0_20px_50px_rgba(98,55,31,0.12)] z-10 border border-gray-50"
         >
           <motion.div
             animate={{
@@ -71,7 +71,7 @@ const LogoLoader = ({ text = "Loading Pure Goodness..." }) => {
         transition={{ delay: 0.3 }}
         className="mt-16 text-center"
       >
-        <p className="text-[#62371f] font-serif font-bold text-xs uppercase tracking-[0.4em] mb-4">
+        <p className="text-[var(--primary)] font-serif font-bold text-xs uppercase tracking-[0.4em] mb-4">
           {text}
         </p>
         <div className="flex gap-2 justify-center">
@@ -87,7 +87,7 @@ const LogoLoader = ({ text = "Loading Pure Goodness..." }) => {
                 repeat: Infinity,
                 delay: i * 0.2,
               }}
-              className="w-2 h-2 rounded-full bg-[#62371f]"
+              className="w-2 h-2 rounded-full bg-[var(--primary)]"
             />
           ))}
         </div>

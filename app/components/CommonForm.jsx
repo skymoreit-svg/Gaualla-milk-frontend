@@ -25,12 +25,12 @@ export default function CommonForm() {
   };
 
   return (
-    <div className="w-full  p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Contact Us</h2>
+    <div className="w-full  p-6 bg-background shadow-lg rounded-lg">
+      <h2 className="text-xl font-semibold text-text mb-4">Contact Us</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         {/* Email */}
         <div>
-          <label className="block text-gray-600 text-sm font-medium">
+          <label className="block text-text text-sm font-medium">
             Name
           </label>
           <input
@@ -38,12 +38,12 @@ export default function CommonForm() {
             name="name"
             value={formData.email}
             onChange={handleChange}
-            className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-1 p-2 border border-highlight rounded focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Enter your email"
           />
         </div>
         <div>
-          <label className="block text-gray-600 text-sm font-medium">
+          <label className="block text-text text-sm font-medium">
             Email
           </label>
           <input
@@ -51,14 +51,14 @@ export default function CommonForm() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-1 p-2 border border-highlight rounded focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Enter your email"
           />
         </div>
 
         {/* Phone Number */}
         <div>
-          <label className="block text-gray-600 text-sm font-medium">
+          <label className="block text-text text-sm font-medium">
             Phone Number
           </label>
           <input
@@ -66,7 +66,7 @@ export default function CommonForm() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-1 p-2 border border-highlight rounded focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Enter your phone number"
           />
         </div>
@@ -75,14 +75,14 @@ export default function CommonForm() {
 
         {/* Service */}
         <div>
-          <label className="block text-gray-600 text-sm font-medium">
+          <label className="block text-text text-sm font-medium">
             Service
           </label>
           <select
             name="service"
             value={formData.service}
             onChange={handleChange}
-            className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-1 p-2 border border-highlight rounded focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">Select a service</option>
             <option value="Rings">Rings</option>
@@ -94,7 +94,7 @@ export default function CommonForm() {
 
         {/* Message */}
         <div>
-          <label className="block text-gray-600 text-sm font-medium">
+          <label className="block text-text text-sm font-medium">
             Message
           </label>
           <textarea
@@ -102,7 +102,7 @@ export default function CommonForm() {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-1 p-2 border border-highlight rounded focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Write your message here"
           ></textarea>
         </div>

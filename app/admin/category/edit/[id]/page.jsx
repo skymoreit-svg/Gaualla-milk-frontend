@@ -80,15 +80,15 @@ const EditCategoryPage = () => {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen w-full bg-blue-50 flex justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 md:w-lg">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+    <div className="min-h-screen w-full bg-primary flex justify-center p-4">
+      <div className="bg-background rounded-2xl shadow-xl p-8 md:w-lg">
+        <h2 className="text-3xl font-bold text-text mb-6 text-center">
           Edit Category
         </h2>
 
         {/* Old Image */}
         <div className="mb-6">
-          <p className="text-sm font-medium text-gray-700 mb-1">Current Image</p>
+          <p className="text-sm font-medium text-text mb-1">Current Image</p>
           <img
             src={`${adminimg}/uploads/${oldImage}`}
             alt="Category"
@@ -110,15 +110,15 @@ const EditCategoryPage = () => {
             <label htmlFor="file-upload" className="cursor-pointer">
               {selectedFile ? (
                 <div className="space-y-2">
-                  <p className="text-green-600 font-medium">New File Selected</p>
+                  <p className="text-accent font-medium">New File Selected</p>
                   <p className="text-sm">{selectedFile.name}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-700">
                     {(selectedFile.size / 1024).toFixed(2)} KB
                   </p>
                 </div>
               ) : (
-                <div className="flex flex-col items-center text-gray-600">
-                  <FiUpload className="text-blue-600 w-8 h-8 mb-2" />
+                <div className="flex flex-col items-center text-text">
+                  <FiUpload className="text-primary w-8 h-8 mb-2" />
                   <p>Click to upload new image</p>
                 </div>
               )}
@@ -139,7 +139,7 @@ const EditCategoryPage = () => {
           {/* Save Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-3 rounded-lg text-lg font-medium hover:bg-green-700"
+            className="w-full bg-accent text-white py-3 rounded-lg text-lg font-medium hover:bg-accent"
           >
             Save Changes
           </button>
@@ -147,7 +147,7 @@ const EditCategoryPage = () => {
         <button
           type="button"
           onClick={() => window.history.back()}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 transition mb-6 mt-7"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-background00 hover:bg-gray-300 text-text transition mb-6 mt-7"
         >
           ← Go Back
         </button>

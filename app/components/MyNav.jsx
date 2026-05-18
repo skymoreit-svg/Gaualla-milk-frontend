@@ -32,8 +32,9 @@ export default function MyNav() {
     { title: "Home", link: "/" },
     { title: "About us", link: "/about" },
     { title: "Blogs", link: "/blogs" },
-    { title: "WishList", link: "/wishlist" },
+    { title: "Our Stories", link: "/about" },
     { title: "Products", link: "/product?name=all" },
+    { title: "Lab Reports", link: "#" },
     { title: "Contact us", link: "/contact-us" },
   ];
 
@@ -92,7 +93,7 @@ export default function MyNav() {
         className={`${sideBar ? "translate-x-0" : "-translate-x-full"
           } duration-400 transition-transform fixed bg-black/40 inset-0 z-[9999] flex  xl:hidden justify-start  `}
       >
-        <div className="w-full md:w-[50%] bg-white h-full p-6">
+        <div className="w-full md:w-[50%] bg-background h-full p-6">
           <div className="flex justify-between">
             <Link href="/" className="cursor-pointer">
               <img
@@ -101,36 +102,36 @@ export default function MyNav() {
                 className="w-32 lg:w-64"
               />
             </Link>
-            <button onClick={() => setSideBar(false)} className="text-black">
+            <button onClick={() => setSideBar(false)} className="text-text">
               <RxCross2 />
             </button>
           </div>
           <div>
-            <ul className="flex flex-col gap-y-3 mt-4 ">
+            <ul className="flex flex-col gap-y-3 mt-4 font-oswald uppercase tracking-wider">
               {MobileLinks.map((elm, index) => (
-                <li key={index} className="border-b border-gray-300 py-2">
+                <li key={index} className="border-b border-highlight py-2">
                   <Link href={elm.link} onClick={() => setSideBar(false)}>{elm.title}</Link>
                 </li>
               ))}
               {userLogin && (
-                <li className="border-b border-gray-300 py-2">
+                <li className="border-b border-highlight py-2">
                   <Link href="/user/profile" onClick={() => setSideBar(false)} className="flex items-center gap-x-2">
                     <RiUserLine className="text-lg" />
                     My Profile
                   </Link>
                 </li>
               )}
-              <div className=" mt-4 flex flex-col gap-y-2 text-lg text-gray-800 hover:text-gray-800 transition-colors duration-200 ">
-                <a href="tel: +91-8378-000052" className="flex items-center gap-x-2  hover:text-gray-800">
+              <div className=" mt-4 flex flex-col gap-y-2 text-lg text-text hover:text-text transition-colors duration-200 normal-case font-sans tracking-normal">
+                <a href="tel: +91-8378-000052" className="flex items-center gap-x-2  hover:text-text">
                   <MdOutlineLocalPhone className="text-lg" />
                   +91-8378-000052
                 </a>
-                <a href="mailto:gauallamilkpvtltd@gmail.com" className="flex items-center gap-x-2  hover:text-gray-800">
+                <a href="mailto:gauallamilkpvtltd@gmail.com" className="flex items-center gap-x-2  hover:text-text">
                   <HiOutlineMail />
                   gauallamilkpvtltd@gmail.com
                 </a>
               </div>
-              <div className="flex items-start gap-x-2  text-lg text-gray-800 hover:text-gray-800 transition-colors duration-200">
+              <div className="flex items-start gap-x-2  text-lg text-text hover:text-text transition-colors duration-200 normal-case font-sans tracking-normal">
                 <IoLocationOutline className="mt-2 text-lg" />
                 <p className="xl:text-nowrap">
                   Booth No 7, Pocket C, Wave Estate, <br />
@@ -202,26 +203,26 @@ export default function MyNav() {
         </Link>
 
         <div className="relative" onMouseEnter={() => setIsProductDropdownOpen(true)}>
-          <div className="hidden lg:flex items-center gap-[10px] h-[50px] rounded-[5px] bg-gray-100 px-[16px] py-[15px] cursor-pointer font-semibold text-[#2C3C28]">
+          <div className="hidden lg:flex items-center gap-[10px] h-[50px] rounded-[5px] bg-background00 px-[16px] py-[15px] cursor-pointer font-semibold text-[var(--text)] font-oswald uppercase tracking-wider">
             <Image className="parent h-2 w-auto" src="/img/bar-1.svg" alt="icons" width={20} height={20} />
-            <Link href={"/product?name=all"} className="text-base">Products</Link>
+            <Link href={"/product?name=all"} className="text-base font-oswald tracking-wider">Products</Link>
           </div>
         </div>
 
-        <div className="relative hidden xl:block md:w-[46%] lg:w-[40%] xl:w-[40%] py-4 bg-[#F3F4F7] rounded-lg">
+        <div className="relative hidden xl:block md:w-[46%] lg:w-[40%] xl:w-[40%] py-4 bg-white rounded-lg">
           <input
             type="text"
             value={productSearch}
             onChange={(e) => setProductSearch(e.target.value)}
             placeholder="Search for items..."
-            className="w-full border-0 px-4  rounded-2xl outline-none bg-transparent placeholder:text-gray-400"
+            className="w-full border-0 px-4  rounded-2xl outline-none bg-transparent placeholder:text-gray-[#252729b8]"
           />
-          <IoSearch className="absolute right-5 top-[22px] text-gray-600" />
+          <IoSearch className="absolute right-5 top-[22px] text-text" />
           {searchProducts && productSearch && (
-            <div className="absolute top-full left-0 w-full bg-white mt-2 rounded-md shadow-lg max-h-[220px] overflow-y-auto z-50">
+            <div className="absolute top-full left-0 w-full bg-background mt-2 rounded-md shadow-lg max-h-[220px] overflow-y-auto z-50">
               <ul className="divide-y divide-gray-200">
                 {searchProducts?.map((item, index) => (
-                  <li key={index} className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer text-sm">
+                  <li key={index} className="px-4 py-2 text-text hover:bg-background00 cursor-pointer text-sm">
                     <Link href={`/product/${item.slug}`} onClick={() => productSearch("")} className="flex justify-between items-center">
                       <span className="text-[19px]">{item.name}</span>
                       <img src={`${imageurl}/${(JSON.parse(item?.images))[0]}`} alt={item.name} className="h-15 w-15 rounded-full" />
@@ -232,18 +233,21 @@ export default function MyNav() {
             </div>
           )}
           {!searchProducts && productSearch && (
-            <div className="absolute top-full left-0 w-full bg-white mt-2 rounded-md shadow-lg p-4 text-gray-500 text-sm z-50">
+            <div className="absolute top-full left-0 w-full bg-background mt-2 rounded-md shadow-lg p-4 text-gray-700 text-sm z-50">
               No products found.
             </div>
           )}
         </div>
 
-        <ul className="lg:flex hidden items-center gap-x-6 text-base">
+        <ul className="lg:flex hidden items-center gap-x-6 text-base font-oswald uppercase tracking-wider font-medium">
           <li>
-            <Link href="/blogs" className="text-gray-700 hover:text-[#62371f]">Blogs</Link>
+            <Link href="/about" className="text-text hover:text-[var(--primary)] transition-colors">Our Stories</Link>
           </li>
           <li>
-            <Link href="/contact-us" className="text-gray-700 hover:text-[#62371f]">Contact us</Link>
+            <Link href="/blogs" className="text-text hover:text-[var(--primary)] transition-colors">Blogs</Link>
+          </li>
+          <li>
+            <Link href="/contact-us" className="text-text hover:text-[var(--primary)] transition-colors">Contact us</Link>
           </li>
         </ul>
 
@@ -254,7 +258,7 @@ export default function MyNav() {
                 <li className="">
                   <Link 
                     href="/login" 
-                    className="px-6 py-2 bg-[#62371f] text-white text-sm font-bold rounded-full shadow-lg hover:bg-black transition-all duration-300"
+                    className="px-6 py-2 bg-[var(--primary)] text-white text-sm font-bold font-oswald uppercase tracking-wider rounded-full shadow-lg hover:bg-black transition-all duration-300"
                   >
                     Login
                   </Link>
@@ -265,7 +269,7 @@ export default function MyNav() {
                 <li>
                   <button
                     onClick={handleAdminLogout}
-                    className="px-6 py-2 border border-[#62371f] text-[#62371f] text-sm font-bold rounded-full hover:bg-[#62371f] hover:text-white transition-all duration-300"
+                    className="px-6 py-2 border border-[var(--primary)] text-[var(--primary)] text-sm font-bold font-oswald uppercase tracking-wider rounded-full hover:bg-[var(--primary)] hover:text-white transition-all duration-300"
                   >
                     Logout
                   </button>
@@ -277,18 +281,18 @@ export default function MyNav() {
                   <li className="">
                     <Link 
                       href="/user/profile" 
-                      className="w-10 h-10 flex justify-center items-center rounded-full bg-gray-100 border border-gray-200 hover:bg-[#62371f] hover:text-white group transition-all duration-300"
+                      className="w-10 h-10 flex justify-center items-center rounded-full bg-background00 border border-highlight hover:bg-[var(--primary)] hover:text-white group transition-all duration-300"
                       title="My Profile"
                     >
-                      <RiUserLine className="text-gray-600 group-hover:text-white transition-colors" />
+                      <RiUserLine className="text-text group-hover:text-white transition-colors" />
                     </Link>
                   </li>
                   <li className="">
                     <button 
                       onClick={() => dispatch(openCartDrawer())} 
-                      className="w-10 h-10 relative flex justify-center items-center rounded-full bg-[#fcfaf8] border border-[#62371f] hover:bg-[#62371f] hover:text-white group transition-all duration-300"
+                      className="w-10 h-10 relative flex justify-center items-center rounded-full bg-[var(--background)] border border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white group transition-all duration-300"
                     >
-                      <BsCartPlus className="text-[#62371f] group-hover:text-white transition-colors" />
+                      <BsCartPlus className="text-[var(--primary)] group-hover:text-white transition-colors" />
                       <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
                         {cartCount}
                       </span>

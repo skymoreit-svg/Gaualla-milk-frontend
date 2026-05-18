@@ -156,13 +156,13 @@ export default function AdminBlogManagePage({ params }) {
 
         <Link
           href="/admin/blogs"
-          className="px-3 py-1.5 rounded-md border border-gray-300 bg-white text-sm hover:bg-gray-100"
+          className="px-3 py-1.5 rounded-md border border-highlight bg-background text-sm hover:bg-background00"
         >
           Back to list
         </Link>
       </div>
 
-      <div className="bg-white border rounded-xl shadow-sm p-6">
+      <div className="bg-background border rounded-xl shadow-sm p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             className="border p-2 rounded"
@@ -219,7 +219,7 @@ export default function AdminBlogManagePage({ params }) {
           <button
             onClick={handleSubmit}
             disabled={saving || loading}
-            className="px-5 py-2 rounded-md bg-green-600 text-white text-sm font-semibold hover:bg-green-700 disabled:opacity-60"
+            className="px-5 py-2 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accent disabled:opacity-60"
           >
             {saving ? "Saving..." : isEditMode ? "Update Blog" : "Create Blog"}
           </button>
@@ -227,13 +227,13 @@ export default function AdminBlogManagePage({ params }) {
           <button
             onClick={resetForm}
             disabled={saving || loading}
-            className="px-5 py-2 rounded-md border text-sm font-semibold hover:bg-gray-100 disabled:opacity-60"
+            className="px-5 py-2 rounded-md border text-sm font-semibold hover:bg-background00 disabled:opacity-60"
           >
             Reset
           </button>
 
           {loading && (
-            <span className="text-sm text-gray-600">Loading blog…</span>
+            <span className="text-sm text-text">Loading blog…</span>
           )}
         </div>
       </div>

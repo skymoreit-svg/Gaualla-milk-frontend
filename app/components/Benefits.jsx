@@ -37,7 +37,7 @@ const dairyData = {
 
 const CheckIcon = () => (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="9" fill="#62371f" stroke="#62371f" />
+        <circle cx="10" cy="10" r="9" fill="var(--primary)" stroke="var(--primary)" />
         <path d="M6 10L7.45 11.45C8.18 12.18 8.53 12.54 8.97 12.52C9.41 12.5 9.75 12.1 10.4 11.32L14 7" stroke="white" strokeLinecap="round" />
     </svg>
 );
@@ -51,21 +51,21 @@ const CrossIcon = () => (
 
 const DairyBenefitsTable = () => {
     return (
-        <section className="py-10 bg-white">
+        <section className="py-10 bg-background">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-10">
-                    <p className="text-sm uppercase text-gray-600">Why Choose Us</p>
-                    <h2 className="text-3xl font-bold text-gray-800">Dairy Product Comparison</h2>
+                    <p className="text-sm uppercase text-text">Why Choose Us</p>
+                    <h2 className="text-3xl font-bold text-text">Dairy Product Comparison</h2>
                 </div>
 
                 <div className="overflow-x-auto">
-                    <table className="min-w-full border border-gray-200 text-center">
+                    <table className="min-w-full border border-highlight text-center">
                         <thead>
-                            <tr className="bg-gray-100">
+                            <tr className="bg-background00">
                                 {dairyData.headers.map((header, index) => (
                                     <th
                                         key={index}
-                                        className="px-4 py-3 text-sm font-semibold text-gray-700 whitespace-pre-wrap border border-gray-200"
+                                        className="px-4 py-3 text-sm font-semibold text-text whitespace-pre-wrap border border-highlight"
                                     >
                                         {header}
                                     </th>
@@ -74,12 +74,12 @@ const DairyBenefitsTable = () => {
                         </thead>
                         <tbody>
                             {dairyData.rows.map((row, rowIndex) => (
-                                <tr key={rowIndex} className="border-t border-gray-200">
-                                    <td className="px-4 py-3 text-sm font-medium text-left text-gray-800 border border-gray-200">
+                                <tr key={rowIndex} className="border-t border-highlight">
+                                    <td className="px-4 py-3 text-sm font-medium text-left text-text border border-highlight">
                                         {row.title}
                                     </td>
                                     {row.values.map((val, colIndex) => (
-                                        <td key={colIndex} className="px-4 py-3 border border-gray-200">
+                                        <td key={colIndex} className="px-4 py-3 border border-highlight">
                                             {val ? <CheckIcon /> : <CrossIcon />}
                                         </td>
                                     ))}

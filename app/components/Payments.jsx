@@ -16,7 +16,7 @@ export default function SecurePayments() {
   return (
     <div className="pb-3 border-b">
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">Secure Payment Options:</h2>
+        <h2 className="text-lg font-semibold text-text">Secure Payment Options:</h2>
       </div>
       <div className="flex flex-wrap gap-4">
         {paymentOptions.map((option, index) => (
@@ -30,7 +30,7 @@ export default function SecurePayments() {
                 sizes="30px"
               />
             </div>
-            <p className="text-sm text-gray-700">{option.label}</p>
+            <p className="text-sm text-text">{option.label}</p>
           </div>
         ))}
       </div>

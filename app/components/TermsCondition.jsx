@@ -11,14 +11,14 @@ export default function TermsCondition() {
       <OtherBanner text="Terms & Conditions" />
 
       <main className="bg-[#f9fafb] py-10 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6 sm:p-10 text-gray-800">
+        <div className="max-w-5xl mx-auto bg-background rounded-xl shadow-md p-6 sm:p-10 text-text">
 
           {/* Heading */}
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
             Terms & Conditions
           </h1>
 
-          <p className="text-sm text-gray-500 mb-8">
+          <p className="text-sm text-gray-700 mb-8">
             <strong>Effective Date:</strong> 1 January 2025
           </p>
 
@@ -142,12 +142,12 @@ export default function TermsCondition() {
           {/* Contact */}
           <section className="border-t pt-6 mt-10">
             <h2 className="text-xl font-semibold mb-3">10. Contact Us</h2>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-text">
               <li>
                 <strong>Email:</strong>{" "}
                 <a
                   href="mailto:gauallamilkpvtltd@gmail.com"
-                  className="text-blue-600 hover:underline"
+                  className="text-primary hover:underline"
                 >
                   gauallamilkpvtltd@gmail.com
                 </a>

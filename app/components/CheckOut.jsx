@@ -435,7 +435,7 @@ export default function CheckOut() {
           user_id: info?.user?.id
         },
         theme: {
-          color: "#62371f", // Branded brown color
+          color: "var(--primary)", // Branded brown color
         },
         modal: {
           ondismiss: function() {
@@ -494,7 +494,7 @@ export default function CheckOut() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
 
       <div className="container mx-auto px-5 md:px-12 xl:px-32 py-10 lg:py-16">
         {error && (
@@ -511,22 +511,22 @@ export default function CheckOut() {
         )}
 
         {orderSuccessOpen ? (
-          <div className="bg-white p-12 rounded-2xl shadow-xl border border-[#62371f]/10 text-center max-w-2xl mx-auto my-10">
-             <div className="w-24 h-24 bg-[#62371f]/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                <svg className="w-12 h-12 text-[#62371f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-background p-12 rounded-2xl shadow-xl border border-[var(--primary)]/10 text-center max-w-2xl mx-auto my-10">
+             <div className="w-24 h-24 bg-[var(--primary)]/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                <svg className="w-12 h-12 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-4xl font-black text-gray-900 mb-4">Thank You!</h2>
-              <p className="text-xl text-gray-600 mb-8">Your order has been placed and is being processed.</p>
+              <h2 className="text-4xl font-black text-text mb-4">Thank You!</h2>
+              <p className="text-xl text-text mb-8">Your order has been placed and is being processed.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
                   onClick={() => window.location.href = '/orders/'} 
-                  className="px-8 py-4 bg-[#62371f] text-white rounded-xl font-bold text-lg hover:bg-[#4a2917] transition-all shadow-lg shadow-gray-100"
+                  className="px-8 py-4 bg-[var(--primary)] text-white rounded-xl font-bold text-lg hover:bg-[#4a2917] transition-all shadow-lg shadow-gray-100"
                 >
                   View My Orders
                 </button>
-                <Link href="/" className="px-8 py-4 border-2 border-gray-100 text-gray-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all">
+                <Link href="/" className="px-8 py-4 border-2 border-highlight text-text rounded-xl font-bold text-lg hover:bg-background transition-all">
                   Back to Home
                 </Link>
               </div>
@@ -534,9 +534,9 @@ export default function CheckOut() {
         ) : (
           <div className="grid lg:grid-cols-3 lg:gap-x-8 gap-y-8">
             <div className="lg:col-span-2">
-              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
-                  <FaMapMarkerAlt className="mr-3 text-blue-500" />
+              <div className="bg-background p-6 rounded-xl shadow-lg border border-highlight">
+                <h3 className="text-2xl font-bold text-text border-b pb-4 mb-6 flex items-center">
+                  <FaMapMarkerAlt className="mr-3 text-primary" />
                   Delivery Address
                 </h3>
 
@@ -544,14 +544,14 @@ export default function CheckOut() {
                   <>
                     <button
                       onClick={() => setShowNewAddress(true)}
-                      className="mb-6 bg-[#62371f] hover:bg-[#4a2917] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
+                      className="mb-6 bg-[var(--primary)] hover:bg-[#4a2917] text-white py-2.5 px-5 rounded-lg transition-colors flex items-center shadow-md hover:shadow-lg"
                     >
                       <FaPlus className="mr-2" /> Add New Address
                     </button>
 
                     {loading ? (
                       <div className="flex justify-center py-10">
-                        <FaSpinner className="animate-spin text-2xl text-blue-500" />
+                        <FaSpinner className="animate-spin text-2xl text-primary" />
                       </div>
                     ) : (
                       <div className="address-list">
@@ -561,42 +561,42 @@ export default function CheckOut() {
                             <div
                               key={addr.id}
                               className={`p-4 rounded-2xl shadow-md border transition 
-                ${addr.is_default ? "border-yellow-400 bg-yellow-50" : "border-gray-200 bg-white"}
+                ${addr.is_default ? "border-yellow-400 bg-yellow-50" : "border-highlight bg-background"}
               `}
                             >
                               <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2 text-gray-700">
+                                <div className="flex items-center gap-2 text-text">
                                   {addr.address_type === "home" ? (
-                                    <FaHome className="text-blue-500" />
+                                    <FaHome className="text-primary" />
                                   ) : (
-                                    <FaBuilding className="text-[#62371f]" />
+                                    <FaBuilding className="text-[var(--primary)]" />
                                   )}
                                   <span className="font-medium capitalize">{addr.address_type}</span>
                                 </div>
                                 {addr.is_default ? (
-                                  <MdOutlineStar className="text-yellow-500 text-xl" />
+                                  <MdOutlineStar className="text-highlight text-xl" />
                                 ) : (
-                                  <MdOutlineStarBorder onClick={() => handelDefault(addr.id)} className="text-gray-400 text-xl cursor-pointer" />
+                                  <MdOutlineStarBorder onClick={() => handelDefault(addr.id)} className="text-gray-[#252729b8] text-xl cursor-pointer" />
                                 )}
                               </div>
 
-                              <p className="mt-2 font-semibold text-gray-800">
+                              <p className="mt-2 font-semibold text-text">
                                 {addr.first_name} {addr.last_name}
                               </p>
-                              <p className="text-gray-600 text-sm">{addr.street}, {addr.city}</p>
-                              <p className="text-gray-600 text-sm">{addr.state}, {addr.zip_code}</p>
-                              <p className="text-gray-600 text-sm">{addr.country}</p>
-                              <p className="text-gray-700 mt-1">📞 {addr.phone}</p>
+                              <p className="text-text text-sm">{addr.street}, {addr.city}</p>
+                              <p className="text-text text-sm">{addr.state}, {addr.zip_code}</p>
+                              <p className="text-text text-sm">{addr.country}</p>
+                              <p className="text-text mt-1">📞 {addr.phone}</p>
                             </div>
                           ))}
                         </div>
 
 
                         {allAddress?.length === 0 && (
-                          <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-xl">
-                            <FaMapMarkerAlt className="text-4xl text-gray-400 mx-auto mb-3" />
-                            <p className="text-gray-500">No addresses saved yet.</p>
-                            <p className="text-gray-400 text-sm mt-1">Please add an address to continue with your order.</p>
+                          <div className="text-center py-8 border-2 border-dashed border-highlight rounded-xl">
+                            <FaMapMarkerAlt className="text-4xl text-gray-[#252729b8] mx-auto mb-3" />
+                            <p className="text-gray-700">No addresses saved yet.</p>
+                            <p className="text-gray-[#252729b8] text-sm mt-1">Please add an address to continue with your order.</p>
                           </div>
                         )}
                       </div>
@@ -615,21 +615,21 @@ export default function CheckOut() {
             </div>
 
             <div className="lg:col-span-1">
-              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 sticky top-6">
-                <h3 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6 flex items-center">
+              <div className="bg-background p-6 rounded-xl shadow-lg border border-highlight sticky top-6">
+                <h3 className="text-2xl font-bold text-text border-b pb-4 mb-6 flex items-center">
                   Order Summary
                 </h3>
 
                 {orderLoading ? (
                   <div className="flex justify-center py-10">
-                    <FaSpinner className="animate-spin text-2xl text-blue-500" />
+                    <FaSpinner className="animate-spin text-2xl text-primary" />
                   </div>
                 ) : orderItems?.length ? (
                   <>
                     <div className="mb-5 pb-4 border-b space-y-4 max-h-[320px] overflow-auto pr-1">
                       {orderItems.map((item) => (
                         <div key={item.cart_id ?? `${item.product_id}-${item.name}`} className="flex items-center">
-                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden mr-4 shrink-0">
+                          <div className="w-16 h-16 bg-background00 rounded-lg overflow-hidden mr-4 shrink-0">
                             <img
                               src={`${imageurl}/${JSON.parse(item.images)[0]}` || "/img/placeholder-product.webp"}
                               alt={item?.name}
@@ -640,11 +640,11 @@ export default function CheckOut() {
                             />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-gray-800 truncate">{item?.name}</h4>
-                            <p className="text-gray-600 text-sm mt-1">Quantity: {item?.quantity}</p>
+                            <h4 className="font-semibold text-text truncate">{item?.name}</h4>
+                            <p className="text-text text-sm mt-1">Quantity: {item?.quantity}</p>
                           </div>
                           <div className="text-right ml-3">
-                            <p className="font-bold text-gray-800">
+                            <p className="font-bold text-text">
                               ₹{parseFloat(item?.total_price ?? 0).toFixed(2)}
                             </p>
                           </div>
@@ -654,53 +654,53 @@ export default function CheckOut() {
 
                     <div className="space-y-3 pb-4 border-b mb-4">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Subtotal</span>
-                        <span className="text-gray-800">₹{parseFloat(subtotal || 0).toFixed(2)}</span>
+                        <span className="text-text">Subtotal</span>
+                        <span className="text-text">₹{parseFloat(subtotal || 0).toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Shipping</span>
-                        <span className="text-[#62371f] font-medium">Free</span>
+                        <span className="text-text">Shipping</span>
+                        <span className="text-[var(--primary)] font-medium">Free</span>
                       </div>
                     </div>
 
 
                     {orderItems.length > 1 ? (
                       <div className="mb-6">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
-                          <span className="text-blue-700 font-medium">One-time purchase (multiple items)</span>
+                        <div className="bg-primary border border-primary rounded-lg py-2 px-4 text-center">
+                          <span className="text-primary font-medium">One-time purchase (multiple items)</span>
                         </div>
                       </div>
                     ) : orderItems?.[0]?.one_time ? (
                       <div className="mb-6">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg py-2 px-4 text-center">
-                          <span className="text-blue-700 font-medium">One-time purchase</span>
+                        <div className="bg-primary border border-primary rounded-lg py-2 px-4 text-center">
+                          <span className="text-primary font-medium">One-time purchase</span>
                         </div>
                       </div>
                     ) : (
                       <div className="mb-6">
-                        <p className="text-sm text-gray-600 mb-2">Select purchase option:</p>
+                        <p className="text-sm text-text mb-2">Select purchase option:</p>
                         <div className="flex space-x-2">
                           <button
                             onClick={() => { setSelectedFrequency('one_time'); setSubscriptionDuration(1); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'one_time'
-                              ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                              ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/30'
+                              : 'bg-background00 text-text hover:bg-background00'}`}
                           >
                             One Time
                           </button>
                           <button
                             onClick={() => { setSelectedFrequency('daily'); setSubscriptionDuration(30); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'daily'
-                              ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                              ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/30'
+                              : 'bg-background00 text-text hover:bg-background00'}`}
                           >
                             30 Days
                           </button>
                           <button
                             onClick={() => { setSelectedFrequency('alternative'); setSubscriptionDuration(15); setShowDatePicker(true); }}
                             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${selectedFrequency === 'alternative'
-                              ? 'bg-[#62371f]/10 text-[#62371f] border border-[#62371f]/30'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                              ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/30'
+                              : 'bg-background00 text-text hover:bg-background00'}`}
                           >
                             Calendar Schedule
                           </button>
@@ -708,8 +708,8 @@ export default function CheckOut() {
                       </div>
                     )}
                     <div className="flex justify-between mb-6">
-                      <span className="text-lg font-semibold text-gray-800">Total</span>
-                      <span className="text-xl font-bold text-gray-800">
+                      <span className="text-lg font-semibold text-text">Total</span>
+                      <span className="text-xl font-bold text-text">
                         ₹{parseFloat(totalToPay || 0).toFixed(2)}
                       </span>
                     </div>
@@ -717,7 +717,7 @@ export default function CheckOut() {
                     <button
                       onClick={handlePlaceOrder}
                       disabled={!defaultAddress || (selectedFrequency === 'alternative' && selectedDates.length === 0)}
-                      className="w-full bg-[#62371f] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
+                      className="w-full bg-[var(--primary)] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
                     >
                       {!defaultAddress ? 'Select Address First' :
                         (selectedFrequency === 'alternative' && selectedDates.length === 0) ? 'Select Dates on Calendar' :
@@ -725,7 +725,7 @@ export default function CheckOut() {
                     </button>
                   </>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No order details available.</p>
+                  <p className="text-gray-700 text-center py-8">No order details available.</p>
                 )}
               </div>
             </div>
@@ -745,23 +745,23 @@ export default function CheckOut() {
       {/* DATE PICKER MODAL FOR ALTERNATIVE DAYS - Rendered at document root via portal */}
       {showDatePicker && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
-          <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Custom Delivery Schedule</h3>
+          <div className="bg-background rounded-xl shadow-2xl max-w-sm w-full p-6" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 className="text-xl font-bold text-text mb-4">Custom Delivery Schedule</h3>
 
             {/* Month/Year Navigation */}
             <div className="flex justify-between items-center mb-4">
               <button
                 onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() - 1))}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                className="bg-background00 hover:bg-gray-300 text-text px-3 py-1 rounded"
               >
                 ← Prev
               </button>
-              <span className="text-gray-800 font-semibold text-sm">
+              <span className="text-text font-semibold text-sm">
                 {currentPickerMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
               </span>
               <button
                 onClick={() => setCurrentPickerMonth(new Date(currentPickerMonth.getFullYear(), currentPickerMonth.getMonth() + 1))}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                className="bg-background00 hover:bg-gray-300 text-text px-3 py-1 rounded"
               >
                 Next →
               </button>
@@ -770,7 +770,7 @@ export default function CheckOut() {
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-2 mb-4">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="text-center text-[10px] font-bold text-gray-600">
+                <div key={day} className="text-center text-[10px] font-bold text-text">
                   {day}
                 </div>
               ))}
@@ -780,12 +780,12 @@ export default function CheckOut() {
                   onClick={() => date && handleDateSelect(date)}
                   disabled={!date}
                   className={`p-2 rounded text-xs font-medium transition-colors ${!date
-                    ? 'text-gray-300 cursor-default'
+                    ? 'text-gray-600 cursor-default'
                     : isDateSelected(date)
-                      ? 'bg-[#62371f] text-white'
+                      ? 'bg-[var(--primary)] text-white'
                       : date < new Date(new Date().setHours(0,0,0,0))
-                        ? 'text-gray-400 cursor-not-allowed opacity-50'
-                        : 'bg-gray-100 text-gray-800 hover:bg-[#62371f]/10'
+                        ? 'text-gray-[#252729b8] cursor-not-allowed opacity-50'
+                        : 'bg-background00 text-text hover:bg-[var(--primary)]/10'
                     }`}
                 >
                   {date ? date.getDate() : ''}
@@ -795,22 +795,22 @@ export default function CheckOut() {
 
             {/* Selected Dates Display */}
             {selectedDates && selectedDates.length > 0 ? (
-              <div className="bg-[#62371f]/5 p-3 rounded-lg mb-4 max-h-[120px] overflow-y-auto">
-                <p className="text-xs text-[#62371f] font-bold mb-1">Selected Dates ({selectedDates.length}):</p>
+              <div className="bg-[var(--primary)]/5 p-3 rounded-lg mb-4 max-h-[120px] overflow-y-auto">
+                <p className="text-xs text-[var(--primary)] font-bold mb-1">Selected Dates ({selectedDates.length}):</p>
                 <div className="flex flex-wrap gap-1">
                   {selectedDates
                     .slice()
                     .sort((a, b) => a.getTime() - b.getTime())
                     .map((d) => (
-                      <span key={d.getTime()} className="text-[10px] bg-white px-2 py-1 rounded border border-[#62371f]/20 text-[#62371f]">
+                      <span key={d.getTime()} className="text-[10px] bg-background px-2 py-1 rounded border border-[var(--primary)]/20 text-[var(--primary)]">
                         {d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </span>
                     ))}
                 </div>
               </div>
             ) : (
-              <div className="bg-gray-50 p-3 rounded-lg mb-4 text-center">
-                <p className="text-xs text-gray-500 font-medium italic">No dates selected yet</p>
+              <div className="bg-background p-3 rounded-lg mb-4 text-center">
+                <p className="text-xs text-gray-700 font-medium italic">No dates selected yet</p>
               </div>
             )}
 
@@ -821,14 +821,14 @@ export default function CheckOut() {
                   setShowDatePicker(false);
                   setSelectedDates([]);
                 }}
-                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2.5 rounded-lg text-sm font-bold transition-colors"
+                className="flex-1 bg-background00 hover:bg-background00 text-text py-2.5 rounded-lg text-sm font-bold transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDates}
                 disabled={selectedDates.length === 0}
-                className="flex-1 bg-[#62371f] hover:bg-black disabled:bg-gray-300 text-white py-2.5 rounded-lg text-sm font-bold transition-colors shadow-md"
+                className="flex-1 bg-[var(--primary)] hover:bg-black disabled:bg-gray-300 text-white py-2.5 rounded-lg text-sm font-bold transition-colors shadow-md"
               >
                 Confirm
               </button>

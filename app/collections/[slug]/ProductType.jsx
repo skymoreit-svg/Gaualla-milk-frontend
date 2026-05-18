@@ -26,7 +26,7 @@ export default function ProductType() {
       {categories.map(({ id, label, count ,link}) => (
         <Link key={id} href={link}>
  
-      {label} <span className="text-gray-500">({count})</span>
+      {label} <span className="text-gray-700">({count})</span>
   </Link>
 ))}
 

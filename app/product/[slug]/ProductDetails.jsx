@@ -10,11 +10,7 @@ import { IoIosArrowUp } from "react-icons/io";
 import { ShoppingBag, Truck, DollarSign, ChevronRight, Star, Edit3 } from "lucide-react";
 import Swal from "sweetalert2";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+// Swiper removed in favor of grid view
 
 import { setCartItems, openCartDrawer } from "@/app/store/cartSlice";
 import { baseurl, imageurl } from "@/app/components/utlis/apis";
@@ -158,7 +154,7 @@ const ProductDetails = ({ slug }) => {
   }, [isLoading, info]);
 
   const Skeleton = ({ className = "" }) => (
-    <div className={`animate-pulse rounded-md bg-gray-200/80 ${className}`} />
+    <div className={`animate-pulse rounded-md bg-background00/80 ${className}`} />
   );
 
   if (loader) {
@@ -170,7 +166,7 @@ const ProductDetails = ({ slug }) => {
             <Skeleton className="h-24 w-20" />
             <Skeleton className="h-24 w-20" />
           </div>
-          <div className="overflow-hidden rounded-2xl border border-gray-100 p-2">
+          <div className="overflow-hidden rounded-2xl border border-highlight p-2">
             <div className="aspect-square w-full">
               <Skeleton className="h-full w-full rounded-xl" />
             </div>
@@ -193,10 +189,10 @@ const ProductDetails = ({ slug }) => {
   if (!productData) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-3xl font-bold text-gray-800 mb-4 font-serif">Product Not Found</h2>
+        <h2 className="text-3xl font-bold text-text mb-4 font-serif">Product Not Found</h2>
         <button 
           onClick={() => route.push('/product?name=all')}
-          className="bg-[#62371f] text-white px-8 py-3 rounded-lg hover:bg-[#87c243] transition-colors font-bold uppercase tracking-widest"
+          className="bg-[var(--primary)] text-white px-8 py-3 rounded-lg hover:bg-[#87c243] transition-colors font-bold uppercase tracking-widest"
         >
           Explore All Products
         </button>
@@ -205,7 +201,7 @@ const ProductDetails = ({ slug }) => {
   }
 
   return (
-    <div className="product-premium-story bg-[#fdfaf7] min-h-screen">
+    <div className="product-premium-story bg-[var(--background)] min-h-screen">
       
       {/* SECTION 1: PROFESSIONAL HERO */}
       <section className="relative pt-12 pb-20 px-6 md:px-12 max-w-[1400px] mx-auto">
@@ -218,7 +214,7 @@ const ProductDetails = ({ slug }) => {
                 <button
                   key={i}
                   onClick={() => setActiveImg(img)}
-                  className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 bg-white ${activeImg === img ? "border-[#62371f] shadow-md" : "border-gray-100 opacity-60 hover:opacity-100"}`}
+                  className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 bg-background ${activeImg === img ? "border-[var(--primary)] shadow-md" : "border-highlight opacity-60 hover:opacity-100"}`}
                 >
                   <img src={`${imageurl}/${img}`} className="w-full h-full object-contain" />
                 </button>
@@ -226,7 +222,7 @@ const ProductDetails = ({ slug }) => {
             </div>
             
             <div className="flex-1 relative">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-white shadow-sm border border-gray-100">
+              <div className="aspect-square rounded-3xl overflow-hidden bg-background shadow-sm border border-highlight">
                 <img
                   src={`${imageurl}/${activeImg}`}
                   alt={productData?.name}
@@ -234,7 +230,7 @@ const ProductDetails = ({ slug }) => {
                 />
               </div>
               {discount > 0 && (
-                <div className="absolute top-4 left-4 bg-[#62371f] text-white text-[10px] font-bold px-3 py-1 rounded shadow-lg">
+                <div className="absolute top-4 left-4 bg-[var(--primary)] text-white text-[10px] font-bold px-3 py-1 rounded shadow-lg">
                   {discount}% OFF
                 </div>
               )}
@@ -245,74 +241,74 @@ const ProductDetails = ({ slug }) => {
           <div className="space-y-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <span className="text-[#62371f] text-xs font-bold uppercase tracking-wider">Premium A2 Collection</span>
+                <span className="text-[var(--primary)] text-xs font-bold uppercase tracking-wider">Premium A2 Collection</span>
                 <span className="w-1 h-1 bg-gray-300 rounded-full" />
-                <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">Farm Fresh</span>
+                <span className="text-gray-[#252729b8] text-xs font-medium uppercase tracking-wider">Farm Fresh</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-text leading-tight">
                 {productData?.name}
               </h1>
               <div className="flex items-center gap-4">
-                <div className="flex text-yellow-400 gap-0.5">
+                <div className="flex text-highlight gap-0.5">
                   {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
                 </div>
-                <span className="text-sm font-medium text-gray-400">120+ Verified Reviews</span>
+                <span className="text-sm font-medium text-gray-[#252729b8]">120+ Verified Reviews</span>
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-baseline gap-4">
-                <span className="text-4xl font-bold text-gray-900">₹{productData?.price}</span>
+                <span className="text-4xl font-bold text-text">₹{productData?.price}</span>
                 {productData?.old_price && (
-                  <span className="text-xl text-gray-400 line-through">₹{productData?.old_price}</span>
+                  <span className="text-xl text-gray-[#252729b8] line-through">₹{productData?.old_price}</span>
                 )}
                 {productData?.unit_quantity && (
-                  <span className="text-sm font-bold text-[#62371f] bg-[#fdf5f0] px-3 py-1 rounded">
+                  <span className="text-sm font-bold text-[var(--primary)] bg-[var(--background)] px-3 py-1 rounded">
                     {productData.unit_quantity}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-400 font-medium">*Prices are inclusive of all taxes</p>
+              <p className="text-xs text-gray-[#252729b8] font-medium">*Prices are inclusive of all taxes</p>
             </div>
 
-            <div className="p-6 bg-white rounded-2xl border border-gray-100 space-y-4">
-              <h4 className="text-sm font-bold text-gray-800 uppercase tracking-widest">Key Highlights</h4>
+            <div className="p-6 bg-background rounded-2xl border border-highlight space-y-4">
+              <h4 className="text-sm font-bold text-text uppercase tracking-widest">Key Highlights</h4>
               <div 
-                className="text-sm text-gray-500 leading-relaxed font-medium"
+                className="text-sm text-gray-700 leading-relaxed font-medium"
                 dangerouslySetInnerHTML={{ __html: productData?.description2 || "Pure, preservative-free, and made from the goodness of A2 milk." }}
               />
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 sm:w-32">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-gray-400 hover:text-gray-900 text-xl font-medium">-</button>
-                <div className="flex-1 text-center font-bold text-gray-900">{quantity}</div>
-                <button onClick={() => setQuantity(quantity + 1)} className="text-gray-400 hover:text-gray-900 text-xl font-medium">+</button>
+              <div className="flex items-center bg-background border border-highlight rounded-xl px-4 py-2 sm:w-32">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-gray-[#252729b8] hover:text-text text-xl font-medium">-</button>
+                <div className="flex-1 text-center font-bold text-text">{quantity}</div>
+                <button onClick={() => setQuantity(quantity + 1)} className="text-gray-[#252729b8] hover:text-text text-xl font-medium">+</button>
               </div>
 
               {inCart ? (
-                <button onClick={() => dispatch(openCartDrawer())} className="flex-1 py-5 rounded-xl bg-gray-900 text-white font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-3">
+                <button onClick={() => dispatch(openCartDrawer())} className="flex-1 py-5 rounded-xl bg-text text-white font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-3">
                   <ShoppingBag size={20} /> View in Cart
                 </button>
               ) : (
                 <button 
                   onClick={() => handeladdtocart(productData?.id, productData?.price)} 
-                  className="flex-1 py-5 rounded-xl bg-[#62371f] text-white font-bold uppercase tracking-widest hover:bg-[#4a2917] transition-all shadow-lg shadow-[#62371f]/10 flex items-center justify-center gap-3"
+                  className="flex-1 py-5 rounded-xl bg-[var(--primary)] text-white font-bold uppercase tracking-widest hover:bg-[#4a2917] transition-all shadow-lg shadow-[var(--primary)]/10 flex items-center justify-center gap-3"
                 >
                   <ShoppingBag size={20} /> Add to Basket
                 </button>
               )}
             </div>
 
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-100">
+            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-highlight">
               {[
                 { icon: <Truck size={20} />, label: "Express Delivery" },
                 { icon: <DollarSign size={20} />, label: "Secure Payment" },
                 { icon: <Star size={20} />, label: "Pure Quality" }
               ].map((item, i) => (
                 <div key={i} className="flex flex-col items-center gap-2 text-center">
-                  <div className="text-[#62371f]">{item.icon}</div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.label}</span>
+                  <div className="text-[var(--primary)]">{item.icon}</div>
+                  <span className="text-[10px] font-bold text-gray-[#252729b8] uppercase tracking-widest">{item.label}</span>
                 </div>
               ))}
             </div>
@@ -321,19 +317,19 @@ const ProductDetails = ({ slug }) => {
       </section>
 
       {/* SECTION 2: CLEAN STORYTELLING */}
-      <section className="bg-white py-24 border-y border-gray-100">
+      <section className="bg-background py-24 border-y border-highlight">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-8">
               <div className="space-y-4">
-                <span className="text-[#62371f] text-xs font-bold uppercase tracking-widest">Our Story</span>
-                <h2 className="text-4xl font-bold text-gray-900 leading-tight">The Gaualla Purity Standard</h2>
+                <span className="text-[var(--primary)] text-xs font-bold uppercase tracking-widest">Our Story</span>
+                <h2 className="text-4xl font-bold text-text leading-tight">The Gaualla Purity Standard</h2>
               </div>
               <div 
-                className="prose prose-lg text-gray-600 leading-relaxed font-medium"
+                className="prose prose-lg text-text leading-relaxed font-medium"
                 dangerouslySetInnerHTML={{ __html: productData?.description }}
               />
-              <blockquote className="border-l-4 border-[#62371f] pl-6 py-2 text-gray-700 italic font-medium">
+              <blockquote className="border-l-4 border-[var(--primary)] pl-6 py-2 text-text italic font-medium">
                 "We believe that the best dairy products come from happy cows and traditional, ethical farming practices."
               </blockquote>
             </div>
@@ -345,29 +341,29 @@ const ProductDetails = ({ slug }) => {
       </section>
 
       {/* SECTION 3: REVIEWS */}
-      <section className="py-24 px-6 bg-[#fdfaf7]">
+      <section className="py-24 px-6 bg-[var(--background)]">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl font-bold text-gray-900">Customer Testimonials</h2>
-            <p className="text-gray-500 font-medium">Hear from our family of happy, healthy customers.</p>
+            <h2 className="text-3xl font-bold text-text">Customer Testimonials</h2>
+            <p className="text-gray-700 font-medium">Hear from our family of happy, healthy customers.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               { name: "Rohit Sharma", text: "The texture is soft and creamy. A noticeable difference in quality compared to other brands." },
               { name: "Anjali Mehta", text: "Freshness you can trust. My family has switched entirely to Gaualla products." }
             ].map((rev, i) => (
-              <div key={i} className="p-10 bg-white rounded-2xl shadow-sm border border-gray-100">
-                <div className="flex text-yellow-400 mb-6 gap-1">
+              <div key={i} className="p-10 bg-background rounded-2xl shadow-sm border border-highlight">
+                <div className="flex text-highlight mb-6 gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
                 </div>
-                <p className="text-gray-600 italic leading-relaxed mb-8">"{rev.text}"</p>
+                <p className="text-text italic leading-relaxed mb-8">"{rev.text}"</p>
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#62371f] text-white flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-bold">
                     {rev.name.charAt(0)}
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-gray-900">{rev.name}</div>
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Verified Buyer</div>
+                    <div className="text-sm font-bold text-text">{rev.name}</div>
+                    <div className="text-[10px] font-bold text-gray-[#252729b8] uppercase tracking-widest">Verified Buyer</div>
                   </div>
                 </div>
               </div>
@@ -377,32 +373,20 @@ const ProductDetails = ({ slug }) => {
       </section>
 
       {/* SECTION 4: RECOMMENDATIONS */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-background">
         <div className="max-w-[1400px] mx-auto px-6">
           <div className="flex items-center justify-between mb-12">
-            <h2 className="text-2xl font-bold text-gray-900">Recommended for You</h2>
-            <Link href="/product?name=all" className="text-[#62371f] font-bold text-sm uppercase tracking-widest hover:underline">
+            <h2 className="text-2xl font-bold text-text">Recommended for You</h2>
+            <Link href="/product?name=all" className="text-[var(--primary)] font-bold text-sm uppercase tracking-widest hover:underline">
               View All Products
             </Link>
           </div>
           
-          <Swiper
-            autoplay={{ delay: 3000 }}
-            loop={true}
-            modules={[Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1.2}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 4 },
-            }}
-          >
-            {AyutramartProduct?.map((elm, index) => (
-              <SwiperSlide key={index}>
-                <ProductAyurvedCard product={elm} />
-              </SwiperSlide>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
+            {AyutramartProduct?.slice(0, 4).map((elm, index) => (
+              <ProductAyurvedCard key={index} product={elm} />
             ))}
-          </Swiper>
+          </div>
           
           <div className="mt-32">
             <FAQSection />
@@ -414,4 +398,4 @@ const ProductDetails = ({ slug }) => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetails;

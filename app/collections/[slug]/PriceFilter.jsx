@@ -55,12 +55,12 @@ const PriceFilter = ({  setSortedProducts,productData }) => {
           <input
             type="checkbox"
             id={range.value}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="w-4 h-4 text-primary border-highlight rounded focus:ring-primary"
             checked={selectedFilters.includes(range.value)}
             onChange={() => handleChange(range.value)}
           />
           <label htmlFor={range.value} className="text-base cursor-pointer">
-            {range.label} <span className="text-gray-500">({range.count})</span>
+            {range.label} <span className="text-gray-700">({range.count})</span>
           </label>
         </li>
       ))}

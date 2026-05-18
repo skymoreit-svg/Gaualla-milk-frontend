@@ -36,7 +36,7 @@ export default function BlogInner({ currentBlog }) {
 
 
             <div className="flex items-center justify-center gap-x-2 mt-4 text-sm md:text-base">
-              <Link href="/" className="hover:text-gray-300 transition">
+              <Link href="/" className="hover:text-gray-600 transition">
                 Home
               </Link>
               <FaGreaterThan className="text-xs opacity-70" />
@@ -56,13 +56,13 @@ export default function BlogInner({ currentBlog }) {
               <div className="entry-meta">
                 <ul className="block lg:flex gap-4 text-sm">
                   <li>
-                    <span className="text-[#62371f]">Posted On:</span>
+                    <span className="text-[var(--primary)]">Posted On:</span>
                     <Link href="" className="text-[#666666] ">
                       January 31 , 2021
                     </Link>
                   </li>
                   <li>
-                    <span className="text-[#62371f]">Posted By:</span>
+                    <span className="text-[var(--primary)]">Posted By:</span>
                     <Link href="" className="text-[#666666] ">
                       John Anderson
                     </Link>
@@ -85,7 +85,7 @@ export default function BlogInner({ currentBlog }) {
                   <i
                     className="bx bxs-quote-left"
                     style={{
-                      color: "#62371f",
+                      color: "var(--primary)",
                       fontSize: "100px",
                       position: "absolute",
                       left: "60px",
@@ -104,12 +104,12 @@ export default function BlogInner({ currentBlog }) {
 
             <div className="article-footer mt-6 flex justify-between items-center">
               <div className="article-tags flex items-center">
-                {/* <i className="bx bx-share-alt text-[#62371f] text-lg"></i> */}
-                <IoMdShare className="text-[#62371f] text-lg" />
+                {/* <i className="bx bx-share-alt text-[var(--primary)] text-lg"></i> */}
+                <IoMdShare className="text-[var(--primary)] text-lg" />
 
                 <Link
                   href="#"
-                  className="text-[#24416b] hover:text-[#62371f] font-semibold text-sm ml-2"
+                  className="text-[#24416b] hover:text-[var(--primary)] font-semibold text-sm ml-2"
                 >
                   Share
                 </Link>
@@ -120,7 +120,7 @@ export default function BlogInner({ currentBlog }) {
                     <Link
                       href="#"
                       target="_blank"
-                      className=" flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[#62371f] hover:bg-[#073439]"
+                      className=" flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[var(--primary)] hover:bg-[#073439]"
                     >
                       <TiSocialFacebook className="text-2xl" />
                     </Link>
@@ -129,7 +129,7 @@ export default function BlogInner({ currentBlog }) {
                     <Link
                       href="#"
                       target="_blank"
-                      className="flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[#62371f] hover:bg-[#073439]"
+                      className="flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[var(--primary)] hover:bg-[#073439]"
                     >
                       <FaTwitter className="text-2xl" />
                     </Link>
@@ -138,7 +138,7 @@ export default function BlogInner({ currentBlog }) {
                     <Link
                       href="#"
                       target="_blank"
-                      className="flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[#62371f] hover:bg-[#073439]"
+                      className="flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[var(--primary)] hover:bg-[#073439]"
                     >
                       <RiLinkedinFill className="text-2xl" />
                     </Link>
@@ -147,7 +147,7 @@ export default function BlogInner({ currentBlog }) {
                     <Link
                       href="#"
                       target="_blank"
-                      className="flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[#62371f] hover:bg-[#073439]"
+                      className="flex items-center justify-center w-8 h-8 leading-[33px] text-white text-center text-[14px] rounded-full bg-[var(--primary)] hover:bg-[#073439]"
                     >
                       <FaPinterestP className="text-2xl" />
                     </Link>
@@ -156,8 +156,8 @@ export default function BlogInner({ currentBlog }) {
               </div>
             </div>
 
-            <div className="post-navigation  mt-6 flex justify-between border-t border-b border-gray-200 py-5">
-              <div className="nav-previous text-[#24416b] hover:text-[#62371f]">
+            <div className="post-navigation  mt-6 flex justify-between border-t border-b border-highlight py-5">
+              <div className="nav-previous text-[#24416b] hover:text-[var(--primary)]">
                 <Link
                   href="#"
                   className="flex gap-2 items-center font-semibold text-sm"
@@ -167,7 +167,7 @@ export default function BlogInner({ currentBlog }) {
                 </Link>
               </div>
 
-              <div className="nav-next text-[#24416b] hover:text-[#62371f]">
+              <div className="nav-next text-[#24416b] hover:text-[var(--primary)]">
                 <Link
                   href="#"
                   className="flex gap-2 items-center font-semibold text-sm"
@@ -183,13 +183,13 @@ export default function BlogInner({ currentBlog }) {
                 <h2 className="text-2xl font-semibold comments-title">
                   2 Comments:
                 </h2>
-                <span className="absolute h-6 w-[3px] bg-[#62371f] left-[-25px] top-1/2 transform -translate-y-1/2"></span>
+                <span className="absolute h-6 w-[3px] bg-[var(--primary)] left-[-25px] top-1/2 transform -translate-y-1/2"></span>
               </div>
               <ol className="comment-list">
                 <li className="comment mb-6">
                   <ol className="comment-list">
                     <li className="comment">
-                      <div className="comment-body block lg:flex gap-4 items-start  py-4 px-0 lg:px-4 border-b border-gray-200">
+                      <div className="comment-body block lg:flex gap-4 items-start  py-4 px-0 lg:px-4 border-b border-highlight">
                         <Image
                           src="/img#/cmt1.webp"
                           width={50}
@@ -198,14 +198,14 @@ export default function BlogInner({ currentBlog }) {
                           alt="Steven Smith"
                         />
                         <div>
-                          <div className="comment-metadata mb-2 text-sm text-gray-500">
+                          <div className="comment-metadata mb-2 text-sm text-gray-700">
                             <h6 className="fn font-semibold mb-2 text-lg lg:text-xl">
                               John Jones
                             </h6>
 
                             <Link
                               href=""
-                              className="uppercase text-[#666666] text-[11px] hover:text-[#62371f]"
+                              className="uppercase text-[#666666] text-[11px] hover:text-[var(--primary)]"
                             >
                               January 24, 2021 at 10:59 am
                             </Link>
@@ -219,7 +219,7 @@ export default function BlogInner({ currentBlog }) {
                           <div className="reply">
                             <Link
                               href="#"
-                              className="inline-block px-5 py-2 border border-[#ded9d9] hover:bg-[#62371f] hover:text-white text-[#24416b] rounded-full text-[13px] font-semibold uppercase relative z-10"
+                              className="inline-block px-5 py-2 border border-[#ded9d9] hover:bg-[var(--primary)] hover:text-white text-[#24416b] rounded-full text-[13px] font-semibold uppercase relative z-10"
                             >
                               Reply
                             </Link>
@@ -230,7 +230,7 @@ export default function BlogInner({ currentBlog }) {
                       {/* Reply to First Comment */}
                       <ol className="children">
                         <li className="comment mt-4">
-                          <div className="comment-body block lg:flex gap-4 items-start  py-4 px-0 lg:px-4 border-b border-gray-200">
+                          <div className="comment-body block lg:flex gap-4 items-start  py-4 px-0 lg:px-4 border-b border-highlight">
                             <Image
                               src="/img#/cmt2.webp"
                               width={50}
@@ -239,14 +239,14 @@ export default function BlogInner({ currentBlog }) {
                               alt="Steven Smith"
                             />
                             <div>
-                              <div className="comment-metadata mb-2 text-sm text-gray-500">
+                              <div className="comment-metadata mb-2 text-sm text-gray-700">
                                 <h6 className="fn font-semibold mb-2 text-lg lg:text-xl">
                                   Steven Smith
                                 </h6>
 
                                 <Link
                                   href=""
-                                  className="uppercase text-[#666666] text-[11px] hover:text-[#62371f]"
+                                  className="uppercase text-[#666666] text-[11px] hover:text-[var(--primary)]"
                                 >
                                   January 24, 2021 at 10:59 am
                                 </Link>
@@ -260,7 +260,7 @@ export default function BlogInner({ currentBlog }) {
                               <div className="reply">
                                 <Link
                                   href="#"
-                                  className="inline-block px-5 py-2 border border-[#ded9d9] hover:bg-[#62371f] hover:text-white text-[#24416b] rounded-full text-[13px] font-semibold uppercase relative z-10"
+                                  className="inline-block px-5 py-2 border border-[#ded9d9] hover:bg-[var(--primary)] hover:text-white text-[#24416b] rounded-full text-[13px] font-semibold uppercase relative z-10"
                                 >
                                   Reply
                                 </Link>
@@ -273,7 +273,7 @@ export default function BlogInner({ currentBlog }) {
 
                     {/* Second Comment */}
                     <li className="comment mt-4">
-                      <div className="comment-body block lg:flex gap-4 items-start  py-4 px-0 lg:px-4 border-b border-gray-200">
+                      <div className="comment-body block lg:flex gap-4 items-start  py-4 px-0 lg:px-4 border-b border-highlight">
                         <Image
                           src="/img#/cmt3.webp"
                           width={50}
@@ -282,14 +282,14 @@ export default function BlogInner({ currentBlog }) {
                           alt="Steven Smith"
                         />
                         <div>
-                          <div className="comment-metadata mb-2 text-sm text-gray-500">
+                          <div className="comment-metadata mb-2 text-sm text-gray-700">
                             <h6 className="fn font-semibold mb-2 text-lg lg:text-xl">
                               John Doe
                             </h6>
 
                             <Link
                               href=""
-                              className="uppercase text-[#666666] text-[11px] hover:text-[#62371f]"
+                              className="uppercase text-[#666666] text-[11px] hover:text-[var(--primary)]"
                             >
                               January 24, 2021 at 10:59 am
                             </Link>
@@ -303,7 +303,7 @@ export default function BlogInner({ currentBlog }) {
                           <div className="reply">
                             <Link
                               href="#"
-                              className="inline-block px-5 py-2 border border-[#ded9d9] hover:bg-[#62371f] hover:text-white text-[#24416b] rounded-full text-[13px] font-semibold uppercase relative z-10"
+                              className="inline-block px-5 py-2 border border-[#ded9d9] hover:bg-[var(--primary)] hover:text-white text-[#24416b] rounded-full text-[13px] font-semibold uppercase relative z-10"
                             >
                               Reply
                             </Link>
@@ -320,7 +320,7 @@ export default function BlogInner({ currentBlog }) {
                   <h2 className="text-[22px] font-semibold comments-title">
                     Leave a Reply
                   </h2>
-                  <span className="absolute h-6 w-[3px] bg-[#62371f] left-[-25px] top-1/2 transform -translate-y-1/2"></span>
+                  <span className="absolute h-6 w-[3px] bg-[var(--primary)] left-[-25px] top-1/2 transform -translate-y-1/2"></span>
                 </div>
                 <p className="my-5 text-base lg:text-lg">
                   Your email address will not be published. Required fields are
@@ -339,7 +339,7 @@ export default function BlogInner({ currentBlog }) {
                         type="text"
                         id="name"
                         name="name"
-                        className="block w-full bg-white border border-gray-200 p-2.5 outline-none transition duration-500"
+                        className="block w-full bg-background border border-highlight p-2.5 outline-none transition duration-500"
                       />
                     </div>
                     <div className="form-group w-full mb-4">
@@ -353,7 +353,7 @@ export default function BlogInner({ currentBlog }) {
                         type="email"
                         id="email"
                         name="email"
-                        className="block w-full bg-white border border-gray-200 p-2.5 outline-none transition duration-500"
+                        className="block w-full bg-background border border-highlight p-2.5 outline-none transition duration-500"
                       />
                     </div>
                   </div>
@@ -368,7 +368,7 @@ export default function BlogInner({ currentBlog }) {
                       type="email"
                       id="email"
                       name="email"
-                      className="block w-full bg-white border border-gray-200 p-2.5 outline-none transition duration-500"
+                      className="block w-full bg-background border border-highlight p-2.5 outline-none transition duration-500"
                     />
                   </div>
                   <div className="comment-form-comment mb-4">
@@ -385,12 +385,12 @@ export default function BlogInner({ currentBlog }) {
                       rows="5"
                       maxLength="65525"
                       required
-                      className="block w-full bg-white border border-gray-200 p-2.5 focus:outline-none transition duration-500"
+                      className="block w-full bg-background border border-highlight p-2.5 focus:outline-none transition duration-500"
                     ></textarea>
                   </div>
                   <button
                     type="submit"
-                    className="bg-[#62371f] text-white py-[14px] px-[30px] inline-block cursor-pointer outline-none rounded-none uppercase transition-all duration-500 font-medium  text-base lg:text-lg hover:bg-[#24416b] hover:text-white"
+                    className="bg-[var(--primary)] text-white py-[14px] px-[30px] inline-block cursor-pointer outline-none rounded-none uppercase transition-all duration-500 font-medium  text-base lg:text-lg hover:bg-[#24416b] hover:text-white"
                   >
                     Post a Comment
                   </button>

@@ -44,7 +44,7 @@
 .blog-tag {
     display: inline-block;
     padding: 0.5rem 1.5rem;
-    background: #62371f;
+    background: var(--primary) !important;
     color: white;
     border-radius: 50px;
     font-size: 0.85rem;
@@ -89,7 +89,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(45deg, #62371f, #8e5a3c);
+    background: linear-gradient(45deg, var(--primary), #8e5a3c);
     color: white;
     display: flex;
     align-items: center;
@@ -115,7 +115,7 @@
 .blog-body {
     font-size: 1.25rem;
     line-height: 1.8;
-    color: #4a4a4a;
+    color: var(--text) !important;
 }
 
 .blog-body p {
@@ -123,7 +123,7 @@
 }
 
 .blog-body strong {
-    color: #62371f;
+    color: var(--primary) !important;
 }
 
 .blog-body em {
@@ -135,7 +135,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    color: #62371f;
+    color: var(--primary) !important;
     text-decoration: none;
     font-weight: 800;
     font-size: 0.9rem;
@@ -144,7 +144,7 @@
     margin-bottom: 2.5rem;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     padding: 0.75rem 1.5rem;
-    background: white;
+    background: var(--background) !important;
     border-radius: 50px;
     box-shadow: 0 10px 20px rgba(98, 55, 31, 0.05);
 }
@@ -179,18 +179,18 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: white;
+    background: var(--background) !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #62371f;
+    color: var(--primary) !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
     cursor: pointer;
 }
 
 .share-btn:hover {
-    background: #62371f;
+    background: var(--primary) !important;
     color: white;
     transform: translateY(-3px);
 }

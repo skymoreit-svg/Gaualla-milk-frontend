@@ -135,31 +135,31 @@ if (!form.stock) {
 
 
   return (
- <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
-  <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+ <div className="min-h-screen bg-gradient-to-br from-primary to-primary p-4 md:p-8">
+  <div className="max-w-3xl mx-auto bg-background shadow-xl rounded-2xl overflow-hidden">
     {/* Header */}
-    <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
+    <div className="bg-gradient-to-r from-primary to-primary p-6 text-white">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
           <FaPlusCircle className="inline" /> Create New Product
         </h1>
 
       </div>
-      <p className="text-blue-100 mt-1">Add a new product to your inventory</p>
+      <p className="text-primary mt-1">Add a new product to your inventory</p>
     </div>
 
     <form onSubmit={handleSubmit} className="p-6 space-y-6">
       {/* Category */}
-      <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-        <label className="block text-sm font-medium text-blue-800 flex items-center gap-2 mb-1">
-          <FaTag className="text-blue-600" /> Category
+      <div className="bg-primary p-4 rounded-lg border border-primary">
+        <label className="block text-sm font-medium text-primary flex items-center gap-2 mb-1">
+          <FaTag className="text-primary" /> Category
         </label>
         <select
   name="category_id"
   value={form.category_id}
   onChange={handleChange}
   required
-  className="w-full border border-blue-200 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+  className="w-full border border-primary rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
 >
   <option value="">Select Category</option>
   {categories.map((cat) => (
@@ -172,8 +172,8 @@ if (!form.stock) {
 
       {/* Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-          <FaSignature className="text-blue-600" /> Product Name
+        <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+          <FaSignature className="text-primary" /> Product Name
         </label>
         <input
           type="text"
@@ -181,37 +181,37 @@ if (!form.stock) {
           value={form.name}
           onChange={handleChange}
           required
-          className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           placeholder="Enter product name"
         />
       </div>
 
       {/* Slug (auto-generated) */}
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-          <FaLink className="text-gray-500" /> Slug
+      <div className="bg-background p-4 rounded-lg border border-highlight">
+        <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+          <FaLink className="text-gray-700" /> Slug
         </label>
         <input
           type="text"
           name="slug"
           value={form.slug}
           readOnly
-          className="w-full border border-gray-200 rounded-lg p-3 mt-1 bg-gray-100 text-gray-600"
+          className="w-full border border-highlight rounded-lg p-3 mt-1 bg-background00 text-text"
         />
-        <p className="text-xs text-gray-500 mt-1">Auto-generated from product name</p>
+        <p className="text-xs text-gray-700 mt-1">Auto-generated from product name</p>
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-          <FaAlignLeft className="text-blue-600" /> Description
+        <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+          <FaAlignLeft className="text-primary" /> Description
         </label>
         <textarea
           name="description"
           value={form.description}
           onChange={handleChange}
           rows="3"
-          className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           placeholder="Describe your product..."
         />
       </div>
@@ -219,11 +219,11 @@ if (!form.stock) {
       {/* Price */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-            <FaDollarSign className="text-green-600" /> Price
+          <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+            <FaDollarSign className="text-accent" /> Price
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-500">₹</span>
+            <span className="absolute left-3 top-3 text-gray-700">₹</span>
             <input
               type="number"
               step="0.01"
@@ -231,24 +231,24 @@ if (!form.stock) {
               value={form.price}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg pl-8 p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full border border-highlight rounded-lg pl-8 p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
               placeholder="0.00"
             />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-            <FaRegMoneyBillAlt className="text-gray-500" /> Old Price
+          <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+            <FaRegMoneyBillAlt className="text-gray-700" /> Old Price
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-500">₹</span>
+            <span className="absolute left-3 top-3 text-gray-700">₹</span>
             <input
               type="number"
               step="0.01"
               name="old_price"
               value={form.old_price}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg pl-8 p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full border border-highlight rounded-lg pl-8 p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
               placeholder="0.00"
             />
           </div>
@@ -258,8 +258,8 @@ if (!form.stock) {
       {/* Stock & Unit Quantity */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-            <FaBoxes className="text-blue-600" /> Stock
+          <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+            <FaBoxes className="text-primary" /> Stock
           </label>
           <input
             type="number"
@@ -267,20 +267,20 @@ if (!form.stock) {
             value={form.stock}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             placeholder="Quantity in stock"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-            <FaWeight className="text-blue-600" /> Unit Quantity
+          <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+            <FaWeight className="text-primary" /> Unit Quantity
           </label>
           <input
             type="text"
             name="unit_quantity"
             value={form.unit_quantity}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             placeholder="e.g., 500g, 1L, 12-pack"
           />
         </div>
@@ -288,44 +288,44 @@ if (!form.stock) {
 
       {/* Details */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2 mb-1">
-          <FaInfoCircle className="text-blue-600" /> Details
+        <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+          <FaInfoCircle className="text-primary" /> Details
         </label>
         <textarea
           name="details"
           value={form.details}
           onChange={handleChange}
           rows="3"
-          className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           placeholder="Additional product details..."
         />
       </div>
 
       {/* One-time Checkbox */}
-      <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+      <div className="flex items-center space-x-3 p-4 bg-primary rounded-lg border border-primary">
         <div className="flex items-center h-5">
           <input
             type="checkbox"
             name="one_time"
             checked={form.one_time}
             onChange={handleChange}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="w-4 h-4 text-primary border-highlight rounded focus:ring-primary"
           />
         </div>
         <div className="flex items-center gap-2">
-          <FaExclamationCircle className="text-blue-600" />
-          <label className="text-sm font-medium text-gray-700">One Time Product</label>
+          <FaExclamationCircle className="text-primary" />
+          <label className="text-sm font-medium text-text">One Time Product</label>
         </div>
-        <span className="text-xs text-blue-600 ml-auto bg-blue-100 px-2 py-1 rounded-full">Optional</span>
+        <span className="text-xs text-primary ml-auto bg-primary px-2 py-1 rounded-full">Optional</span>
       </div>
 
       {/* Images */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-        <label className="block text-sm font-medium text-gray-700 flex items-center justify-center gap-2 mb-2">
-          <FaImages className="text-blue-600 text-lg" /> Product Images
+      <div className="border-2 border-dashed border-highlight rounded-lg p-6 text-center hover:border-primary transition-colors">
+        <label className="block text-sm font-medium text-text flex items-center justify-center gap-2 mb-2">
+          <FaImages className="text-primary text-lg" /> Product Images
         </label>
-        <p className="text-xs text-gray-500 mb-4">Upload one or multiple product images</p>
-        <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2">
+        <p className="text-xs text-gray-700 mb-4">Upload one or multiple product images</p>
+        <label className="cursor-pointer bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors inline-flex items-center gap-2">
           <FaUpload className="inline" /> Choose Files
           <input
             type="file"
@@ -335,7 +335,7 @@ if (!form.stock) {
             className="hidden"
           />
         </label>
-        <p className="text-xs text-gray-500 mt-3">PNG, JPG, GIF up to 10MB</p>
+        <p className="text-xs text-gray-700 mt-3">PNG, JPG, GIF up to 10MB</p>
       </div>
 
       {/* Submit Button */}
@@ -351,7 +351,7 @@ if (!form.stock) {
 
         <button
           type="submit"
-          className=" bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+          className=" bg-gradient-to-r from-primary to-primary text-white px-4 py-2 rounded-lg hover:from-primary hover:to-primary transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
         >
           <FaPlus className="inline" /> Create Product
         </button>

@@ -77,24 +77,24 @@ const WebhooksPage = () => {
 
   const getEventTypeBadge = (eventType) => {
     if (eventType?.includes("captured") || eventType?.includes("paid")) {
-      return "bg-green-100 text-green-700";
+      return "bg-green-100 text-accent";
     }
     if (eventType?.includes("failed")) {
       return "bg-red-100 text-red-700";
     }
     if (eventType?.includes("refund")) {
-      return "bg-orange-100 text-orange-700";
+      return "bg-orange-100 text-highlight";
     }
     if (eventType?.includes("expired") || eventType?.includes("cancelled")) {
-      return "bg-gray-100 text-gray-700";
+      return "bg-background00 text-text";
     }
-    return "bg-blue-100 text-blue-700";
+    return "bg-primary text-primary";
   };
 
   const getProcessedBadge = (processed) => {
     return processed
-      ? "bg-green-100 text-green-700"
-      : "bg-yellow-100 text-yellow-700";
+      ? "bg-green-100 text-accent"
+      : "bg-yellow-100 text-highlight";
   };
 
   const formatCurrency = (amount) => {
@@ -109,28 +109,28 @@ const WebhooksPage = () => {
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-background min-h-screen">
       {/* Header */}
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Webhook Events</h1>
-          <p className="text-gray-600 mt-1">Audit trail of all payment webhook events</p>
+          <h1 className="text-3xl font-bold text-text">Webhook Events</h1>
+          <p className="text-text mt-1">Audit trail of all payment webhook events</p>
         </div>
         <Link
           href="/admin/payments"
-          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-primary transition"
         >
           Back to Dashboard
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-gray-300 rounded-lg p-5 mb-6">
+      <div className="bg-background border border-highlight rounded-lg p-5 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <select
             value={filters.event_type}
             onChange={(e) => setFilters({ ...filters, event_type: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Event Types</option>
             <option value="payment.captured">Payment Captured</option>
@@ -145,7 +145,7 @@ const WebhooksPage = () => {
           <select
             value={filters.processed}
             onChange={(e) => setFilters({ ...filters, processed: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Status</option>
             <option value="true">Processed</option>
@@ -157,7 +157,7 @@ const WebhooksPage = () => {
             placeholder="Start Date"
             value={filters.start_date}
             onChange={(e) => setFilters({ ...filters, start_date: e.target.value })}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
           <div className="flex gap-2">
@@ -166,7 +166,7 @@ const WebhooksPage = () => {
               placeholder="End Date"
               value={filters.end_date}
               onChange={(e) => setFilters({ ...filters, end_date: e.target.value })}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2 border border-highlight rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <button
               onClick={() => {
@@ -178,7 +178,7 @@ const WebhooksPage = () => {
                 });
                 setCurrentPage(1);
               }}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              className="px-4 py-2 text-text border border-highlight rounded-lg hover:bg-background transition"
             >
               Clear
             </button>
@@ -187,38 +187,38 @@ const WebhooksPage = () => {
       </div>
 
       {/* Events Table */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+      <div className="bg-background rounded-lg shadow border border-highlight overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
-            <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading webhook events...</p>
+            <RefreshCw className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-text">Loading webhook events...</p>
           </div>
         ) : events.length === 0 ? (
           <div className="p-12 text-center">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No webhook events found</p>
+            <AlertCircle className="w-12 h-12 text-gray-[#252729b8] mx-auto mb-4" />
+            <p className="text-text">No webhook events found</p>
           </div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-background border-b border-highlight">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Event ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Event Type</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Entity ID</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Amount</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Processed</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Received At</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Event ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Event Type</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Entity ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Amount</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Processed</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Received At</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-text uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {events.map((event) => (
-                    <tr key={event.id} className="hover:bg-gray-50 transition">
+                    <tr key={event.id} className="hover:bg-background transition">
                       <td className="px-6 py-4">
-                        <div className="text-sm font-mono text-gray-900">
+                        <div className="text-sm font-mono text-text">
                           {event.event_id?.substring(0, 20) || event.id}...
                         </div>
                       </td>
@@ -228,12 +228,12 @@ const WebhooksPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-700">
+                        <div className="text-sm text-text">
                           {event.entity_id?.substring(0, 20) || "N/A"}...
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-semibold text-gray-900">
+                        <div className="text-sm font-semibold text-text">
                           {event.amount ? formatCurrency(event.amount) : "N/A"}
                         </div>
                       </td>
@@ -255,13 +255,13 @@ const WebhooksPage = () => {
                           )}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-text">
                         {formatDate(event.created_at)}
                       </td>
                       <td className="px-6 py-4">
                         <button
                           onClick={() => setSelectedEvent(event)}
-                          className="text-blue-600 hover:text-blue-800 transition"
+                          className="text-primary hover:text-primary transition"
                           title="View Details"
                         >
                           <Eye className="w-5 h-5" />
@@ -275,8 +275,8 @@ const WebhooksPage = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
-                <div className="text-sm text-gray-600">
+              <div className="px-6 py-4 border-t border-highlight flex justify-between items-center">
+                <div className="text-sm text-text">
                   Showing {((currentPage - 1) * pagination.limit) + 1} to{" "}
                   {Math.min(currentPage * pagination.limit, pagination.total)} of{" "}
                   {pagination.total} events
@@ -285,14 +285,14 @@ const WebhooksPage = () => {
                   <button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-highlight rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+                    className="px-4 py-2 border border-highlight rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition"
                   >
                     Next
                   </button>
@@ -306,12 +306,12 @@ const WebhooksPage = () => {
       {/* Event Detail Modal */}
       {selectedEvent && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-background rounded-lg shadow-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Webhook Event Details</h2>
+              <h2 className="text-2xl font-bold text-text">Webhook Event Details</h2>
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-[#252729b8] hover:text-text"
               >
                 <XCircle className="w-6 h-6" />
               </button>
@@ -320,65 +320,65 @@ const WebhooksPage = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Event ID</label>
-                  <p className="text-sm font-mono text-gray-900 mt-1">{selectedEvent.event_id || selectedEvent.id}</p>
+                  <label className="text-sm font-medium text-text">Event ID</label>
+                  <p className="text-sm font-mono text-text mt-1">{selectedEvent.event_id || selectedEvent.id}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Event Type</label>
-                  <p className="text-sm text-gray-900 mt-1">{selectedEvent.event_type}</p>
+                  <label className="text-sm font-medium text-text">Event Type</label>
+                  <p className="text-sm text-text mt-1">{selectedEvent.event_type}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Entity Type</label>
-                  <p className="text-sm text-gray-900 mt-1">{selectedEvent.entity_type || "N/A"}</p>
+                  <label className="text-sm font-medium text-text">Entity Type</label>
+                  <p className="text-sm text-text mt-1">{selectedEvent.entity_type || "N/A"}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Entity ID</label>
-                  <p className="text-sm font-mono text-gray-900 mt-1">{selectedEvent.entity_id || "N/A"}</p>
+                  <label className="text-sm font-medium text-text">Entity ID</label>
+                  <p className="text-sm font-mono text-text mt-1">{selectedEvent.entity_id || "N/A"}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Payment ID</label>
-                  <p className="text-sm font-mono text-gray-900 mt-1">{selectedEvent.payment_id || "N/A"}</p>
+                  <label className="text-sm font-medium text-text">Payment ID</label>
+                  <p className="text-sm font-mono text-text mt-1">{selectedEvent.payment_id || "N/A"}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Payment Link ID</label>
-                  <p className="text-sm font-mono text-gray-900 mt-1">{selectedEvent.payment_link_id || "N/A"}</p>
+                  <label className="text-sm font-medium text-text">Payment Link ID</label>
+                  <p className="text-sm font-mono text-text mt-1">{selectedEvent.payment_link_id || "N/A"}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Amount</label>
-                  <p className="text-sm text-gray-900 mt-1">{selectedEvent.amount ? formatCurrency(selectedEvent.amount) : "N/A"}</p>
+                  <label className="text-sm font-medium text-text">Amount</label>
+                  <p className="text-sm text-text mt-1">{selectedEvent.amount ? formatCurrency(selectedEvent.amount) : "N/A"}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Status</label>
-                  <p className="text-sm text-gray-900 mt-1">{selectedEvent.status || "N/A"}</p>
+                  <label className="text-sm font-medium text-text">Status</label>
+                  <p className="text-sm text-text mt-1">{selectedEvent.status || "N/A"}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Processed</label>
-                  <p className="text-sm text-gray-900 mt-1">
+                  <label className="text-sm font-medium text-text">Processed</label>
+                  <p className="text-sm text-text mt-1">
                     {selectedEvent.processed ? (
-                      <span className="text-green-600">Yes</span>
+                      <span className="text-accent">Yes</span>
                     ) : (
-                      <span className="text-yellow-600">No</span>
+                      <span className="text-highlight">No</span>
                     )}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Signature Verified</label>
-                  <p className="text-sm text-gray-900 mt-1">
+                  <label className="text-sm font-medium text-text">Signature Verified</label>
+                  <p className="text-sm text-text mt-1">
                     {selectedEvent.signature_verified ? (
-                      <span className="text-green-600">Yes</span>
+                      <span className="text-accent">Yes</span>
                     ) : (
                       <span className="text-red-600">No</span>
                     )}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Received At</label>
-                  <p className="text-sm text-gray-900 mt-1">{formatDate(selectedEvent.created_at)}</p>
+                  <label className="text-sm font-medium text-text">Received At</label>
+                  <p className="text-sm text-text mt-1">{formatDate(selectedEvent.created_at)}</p>
                 </div>
                 {selectedEvent.processed_at && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Processed At</label>
-                    <p className="text-sm text-gray-900 mt-1">{formatDate(selectedEvent.processed_at)}</p>
+                    <label className="text-sm font-medium text-text">Processed At</label>
+                    <p className="text-sm text-text mt-1">{formatDate(selectedEvent.processed_at)}</p>
                   </div>
                 )}
               </div>
@@ -392,8 +392,8 @@ const WebhooksPage = () => {
 
               {selectedEvent.payload && (
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Payload</label>
-                  <pre className="mt-2 p-4 bg-gray-50 border border-gray-200 rounded-lg text-xs overflow-x-auto">
+                  <label className="text-sm font-medium text-text">Payload</label>
+                  <pre className="mt-2 p-4 bg-background border border-highlight rounded-lg text-xs overflow-x-auto">
                     {JSON.stringify(JSON.parse(selectedEvent.payload), null, 2)}
                   </pre>
                 </div>
@@ -403,7 +403,7 @@ const WebhooksPage = () => {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                className="px-4 py-2 bg-gray-300 text-text rounded-lg hover:bg-gray-400 transition"
               >
                 Close
               </button>

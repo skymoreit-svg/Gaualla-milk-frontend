@@ -72,12 +72,12 @@ export default function LiveMapPage() {
     <div className="p-4 md:p-6">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Live Rider Map</h1>
-          <p className="text-sm text-gray-500">{riders.length} rider(s) online</p>
+          <h1 className="text-2xl font-bold text-text">Live Rider Map</h1>
+          <p className="text-sm text-gray-700">{riders.length} rider(s) online</p>
         </div>
         <button
           onClick={fetchLocations}
-          className="flex items-center gap-2 text-sm bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200"
+          className="flex items-center gap-2 text-sm bg-background00 px-3 py-2 rounded-lg hover:bg-background00"
         >
           <FaSync /> Refresh
         </button>
@@ -85,15 +85,15 @@ export default function LiveMapPage() {
 
       {/* Legend */}
       <div className="flex gap-4 mb-4 text-sm">
-        <span className="flex items-center gap-1"><FaCircle className="text-green-500 text-xs" /> Idle</span>
-        <span className="flex items-center gap-1"><FaCircle className="text-blue-500 text-xs" /> Delivering</span>
+        <span className="flex items-center gap-1"><FaCircle className="text-accent text-xs" /> Idle</span>
+        <span className="flex items-center gap-1"><FaCircle className="text-primary text-xs" /> Delivering</span>
         <span className="flex items-center gap-1"><FaCircle className="text-red-500 text-xs" /> Delivery Destination</span>
       </div>
 
       <div className="rounded-xl overflow-hidden shadow-lg border">
         {!isLoaded ? (
-          <div className="flex items-center justify-center bg-gray-100" style={mapContainerStyle}>
-            <p className="text-gray-500">Loading map...</p>
+          <div className="flex items-center justify-center bg-background00" style={mapContainerStyle}>
+            <p className="text-gray-700">Loading map...</p>
           </div>
         ) : (
           <GoogleMap mapContainerStyle={mapContainerStyle} center={mapCenter} zoom={12}>
@@ -163,20 +163,20 @@ export default function LiveMapPage() {
                 onCloseClick={() => setSelectedRider(null)}
               >
                 <div className="p-2 min-w-[180px]">
-                  <p className="font-bold text-gray-800">{selectedRider.name}</p>
-                  <p className="text-sm text-gray-600">{selectedRider.phone}</p>
-                  <p className="text-sm text-gray-500 capitalize">{selectedRider.vehicle_type}</p>
+                  <p className="font-bold text-text">{selectedRider.name}</p>
+                  <p className="text-sm text-text">{selectedRider.phone}</p>
+                  <p className="text-sm text-gray-700 capitalize">{selectedRider.vehicle_type}</p>
                   {selectedRider.active_order_id && (
-                    <p className="text-sm text-blue-600 mt-1">
+                    <p className="text-sm text-primary mt-1">
                       Delivering Order #{selectedRider.active_order_id}
                     </p>
                   )}
                   {selectedRider.last_location_update && (
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-gray-[#252729b8] mt-1">
                       Updated: {new Date(selectedRider.last_location_update).toLocaleTimeString()}
                     </p>
                   )}
-                  <Link href={`/admin/riders/${selectedRider.id}`} className="text-xs text-blue-500 hover:underline mt-1 block">
+                  <Link href={`/admin/riders/${selectedRider.id}`} className="text-xs text-primary hover:underline mt-1 block">
                     View Profile
                   </Link>
                 </div>

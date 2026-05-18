@@ -44,13 +44,13 @@ export default function ProductsForm() {
   return (
     <div>
        <div className="  rounded-2xl shadow-2xl px-4 py-3">
-                  <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  <h2 className="text-2xl font-semibold text-text mb-4">
                     Contact Us
                   </h2>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Name */}
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block text-text font-medium">
                         Name
                       </label>
                       <input
@@ -65,7 +65,7 @@ export default function ProductsForm() {
 
                     {/* Email */}
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block text-text font-medium">
                         Email
                       </label>
                       <input
@@ -80,7 +80,7 @@ export default function ProductsForm() {
 
                     {/* Phone */}
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block text-text font-medium">
                         Phone
                       </label>
                       <input
@@ -95,7 +95,7 @@ export default function ProductsForm() {
 
                     {/* Service Selection */}
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block text-text font-medium">
                         Select Service
                       </label>
                       <select
@@ -117,7 +117,7 @@ export default function ProductsForm() {
 
                     {/* Message */}
                     <div>
-                      <label className="block text-gray-700 font-medium">
+                      <label className="block text-text font-medium">
                         Message
                       </label>
                       <textarea

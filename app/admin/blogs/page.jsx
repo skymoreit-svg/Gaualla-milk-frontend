@@ -81,23 +81,23 @@ export default function AdminBlogsListPage() {
 
   return (
     <div className="max-w-full mx-auto px-3 sm:px-6 lg:px-8 py-6">
-      <div className="bg-gray-50 rounded-xl p-4 sm:p-6 shadow-sm">
+      <div className="bg-background rounded-xl p-4 sm:p-6 shadow-sm">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-          <h1 className="text-2xl font-bold text-gray-900">Blogs</h1>
+          <h1 className="text-2xl font-bold text-text">Blogs</h1>
 
           <div className="flex gap-2">
             <button
               onClick={fetchBlogs}
               disabled={listLoading}
-              className="px-3 py-1.5 rounded-md border border-blue-200 bg-blue-50 text-sm font-semibold text-blue-700"
+              className="px-3 py-1.5 rounded-md border border-primary bg-primary text-sm font-semibold text-primary"
             >
               Refresh
             </button>
 
             <Link
               href="/admin/blogs/manage"
-              className="px-4 py-2 rounded-md bg-green-600 text-white text-sm font-semibold"
+              className="px-4 py-2 rounded-md bg-accent text-white text-sm font-semibold"
             >
               Create Blog
             </Link>
@@ -106,16 +106,16 @@ export default function AdminBlogsListPage() {
 
         {/* Desktop Table */}
         <div className="hidden sm:block">
-          <table className="min-w-full text-sm bg-white">
+          <table className="min-w-full text-sm bg-background">
             <tbody>
               {blogs.map((blog) => (
-                <tr key={blog.id} className="border-b hover:bg-gray-100">
+                <tr key={blog.id} className="border-b hover:bg-background00">
                   <td className="px-3 py-3 font-semibold">{blog.title}</td>
                   <td className="px-3 py-3">
                     {blog.writer || blog.author || "—"}
                   </td>
                   <td className="px-3 py-3">
-                    <span className="px-2 py-1 text-xs rounded-full bg-blue-50">
+                    <span className="px-2 py-1 text-xs rounded-full bg-primary">
                       {blog.tag || "—"}
                     </span>
                   </td>
@@ -127,7 +127,7 @@ export default function AdminBlogsListPage() {
                   <td className="px-3 py-3 text-right space-x-2">
                     <Link
                       href={`/admin/blogs/manage/${blog.id}?mode=edit`}
-                      className="px-3 py-1.5 rounded-md bg-blue-600 text-white text-xs"
+                      className="px-3 py-1.5 rounded-md bg-primary text-white text-xs"
                     >
                       Edit
                     </Link>
