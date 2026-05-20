@@ -204,13 +204,8 @@ export default function AdminBlogManagePage({ params }) {
               readonly: false,
               height: 440,
               toolbarSticky: true,
-              buttons:
-                "bold,italic,underline,strikethrough,|," +
-                "ul,ol,|," +
-                "outdent,indent,|," +
-                "link,image,video,|," +
-                "font,fontsize,paragraph,|," +
-                "source,undo,redo",
+              toolbarAdaptive: false,
+              buttons: "bold,italic,paragraph,image,video",
             }}
           />
         </div>

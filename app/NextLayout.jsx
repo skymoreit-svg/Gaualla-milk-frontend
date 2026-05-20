@@ -33,7 +33,7 @@ const NextLayout = ({ children }) => {
 
   return (
     <>
-      {!path.includes("admin") ? (
+      {(!path.includes("admin") && !path.includes("rider")) ? (
         <>
           <TopBar />
           <MyNav />

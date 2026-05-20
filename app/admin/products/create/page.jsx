@@ -4,6 +4,7 @@ import axios from "axios";
 import slugify from "slugify";
 import Link from "next/link";
 import { adminurl } from "../../adminCompo/adminapis";
+import dynamic from "next/dynamic";
 
 // Enable credentials for all admin requests
 axios.defaults.withCredentials = true;
@@ -11,6 +12,8 @@ import { FaPlus, FaPlusCircle,FaTag,FaSignature,FaLink,FaAlignLeft,FaDollarSign,
 import { ArrowLeft } from "lucide-react";
 
 import toast from "react-hot-toast";
+
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 
 
@@ -29,6 +32,15 @@ const ProductCreatePage = () => {
     images: null, // file
     one_time: false,
   });
+
+  const joditConfig = useMemo(() => ({
+    readonly: false,
+    toolbarAdaptive: false,
+    buttons: "bold,italic,paragraph,image,video",
+    uploader: {
+      insertImageAsBase64URI: true
+    }
+  }), []);
 
   // fetch categories
   const getCategories = async () => {
@@ -206,14 +218,14 @@ if (!form.stock) {
         <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
           <FaAlignLeft className="text-primary" /> Description
         </label>
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          rows="3"
-          className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          placeholder="Describe your product..."
-        />
+        <div className="mt-1 border border-highlight rounded-lg overflow-hidden bg-background">
+          <JoditEditor
+            key="description-editor"
+            value={form.description}
+            onBlur={(newContent) => setForm((prev) => ({ ...prev, description: newContent }))}
+            config={joditConfig}
+          />
+        </div>
       </div>
 
       {/* Price */}
@@ -291,14 +303,14 @@ if (!form.stock) {
         <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
           <FaInfoCircle className="text-primary" /> Details
         </label>
-        <textarea
-          name="details"
-          value={form.details}
-          onChange={handleChange}
-          rows="3"
-          className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          placeholder="Additional product details..."
-        />
+        <div className="mt-1 border border-highlight rounded-lg overflow-hidden bg-background">
+          <JoditEditor
+            key="details-editor"
+            value={form.details}
+            onBlur={(newContent) => setForm((prev) => ({ ...prev, details: newContent }))}
+            config={joditConfig}
+          />
+        </div>
       </div>
 
       {/* One-time Checkbox */}

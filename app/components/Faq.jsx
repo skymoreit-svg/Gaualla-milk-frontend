@@ -40,31 +40,31 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="w-full bg-[var(--background)] py-24 lg:py-14 overflow-hidden relative">
+    <section className="w-full bg-[var(--background)] py-12 md:py-24 lg:py-14 overflow-hidden relative">
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -mr-48 -mt-48" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl -ml-48 -mb-48" />
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-20 items-start">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start">
           
           {/* Left Side: Header & Visual */}
-          <div className="lg:w-2/5 space-y-8 lg:sticky lg:top-32">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
+          <div className="lg:w-2/5 space-y-6 md:space-y-8 lg:sticky lg:top-32 w-full">
+            <div className="space-y-4 text-center lg:text-left">
+              <div className="flex items-center gap-3 justify-center lg:justify-start">
                 <span className="w-10 h-px bg-[var(--primary)]" />
                 <span className="text-[var(--primary)] text-xs font-black uppercase tracking-[0.3em]">Common Queries</span>
               </div>
-              <h2 className="text-5xl lg:text-6xl font-black text-text leading-tight font-serif">
-                Purity <br />
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-text leading-tight font-serif">
+                Purity <br className="hidden lg:block" />
                 <span className="text-[var(--primary)]">Explained.</span>
               </h2>
-              <p className="text-gray-700 text-lg font-medium max-w-md">
+              <p className="text-gray-700 text-sm md:text-base lg:text-lg font-medium max-w-md mx-auto lg:mx-0">
                 Everything you need to know about our farm-fresh A2 dairy products and delivery process.
               </p>
             </div>
 
-            <div className="relative group">
+            <div className="relative group hidden lg:block">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
                 <img
                   src="/img/fa1.webp"
@@ -83,7 +83,7 @@ export default function FAQSection() {
           </div>
 
           {/* Right Side: FAQ Accordion */}
-          <div className="lg:w-3/5 w-full space-y-4">
+          <div className="lg:w-3/5 w-full space-y-3 md:space-y-4">
             {faqs.map((elm, index) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -91,7 +91,7 @@ export default function FAQSection() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 key={index}
-                className={`group rounded-[2rem] transition-all duration-500 overflow-hidden ${
+                className={`group rounded-2xl md:rounded-[2rem] transition-all duration-500 overflow-hidden ${
                   openIndex === index 
                     ? "bg-background shadow-2xl shadow-[var(--primary)]/5 border border-[var(--primary)]/10" 
                     : "bg-background/50 hover:bg-background border border-transparent"
@@ -99,16 +99,16 @@ export default function FAQSection() {
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                  className="w-full px-8 py-10 text-left flex items-start gap-6"
+                  className="w-full px-4 py-5 md:px-8 md:py-8 text-left flex items-start gap-4 md:gap-6"
                 >
-                  <span className={`text-2xl font-black transition-colors duration-300 ${
+                  <span className={`text-lg md:text-2xl font-black transition-colors duration-300 ${
                     openIndex === index ? "text-[var(--primary)]" : "text-gray-600"
                   }`}>
                     {elm.number}
                   </span>
                   
                   <div className="flex-1">
-                    <h6 className={`text-xl font-bold transition-colors duration-300 ${
+                    <h6 className={`text-base md:text-xl font-bold transition-colors duration-300 ${
                       openIndex === index ? "text-text" : "text-text"
                     }`}>
                       {elm.question}
@@ -122,8 +122,8 @@ export default function FAQSection() {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.4, ease: "circOut" }}
                         >
-                          <div className="pt-6 border-t border-highlight mt-6">
-                            <p className="text-gray-700 leading-relaxed font-medium">
+                          <div className="pt-4 border-t border-highlight mt-4 md:pt-6 md:mt-6">
+                            <p className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed font-medium">
                               {elm.answer}
                             </p>
                           </div>
@@ -132,10 +132,10 @@ export default function FAQSection() {
                     </AnimatePresence>
                   </div>
 
-                  <div className={`mt-1 p-2 rounded-full transition-all duration-500 ${
+                  <div className={`mt-0.5 p-1.5 md:p-2 rounded-full transition-all duration-500 ${
                     openIndex === index ? "bg-[var(--primary)] text-white rotate-180" : "bg-background00 text-gray-[#252729b8] group-hover:bg-background00"
                   }`}>
-                    <ChevronDown size={20} />
+                    <ChevronDown size={16} className="md:w-5 md:h-5" />
                   </div>
                 </button>
               </motion.div>

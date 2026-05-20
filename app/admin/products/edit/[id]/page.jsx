@@ -7,8 +7,11 @@ import { adminurl } from "../../../adminCompo/adminapis";
 import { FaPlus, FaPlusCircle, FaTag, FaSignature, FaLink, FaAlignLeft, FaDollarSign, FaRegMoneyBillAlt, FaBoxes, FaWeight, FaInfoCircle, FaExclamationCircle, FaImages, FaUpload } from "react-icons/fa";
 import { ArrowLeft } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import toast from "react-hot-toast";
+
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 // Enable credentials for all admin requests
 axios.defaults.withCredentials = true;
@@ -34,6 +37,18 @@ const EditProductPage = () => {
     images: null, // file
     one_time: false,
   });
+
+  const joditConfig = useMemo(() => ({
+    readonly: false,
+    placeholder: "Start typing...",
+    height: 300,
+    toolbarSticky: false,
+    toolbarAdaptive: false,
+    buttons: "bold,italic,paragraph,image,video",
+    uploader: {
+      insertImageAsBase64URI: true
+    }
+  }), []);
 
   // Fetch categories
   const getCategories = async () => {
@@ -255,18 +270,18 @@ if (!form.stock) {
             </div>
 
             {/* Description */}
-            <div className="border border-highlight rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4 bg-background">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
                 <FaAlignLeft className="text-primary" /> Description
               </label>
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                rows={4}
-                className="w-full border p-3 rounded-lg"
-                placeholder="Product description"
-              />
+              <div className="mt-1 border rounded-md overflow-hidden bg-background">
+                <JoditEditor
+                  key="description-editor-edit"
+                  value={form.description}
+                  onBlur={(newContent) => setForm((prev) => ({ ...prev, description: newContent }))}
+                  config={joditConfig}
+                />
+              </div>
             </div>
 
             {/* Price and Old Price */}
@@ -337,18 +352,18 @@ if (!form.stock) {
             </div>
 
             {/* Details */}
-            <div className="border border-highlight rounded-lg p-4">
+            <div className="border border-highlight rounded-lg p-4 bg-background">
               <label className="text-sm font-medium flex items-center gap-2 mb-2">
                 <FaInfoCircle className="text-primary" /> Additional Details
               </label>
-              <textarea
-                name="details"
-                value={form.details}
-                onChange={handleChange}
-                rows={3}
-                className="w-full border p-3 rounded-lg"
-                placeholder="Additional product details"
-              />
+              <div className="mt-1 border rounded-md overflow-hidden bg-background">
+                <JoditEditor
+                  key="details-editor-edit"
+                  value={form.details}
+                  onBlur={(newContent) => setForm((prev) => ({ ...prev, details: newContent }))}
+                  config={joditConfig}
+                />
+              </div>
             </div>
 
             {/* One Time Product Checkbox */}

@@ -6,7 +6,8 @@ import { FaChevronRight } from "react-icons/fa";
 
 const OtherBanner = ({ text }) => {
   return (
-    <div className="relative w-full text-white">
+    <div className="relative w-full text-white flex flex-col">
+      <div className="brand-striped-border relative z-10" />
       {/* Background image */}
       <img
         src="/range.webp"
@@ -31,6 +32,7 @@ const OtherBanner = ({ text }) => {
           <span className="text-white">{text}</span>
         </div>
       </div>
+      <div className="brand-striped-border relative z-10" />
     </div>
   )
 }

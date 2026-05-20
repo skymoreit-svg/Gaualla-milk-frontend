@@ -91,38 +91,44 @@ export default function OfferProductValid() {
     {
       title: "Fresh & Pure, Just Like It Should Be",
       description: "The Gaualla milk is provided by desi cows raised in spacious areas. We pledge to deliver fresh milk every single day, which is not processed and contains complete natural goodness.",
-      icon: <FaLeaf className="text-2xl text-[var(--primary)]" />,
-      color: "bg-[var(--primary)]/5"
+      icon: <FaLeaf className="text-lg md:text-3xl text-[var(--primary)]" />,
+      color: "bg-white/80",
+      isDark: false
     },
     {
       title: "No Preservatives. No Compromise",
       description: "We never include chemicals or artificial preservatives in our milk or A2 ghee. What you receive is pure milk that is as close to nature as it gets.",
-      icon: <FaHeart className="text-2xl text-red-500" />,
-      color: "bg-red-50"
+      icon: <FaHeart className="text-lg md:text-3xl text-white" />,
+      color: "bg-primary",
+      isDark: true
     },
     {
       title: "From Cow to Kitchen—With Complete Trust",
       description: "We believe in transparency and honesty. Gaualla feels that everyone should be able to trace their milk, and we guarantee that.",
-      icon: <FaShieldAlt className="text-2xl text-primary" />,
-      color: "bg-primary"
+      icon: <FaShieldAlt className="text-lg md:text-3xl text-[var(--primary)]" />,
+      color: "bg-white/80",
+      isDark: false
     },
     {
       title: "Packed with Strength & Nourishment",
       description: "A2 milk from Gaualla boosts your body's growth, strength, and vitality because it is packed with important nutrients.",
-      icon: <FaSeedling className="text-2xl text-highlight" />,
-      color: "bg-amber-50"
+      icon: <FaSeedling className="text-lg md:text-3xl text-white" />,
+      color: "bg-primary",
+      isDark: true
     },
     {
       title: "Grown Local. Trusted More",
       description: "We offer our support to Indian farmers by sourcing the milk locally from them to give you purified milk.",
-      icon: <FaMapMarkerAlt className="text-2xl text-primary" />,
-      color: "bg-primary"
+      icon: <FaMapMarkerAlt className="text-lg md:text-3xl text-[var(--primary)]" />,
+      color: "bg-white/80",
+      isDark: false
     },
     {
       title: "Immunity-Boosting Goodness",
       description: "Gaualla milk contains vitamins and minerals, it supports your family's health and keeps their immune defences strong.",
-      icon: <FaFirstAid className="text-2xl text-primary" />,
-      color: "bg-primary"
+      icon: <FaFirstAid className="text-lg md:text-3xl text-white" />,
+      color: "bg-primary",
+      isDark: true
     },
   ];
 
@@ -208,25 +214,36 @@ export default function OfferProductValid() {
               </h1>
 
               {/* Description */}
-              <p className="text-text text-lg mb-8 leading-relaxed">
+              {/* <p className="text-text text-lg mb-8 leading-relaxed">
                 Hamara A2 desi cow milk shuddh Bharatiya gaayon se prapt hota
                 hai—yeh sirf ek drink nahi, ek parampara hai. Poshan se bharpoor,
                 prakritik kheti se utpaadit, aur har boond mein shuddhata aur
                 swasthya ka vaada chhupa hai.
-              </p>
+              </p> */}
 
               {/* Features grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-6 mb-10">
                 {features.map((feature, index) => (
-                  <div key={index} className={`p-4 rounded-xl ${feature.color} border border-transparent hover:border-[var(--primary)]/20 transition-all duration-300`}>
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-lg bg-background shadow-sm">
-                        {feature.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-text mb-1">{feature.title}</h3>
-                        <p className="text-sm text-text">{feature.description}</p>
-                      </div>
+                  <div 
+                    key={index} 
+                    className={`p-2.5 md:p-6 rounded-xl md:rounded-2xl ${feature.color} border border-transparent transition-all duration-300 flex items-center md:flex-col md:justify-center md:text-center md:gap-3 gap-2 ${
+                      feature.isDark 
+                        ? "hover:border-white/30" 
+                        : "hover:border-[var(--primary)]/20"
+                    }`}
+                  >
+                    <div className={`p-1.5 md:p-3 rounded-lg shadow-sm shrink-0 ${
+                      feature.isDark ? "bg-white/20" : "bg-background"
+                    }`}>
+                      {feature.icon}
+                    </div>
+                    <div>
+                      <h3 className={`font-oswald uppercase tracking-wider text-[10px] sm:text-xs md:text-base font-bold leading-tight ${
+                        feature.isDark ? "text-white" : "text-text"
+                      }`}>{feature.title}</h3>
+                      {/* <p className={`text-sm ${
+                        feature.isDark ? "text-amber-50/90" : "text-text/90"
+                      }`}>{feature.description}</p> */}
                     </div>
                   </div>
                 ))}

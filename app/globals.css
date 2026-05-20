@@ -331,3 +331,18 @@ blockquote:after {
   font-weight: 700;
   text-transform: uppercase;
 }
+
+/* Brand striped border matching the hazard/caution banner tape style */
+.brand-striped-border {
+  height: 12px;
+  width: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--primary) 0px,
+    var(--primary) 12px,
+    var(--background) 12px,
+    var(--background) 24px
+  );
+  display: block;
+}
+

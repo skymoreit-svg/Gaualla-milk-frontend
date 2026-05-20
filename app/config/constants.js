@@ -30,6 +30,10 @@ export const API_ENDPOINTS = {
   
   // Admin API endpoints
   ADMIN_BASE: `${API_BASE_URL}/admin`,
+
+  // Rider API endpoints
+  RIDER_BASE: `${API_BASE_URL}/api/rider`,
+  RIDER_AUTH: `${API_BASE_URL}/api/rider/auth`,
   
   // Image paths
   UPLOADS: `${IMAGE_BASE_URL}/uploads`,

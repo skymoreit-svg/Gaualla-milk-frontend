@@ -76,7 +76,7 @@ export default function ProductAyurvedCard({ product }) {
           {added ? (
             <FaHeart className="text-red-500 scale-110" />
           ) : (
-            <FaRegHeart className="text-gray-[#252729b8] group-hover/wish:text-[var(--primary)]" />
+            <FaRegHeart className="text-gray-600 group-hover/wish:text-[var(--primary)]" />
           )}
         </button>
 
@@ -109,7 +109,7 @@ export default function ProductAyurvedCard({ product }) {
           <div className="flex items-baseline gap-1.5 pt-1">
             <span className="text-lg sm:text-xl font-black text-text">₹{productPrice}</span>
             {productOldPrice && (
-              <span className="text-xs text-gray-[#252729b8] line-through font-medium">₹{productOldPrice}</span>
+              <span className="text-xs text-gray-600 line-through font-medium">₹{productOldPrice}</span>
             )}
           </div>
         </div>

@@ -45,7 +45,7 @@ const AboutSection = () => {
           </div>
 
           {/* Right: Content */}
-          <div className="w-full lg:w-1/2 space-y-10">
+          <div className="w-full lg:w-1/2 space-y-10 md:space-y-5">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
                 <span className="w-10 h-px bg-[var(--primary)]" />
@@ -61,7 +61,7 @@ const AboutSection = () => {
             </div>
 
             {/* Features Grid (2x2 on mobile & desktop) */}
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 pt-4">
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 pt-4 md:pt-2">
               {features.map((item, index) => (
                 <div key={index} className="space-y-2 sm:space-y-4">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[var(--background)] text-[var(--primary)] flex items-center justify-center shadow-sm">

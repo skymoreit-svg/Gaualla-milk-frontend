@@ -1,31 +1,9 @@
-
-
 "use client";
-import Link from "next/link";
-import React, { useState, useEffect, useRef } from "react";
-
-import { IoArrowBack } from "react-icons/io5";
-import { IoArrowForward } from "react-icons/io5";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
-
-import {
-  FaLinkedin,
-  FaTwitter,
-  FaGithub,
-  FaMapMarkerAlt,
-  FaStar,
-} from "react-icons/fa";
-
-import "swiper/css";
-import "swiper/css/navigation";
-// import SuccessStoryAbove from "./SuccessStoryAbove";
+import React from "react";
+import { FaStar } from "react-icons/fa";
+import Stack from "./Stack";
 
 export default function SuccessStory() {
-  const prevRef = useRef(null); // Ref for the previous button
-  const nextRef = useRef(null); // Ref for the next button
-
   const testimonials = [
     {
       heading: "Freshness you can taste in every sip!",
@@ -69,119 +47,97 @@ export default function SuccessStory() {
     },
   ];
 
-  const [showDec, setShowDec] = useState(110);
-  const [expan, setExpand] = useState(null);
-
-  const setExpnadHandler = (id) => {
-    setExpand((prev) => (prev == id ? null : id));
-  };
-
   return (
-    <div className="relative  mt-5 lg:mt-10 overflow-hidden  py-5 md:py-10 lg:py-16  bg-[url('/test-bg.webp')]  ">
-
+    <div className="relative mt-5 lg:mt-10 overflow-hidden py-12 md:py-20 lg:py-24 bg-[url('/test-bg.webp')]">
       <img
         src="/test-bg.webp"
-        alt="cleint-review "
-        className="absolute left-0 top-0"
+        alt="client-review background"
+        className="absolute left-0 top-0 w-full h-full object-cover opacity-10 pointer-events-none"
       />
 
-      <div className="relative z-10  bg-cover  bg-center space-y-10 lg:space-y-16 text-text  ">
-        <div className="px-5 md:px-16 xl:px-32 grid grid-cols-1 lg:grid-cols-3 gap-y-10 lg:gap-y-0 gap-x-5 justify-center items-center">
-          {/* Left Section */}
-          <div className="col-span-1 space-y-5">
-
-            <h3 className="text-xl mt-2 md:text-3xl xl:text-5xl font-bold">
-              {/* What people say  <br /> about us */}
-              What Our  Clients Say
+      <div className="relative z-10 container mx-auto px-6 md:px-12 xl:px-24">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+          
+          {/* Left Section - Clean heading & info */}
+          <div className="lg:col-span-2 space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-bold uppercase tracking-wider">
+              Testimonials
+            </div>
+            
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-black font-serif text-text leading-tight uppercase">
+              What Our <br />
+              <span className="text-[var(--primary)]">Clients Say</span>
             </h3>
-            <p className="text-sm md:text-base text-justify">
-              Real feedback from real users who have experienced the magic of traditional brass cooking in their modern kitchens, celebrating authentic flavors, healthier meals, and timeless craftsmanship.
+            
+            <div className="h-[2px] w-20 bg-[var(--primary)]"></div>
+            
+            <p className="text-sm md:text-base text-text/80 leading-relaxed font-medium">
+              We take pride in providing 100% pure, farm-fresh organic dairy products. Read through our clients' real experiences with our milk, paneer, curd, and ghee.
             </p>
-            <div className="relative space-x-2 flex justify-start">
-              <button
-                ref={prevRef}
-                className="w-10 h-10 md:w-12 md:h-12 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white flex items-center justify-center text-lg md:text-2xl bg-background group rounded-full transition-all duration-500 ease-in-out"
-              >
-                <IoArrowBack className="group-hover:-translate-x-1 transition-all duration-100 ease-in-out" />
-              </button>
-              <button
-                ref={nextRef}
-                className="w-10 h-10 md:w-12 md:h-12 text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white flex items-center justify-center text-lg md:text-2xl bg-background group rounded-full transition-all duration-500 ease-in-out"
-              >
-                <IoArrowForward className="group-hover:translate-x-1 transition-all duration-100 ease-in-out" />
-              </button>
+
+            <div className="pt-2 flex items-center gap-3 text-text/60 text-xs font-bold uppercase tracking-wider">
+              <span className="animate-pulse w-2.5 h-2.5 rounded-full bg-[var(--primary)]"></span>
+              Drag or click the cards to explore
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="col-span-2">
-            <Swiper
-              navigation={{
-                prevEl: prevRef.current,
-                nextEl: nextRef.current,
-              }}
-              onBeforeInit={(swiper) => {
-                swiper.params.navigation.prevEl = prevRef.current;
-                swiper.params.navigation.nextEl = nextRef.current;
-              }}
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              loop={true}
-              modules={[Navigation, Autoplay]}
-              className="mySwiper"
-              breakpoints={{
-                640: { slidesPerView: 1, spaceBetween: 15 },
-                768: { slidesPerView: 2, spaceBetween: 20 },
-                1024: { slidesPerView: 2, spaceBetween: 20 },
-                1280: { slidesPerView: 2, spaceBetween: 25 },
-              }}
-            >
-              {testimonials.map((member, index) => (
-                <SwiperSlide key={index} className="pb-10 md:pb-0">
-                  <div className="bg-background shadow-xl text-text h-max lg:h-[280px] border border-highlight rounded-xl p-6 transition-all  hover:border-highlight">
-                    <h5 className="font-bold text-xl md:text-2xl text-text">
-                      {member.heading}
-                    </h5>
+          {/* Right Section - Interactive Stack Card Slider */}
+          <div className="lg:col-span-3 flex items-center justify-center">
+            <div className="w-full max-w-[450px] h-[340px] md:h-[365px] relative px-4">
+              <Stack
+                randomRotation={true}
+                sensitivity={140}
+                sendToBackOnClick={true}
+                autoplay={true}
+                autoplayDelay={4000}
+                pauseOnHover={true}
+                cards={testimonials.map((member, index) => (
+                  <div 
+                    key={index} 
+                    className="w-full h-full bg-white shadow-xl text-text border border-[var(--primary)]/10 rounded-3xl p-6 md:p-8 flex flex-col justify-between select-none"
+                  >
+                    <div>
+                      {/* Star ratings */}
+                      <div className="flex items-center justify-center gap-x-1.5 text-amber-500 mb-4">
+                        {Array.from({ length: member.rating }).map((_, i) => (
+                          <FaStar key={i} size={16} />
+                        ))}
+                      </div>
+                      
+                      <h5 className="font-oswald uppercase tracking-wide font-black text-lg md:text-xl text-text mb-3 leading-tight text-center">
+                        "{member.heading}"
+                      </h5>
 
-                    <div className="flex items-center gap-x-2 text-highlight mb-2">
-                      <FaStar />
-                      <FaStar />
-                      <FaStar />
-                      <FaStar />
-                      <FaStar />
+                      <p className="text-text/80 text-sm md:text-base leading-relaxed italic text-center">
+                        "{member.desc}"
+                      </p>
                     </div>
 
-                    <p className="text-text text-sm mb-4">{member.desc}</p>
+                    <div>
+                      <hr className="border-[var(--primary)]/10 my-4" />
 
-                    <hr className="border-highlight mb-4" />
-
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex flex-col items-center justify-center text-center">
                         <img
                           src={member.img}
                           alt={member.name}
-                          className="h-10 w-10 rounded-full object-cover"
+                          className="h-12 w-12 rounded-full object-cover border border-[var(--primary)]/20 shadow-md mb-2"
                         />
                         <div>
-                          <h6 className="font-semibold text-text">
+                          <h6 className="font-black text-sm md:text-base text-text uppercase tracking-wide">
                             {member.name}
                           </h6>
-                          <p className="text-sm text-gray-700">
+                          <p className="text-xs text-text/60 font-semibold">
                             {member.position}
                           </p>
                         </div>
                       </div>
-                      <div className="text-gray-[#252729b8] text-sm">
-                        {/* Any additional content can go here */}
-                      </div>
                     </div>
                   </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+                ))}
+              />
+            </div>
           </div>
+
         </div>
       </div>
     </div>
