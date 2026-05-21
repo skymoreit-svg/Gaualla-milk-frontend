@@ -191,7 +191,10 @@ export default function OrderActionPage() {
                       {order.street}, {order.landmark && `${order.landmark}, `} {order.city}, {order.state} - {order.zip_code}
                     </p>
                     <a 
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${order.street} ${order.city}`)}`}
+                      href={order.latitude && order.longitude 
+                        ? `https://www.google.com/maps/dir/?api=1&destination=${order.latitude},${order.longitude}`
+                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${order.street} ${order.city}`)}`
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-3 inline-block text-emerald-600 font-bold text-xs uppercase tracking-widest border-b-2 border-emerald-600 pb-0.5"
