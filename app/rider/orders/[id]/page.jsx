@@ -62,6 +62,21 @@ export default function OrderActionPage() {
     }
   };
 
+  const handleOpenNavigation = () => {
+    if (!order) return;
+    
+    const destLat = order.latitude;
+    const destLng = order.longitude;
+    
+    if (destLat && destLng) {
+      const url = `https://www.google.com/maps?z=16&t=m&q=loc:${destLat}+${destLng}`;
+      window.open(url, "_blank");
+    } else {
+      const addressText = `${order.street} ${order.city}`;
+      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`, "_blank");
+    }
+  };
+
   if (loading) {
     return <div className="p-8 text-center text-gray-500 font-medium animate-pulse">Loading mission details...</div>;
   }
@@ -190,17 +205,12 @@ export default function OrderActionPage() {
                     <p className="text-gray-500 text-sm font-medium leading-relaxed">
                       {order.street}, {order.landmark && `${order.landmark}, `} {order.city}, {order.state} - {order.zip_code}
                     </p>
-                    <a 
-                      href={order.latitude && order.longitude 
-                        ? `https://www.google.com/maps/dir/?api=1&destination=${order.latitude},${order.longitude}`
-                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${order.street} ${order.city}`)}`
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-3 inline-block text-emerald-600 font-bold text-xs uppercase tracking-widest border-b-2 border-emerald-600 pb-0.5"
+                    <button 
+                      onClick={handleOpenNavigation}
+                      className="mt-3 inline-block text-left text-emerald-600 font-bold text-xs uppercase tracking-widest border-b-2 border-emerald-600 pb-0.5 cursor-pointer bg-transparent border-t-0 border-x-0 outline-none"
                     >
                       Open in Navigation
-                    </a>
+                    </button>
                  </div>
               </div>
            </div>

@@ -164,7 +164,7 @@ export default function RidersPage() {
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => { setEditingRider(rider); setShowForm(true); }}
-                        className="text-xs px-2 py-1 bg-primary text-primary rounded hover:bg-primary"
+                        className="text-xs px-2 py-1 bg-primary text-white rounded hover:bg-primary"
                       >
                         Edit
                       </button>

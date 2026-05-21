@@ -83,7 +83,7 @@ export default function AssignRiderModal({ orderId, onClose, onAssigned }) {
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{rider.name}</span>
                       {rider.active_orders > 0 && (
-                        <span className="bg-primary text-primary text-xs px-2 py-0.5 rounded-full font-medium">
+                        <span className="bg-primary text-white text-xs px-2 py-0.5 rounded-full font-medium">
                           {rider.active_orders} active
                         </span>
                       )}

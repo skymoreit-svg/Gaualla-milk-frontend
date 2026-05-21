@@ -76,9 +76,9 @@ export default function RiderDetailPage() {
 
   const assignmentStatusColor = {
     pending: "bg-yellow-100 text-highlight",
-    accepted: "bg-primary text-primary",
-    picked_up: "bg-primary text-primary",
-    in_transit: "bg-primary text-primary",
+    accepted: "bg-primary text-white",
+    picked_up: "bg-primary text-white",
+    in_transit: "bg-primary text-white",
     delivered: "bg-green-100 text-accent",
     failed: "bg-red-100 text-red-700",
     rejected: "bg-background00 text-text",

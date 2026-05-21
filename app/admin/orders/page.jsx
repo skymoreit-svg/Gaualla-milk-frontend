@@ -102,8 +102,8 @@ const OrdersPage = () => {
   const getStatusColor = (status) => {
     const s = (status || "").toLowerCase();
     if (s.includes("completed")) return "bg-green-100 text-accent";
-    if (s.includes("out") || s.includes("delivery")) return "bg-primary text-primary";
-    if (s.includes("processing")) return "bg-primary text-primary";
+    if (s.includes("out") || s.includes("delivery")) return "bg-primary text-white";
+    if (s.includes("processing")) return "bg-primary text-white";
     if (s.includes("pending")) return "bg-yellow-100 text-highlight";
     if (s.includes("cancelled")) return "bg-red-100 text-red-700";
     return "bg-background00 text-text";
@@ -245,9 +245,9 @@ const OrdersPage = () => {
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${
-                      order.type === 'alternative' ? 'bg-primary text-primary' :
+                      order.type === 'alternative' ? 'bg-primary text-white' :
                       order.type === 'daily' ? 'bg-green-100 text-accent' :
-                      'bg-primary text-primary'
+                      'bg-primary text-white'
                     }`}>
                       {order.type === 'onetime' ? 'One Time' : 
                        order.type === 'daily' ? '30 Days' :

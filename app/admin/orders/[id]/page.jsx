@@ -146,10 +146,10 @@ const OrderDetailPage = () => {
       return { bg: "bg-green-100", text: "text-accent", icon: CheckCircle };
     }
     if (statusLower.includes("delivery") || statusLower.includes("out")) {
-      return { bg: "bg-primary", text: "text-primary", icon: Truck };
+      return { bg: "bg-primary", text: "text-white", icon: Truck };
     }
     if (statusLower === "processing") {
-      return { bg: "bg-primary", text: "text-primary", icon: Clock };
+      return { bg: "bg-primary", text: "text-white", icon: Clock };
     }
     if (statusLower === "pending") {
       return { bg: "bg-yellow-100", text: "text-highlight", icon: Clock };
@@ -693,7 +693,7 @@ const OrderDetailPage = () => {
                   <p className="mt-1">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       order.delivery_status === "delivered" ? "bg-green-100 text-accent" :
-                      order.delivery_status === "in_transit" ? "bg-primary text-primary" :
+                      order.delivery_status === "in_transit" ? "bg-primary text-white" :
                       order.delivery_status === "unassigned" ? "bg-background00 text-text" :
                       "bg-yellow-100 text-highlight"
                     }`}>

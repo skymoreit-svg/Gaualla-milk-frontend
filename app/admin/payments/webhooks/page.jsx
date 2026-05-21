@@ -88,7 +88,7 @@ const WebhooksPage = () => {
     if (eventType?.includes("expired") || eventType?.includes("cancelled")) {
       return "bg-background00 text-text";
     }
-    return "bg-primary text-primary";
+    return "bg-primary text-white";
   };
 
   const getProcessedBadge = (processed) => {

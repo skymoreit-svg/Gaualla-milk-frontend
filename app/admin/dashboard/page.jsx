@@ -97,8 +97,8 @@ const DashboardPage = () => {
     const lowerStatus = (status || "").toLowerCase();
     if (lowerStatus.includes("completed")) return "bg-green-100 text-accent";
     if (lowerStatus.includes("pending")) return "bg-yellow-100 text-highlight";
-    if (lowerStatus.includes("out") || lowerStatus.includes("delivery")) return "bg-primary text-primary";
-    if (lowerStatus.includes("processing")) return "bg-primary text-primary";
+    if (lowerStatus.includes("out") || lowerStatus.includes("delivery")) return "bg-primary text-white";
+    if (lowerStatus.includes("processing")) return "bg-primary text-white";
     if (lowerStatus.includes("cancelled")) return "bg-red-100 text-red-700";
     return "bg-background00 text-text";
   };
