@@ -26,7 +26,7 @@ export default function WishList() {
       <div className=" p-5 md:px-12 xl:px-32 bg-background">
 
         {wishList.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center py-10 sm:py-10 md:py -12 lg:py-14bg-background rounded-xl shadow-sm">
+          <div className="flex flex-col items-center justify-center text-center py-10 sm:py-10 md:py-12 lg:py-14bg-background rounded-xl shadow-sm">
             <FaHeartBroken className="text-5xl text-red-400 mb-4 space-y-4 lg:space-y-6" />
             <p className="text-gray-700 text-lg">Your wishlist is empty!</p>
             <p className="text-sm text-gray-[#252729b8]">Start adding items you love.</p>

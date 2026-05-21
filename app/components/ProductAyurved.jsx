@@ -35,10 +35,10 @@ export default function ProductAyurved() {
         </div>
     );
 
-    if (error) return <div className="text-center py-10 sm:py-10 md:py -12 lg:py-14text-red-500 font-medium">Unable to load products. Please try again later.</div>;
+    if (error) return <div className="text-center py-10 sm:py-10 md:py-12 lg:py-14text-red-500 font-medium">Unable to load products. Please try again later.</div>;
 
     return (
-        <section className="bg-[var(--background)] py-10 sm:py-10 md:py -12 lg:py-14">
+        <section className="bg-[var(--background)] py-10 sm:py-10 md:py-12 lg:py-14">
             <div className="max-w-[1400px] mx-auto px-6">
                 <div className="flex flex-col items-center justify-center mb-12 gap-4 w-full overflow-hidden">
                     <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 w-full overflow-hidden py-2">
@@ -71,7 +71,7 @@ export default function ProductAyurved() {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-10 sm:py-10 md:py -12 lg:py-14bg-background rounded-3xl border border-dashed border-highlight text-gray-[#252729b8] font-medium">
+                    <div className="text-center py-10 sm:py-10 md:py-12 lg:py-14bg-background rounded-3xl border border-dashed border-highlight text-gray-[#252729b8] font-medium">
                         No products available at the moment.
                     </div>
                 )}

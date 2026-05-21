@@ -103,7 +103,7 @@ const Footer = () => {
 </a>
 
 
-      <section className="px-5 md:px-12 xl:px-32 pb-8">
+      <section className="sm:py-10 md:py-12">
         <div className="container mx-auto rounded-3xl border border-[var(--highlight)] bg-[var(--background)] px-6 py-8 shadow-[0_20px_60px_rgba(98,55,31,0.12)] lg:px-10 lg:py-10">
           <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-center">
             <div className="space-y-3">

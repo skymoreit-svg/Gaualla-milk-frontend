@@ -7,11 +7,8 @@ import { adminurl } from "../../../adminCompo/adminapis";
 import { FaPlus, FaPlusCircle, FaTag, FaSignature, FaLink, FaAlignLeft, FaDollarSign, FaRegMoneyBillAlt, FaBoxes, FaWeight, FaInfoCircle, FaExclamationCircle, FaImages, FaUpload } from "react-icons/fa";
 import { ArrowLeft } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
-import dynamic from "next/dynamic";
-
 import toast from "react-hot-toast";
-
-const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+import RichTextEditor from "../../../adminCompo/RichTextEditor";
 
 // Enable credentials for all admin requests
 axios.defaults.withCredentials = true;
@@ -36,19 +33,10 @@ const EditProductPage = () => {
     details: "",
     images: null, // file
     one_time: false,
+    description2: "",
   });
 
-  const joditConfig = useMemo(() => ({
-    readonly: false,
-    placeholder: "Start typing...",
-    height: 300,
-    toolbarSticky: false,
-    toolbarAdaptive: false,
-    buttons: "bold,italic,paragraph,image,video",
-    uploader: {
-      insertImageAsBase64URI: true
-    }
-  }), []);
+
 
   // Fetch categories
   const getCategories = async () => {
@@ -85,6 +73,7 @@ const EditProductPage = () => {
           details: product.details || "",
           images: null, // Will be handled separately for editing
           one_time: product.one_time === 1 || product.one_time === "1" || product.one_time === true,
+          description2: product.description2 || "",
         });
       } else {
         toast.error("Product not found");
@@ -275,11 +264,9 @@ if (!form.stock) {
                 <FaAlignLeft className="text-primary" /> Description
               </label>
               <div className="mt-1 border rounded-md overflow-hidden bg-background">
-                <JoditEditor
-                  key="description-editor-edit"
+                <RichTextEditor
                   value={form.description}
-                  onBlur={(newContent) => setForm((prev) => ({ ...prev, description: newContent }))}
-                  config={joditConfig}
+                  onChange={(newContent) => setForm((prev) => ({ ...prev, description: newContent }))}
                 />
               </div>
             </div>
@@ -357,11 +344,22 @@ if (!form.stock) {
                 <FaInfoCircle className="text-primary" /> Additional Details
               </label>
               <div className="mt-1 border rounded-md overflow-hidden bg-background">
-                <JoditEditor
-                  key="details-editor-edit"
+                <RichTextEditor
                   value={form.details}
-                  onBlur={(newContent) => setForm((prev) => ({ ...prev, details: newContent }))}
-                  config={joditConfig}
+                  onChange={(newContent) => setForm((prev) => ({ ...prev, details: newContent }))}
+                />
+              </div>
+            </div>
+
+            {/* Description 2 */}
+            <div className="border border-highlight rounded-lg p-4 bg-background">
+              <label className="text-sm font-medium flex items-center gap-2 mb-2">
+                <FaAlignLeft className="text-primary" /> Description 2
+              </label>
+              <div className="mt-1 border rounded-md overflow-hidden bg-background">
+                <RichTextEditor
+                  value={form.description2}
+                  onChange={(newContent) => setForm((prev) => ({ ...prev, description2: newContent }))}
                 />
               </div>
             </div>

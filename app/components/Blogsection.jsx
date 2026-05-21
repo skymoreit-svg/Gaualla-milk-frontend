@@ -43,7 +43,7 @@ export default function BlogCardsGrid() {
         );
     
     if (!blogs.length)
-        return <div className="py-10 sm:py-10 md:py -12 lg:py-14text-center text-lg text-gray-700">Our storytellers are busy at work. Check back soon!</div>;
+        return <div className="py-10 sm:py-10 md:py-12 lg:py-14text-center text-lg text-gray-700">Our storytellers are busy at work. Check back soon!</div>;
 
     const visibleBlogs = blogs.slice(0, visibleCount);
 
@@ -71,7 +71,7 @@ export default function BlogCardsGrid() {
     return (
         <section
             id="blog-section"
-            className="py-10 sm:py-10 md:py -12 lg:py-14px-5 md:px-16 xl:px-32 bg-gradient-to-b from-white to-[#f9f5f2]"
+            className="py-10 sm:py-10 md:py-12 lg:py-14px-5 md:px-16 xl:px-32 bg-gradient-to-b from-white to-[#f9f5f2]"
         >
             {/* HEADING */}
             <div className="text-center mb-16">

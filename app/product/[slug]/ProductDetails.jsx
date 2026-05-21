@@ -16,6 +16,7 @@ import { setCartItems, openCartDrawer } from "@/app/store/cartSlice";
 import { baseurl, imageurl } from "@/app/components/utlis/apis";
 
 import Description from "./Description ";
+import RichTextHtmlRenderer from "@/app/components/RichTextHtmlRenderer";
 import ProductAyurvedCard from "@/app/components/ProductAyurvedCard";
 import FAQSection from "@/app/components/Faq";
 import BenefitsTable from "@/app/components/Benefits";
@@ -208,7 +209,7 @@ const ProductDetails = ({ slug }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           
           {/* LEFT: CLEAN GALLERY */}
-          <div className="flex flex-col-reverse md:flex-row gap-6">
+          <div className="flex flex-col-reverse md:flex-row gap-6 lg:sticky lg:top-8 self-start">
             <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
               {productImages.map((img, i) => (
                 <button
@@ -238,7 +239,7 @@ const ProductDetails = ({ slug }) => {
           </div>
 
           {/* RIGHT: PROFESSIONAL INFO */}
-          <div className="space-y-8">
+          <div className="space-y-3">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <span className="text-[var(--primary)] text-xs font-bold uppercase tracking-wider">Premium A2 Collection</span>
@@ -257,13 +258,13 @@ const ProductDetails = ({ slug }) => {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-baseline gap-4">
-                <span className="text-4xl font-bold text-text">₹{productData?.price}</span>
+              <div className="flex items-baseline">
+                <span className="oswald text-4xl font-bold text-text">₹{productData?.price}</span>
                 {productData?.old_price && (
                   <span className="text-xl text-gray-[#252729b8] line-through">₹{productData?.old_price}</span>
                 )}
                 {productData?.unit_quantity && (
-                  <span className="text-sm font-bold text-[var(--primary)] bg-[var(--background)] px-3 py-1 rounded">
+                  <span className="oswald text-sm font-bold text-[var(--primary)] bg-[var(--background)] px-3 py-1 rounded">
                     {productData.unit_quantity}
                   </span>
                 )}
@@ -273,9 +274,9 @@ const ProductDetails = ({ slug }) => {
 
             <div className="p-6 bg-background rounded-2xl border border-highlight space-y-4">
               <h4 className="text-sm font-bold text-text uppercase tracking-widest">Key Highlights</h4>
-              <div 
+              <RichTextHtmlRenderer
                 className="text-sm text-gray-700 leading-relaxed font-medium"
-                dangerouslySetInnerHTML={{ __html: productData?.description2 || "Pure, preservative-free, and made from the goodness of A2 milk." }}
+                html={productData?.description2 || "Pure, preservative-free, and made from the goodness of A2 milk."}
               />
             </div>
 
@@ -318,24 +319,19 @@ const ProductDetails = ({ slug }) => {
 
       {/* SECTION 2: CLEAN STORYTELLING */}
       <section className="bg-background py-24 border-y border-highlight">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <span className="text-[var(--primary)] text-xs font-bold uppercase tracking-widest">Our Story</span>
-                <h2 className="text-4xl font-bold text-text leading-tight">The Gaualla Purity Standard</h2>
-              </div>
-              <div 
-                className="prose prose-lg text-text leading-relaxed font-medium"
-                dangerouslySetInnerHTML={{ __html: productData?.description }}
-              />
-              <blockquote className="border-l-4 border-[var(--primary)] pl-6 py-2 text-text italic font-medium">
-                "We believe that the best dairy products come from happy cows and traditional, ethical farming practices."
-              </blockquote>
+        <div className="max-w-[900px] mx-auto px-6">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <span className="text-[var(--primary)] text-xs font-bold uppercase tracking-widest">Our Story</span>
+              <h2 className="text-4xl font-bold text-text leading-tight">The Gaualla Purity Standard</h2>
             </div>
-            <div className="rounded-3xl overflow-hidden shadow-xl">
-              <img src={`${imageurl}/${productImages[0]}`} className="w-full h-full object-cover aspect-[4/3]" alt="Farm fresh" />
-            </div>
+            <RichTextHtmlRenderer
+              className="prose prose-lg text-text leading-relaxed font-medium"
+              html={productData?.description}
+            />
+            <blockquote className="border-l-4 border-[var(--primary)] pl-6 py-2 text-text italic font-medium">
+              "We believe that the best dairy products come from happy cows and traditional, ethical farming practices."
+            </blockquote>
           </div>
         </div>
       </section>

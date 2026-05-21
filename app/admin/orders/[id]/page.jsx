@@ -119,6 +119,24 @@ const OrderDetailPage = () => {
     }
   };
 
+  const handleTriggerScheduler = async () => {
+    try {
+      setSaving(true);
+      const response = await axios.post(`${adminurl}/trigger-scheduler`, {}, { withCredentials: true });
+      if (response.data.success) {
+        toast.success("Daily scheduler triggered successfully!");
+        fetchOrder();
+      } else {
+        toast.error("Failed to trigger scheduler");
+      }
+    } catch (err) {
+      console.error("Error triggering scheduler:", err);
+      toast.error("Failed to trigger scheduler: " + (err.response?.data?.error || err.message));
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -406,6 +424,114 @@ const OrderDetailPage = () => {
               </div>
             )}
 
+            {/* Subscription Delivery Schedule & Progress */}
+            {order.daily_deliveries_summary && order.daily_deliveries_summary.length > 0 && (
+              <div className="bg-background rounded-lg shadow border border-highlight p-6">
+                <h2 className="text-xl font-bold text-text mb-4 flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  Subscription Delivery Schedule & Progress
+                </h2>
+                
+                {/* Overall Progress Tracker */}
+                {(() => {
+                  const total = order.daily_deliveries_summary.length;
+                  const deliveredCount = order.daily_deliveries_summary.filter(d => d.status === "delivered").length;
+                  const failedCount = order.daily_deliveries_summary.filter(d => d.status === "failed").length;
+                  const processingCount = order.daily_deliveries_summary.filter(d => d.status === "out_for_delivery" || d.status === "processing").length;
+                  const pctDelivered = Math.round((deliveredCount / total) * 100) || 0;
+                  const pctFailed = Math.round((failedCount / total) * 100) || 0;
+                  const pctProcessing = Math.round((processingCount / total) * 100) || 0;
+
+                  return (
+                    <div className="mb-6 p-4 rounded-lg bg-background05 border border-highlight/40">
+                      <div className="flex justify-between items-center text-sm text-text mb-2 font-semibold">
+                        <span>Overall Progress ({deliveredCount}/{total} Delivered)</span>
+                        <span className="font-bold text-accent">{pctDelivered}% Completed</span>
+                      </div>
+                      <div className="w-full bg-background00 rounded-full h-3.5 flex overflow-hidden border border-highlight">
+                        <div style={{ width: `${pctDelivered}%` }} className="bg-accent h-full transition-all duration-500" title={`Delivered: ${pctDelivered}%`}></div>
+                        <div style={{ width: `${pctProcessing}%` }} className="bg-primary h-full transition-all duration-500" title={`Out for Delivery: ${pctProcessing}%`}></div>
+                        <div style={{ width: `${pctFailed}%` }} className="bg-red-500 h-full transition-all duration-500" title={`Failed: ${pctFailed}%`}></div>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-xs font-medium">
+                        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded bg-green-50 border border-green-150 text-green-700">
+                          <span className="w-2.5 h-2.5 rounded-full bg-accent"></span>
+                          <span>Delivered: {deliveredCount}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded bg-blue-50 border border-blue-150 text-blue-700">
+                          <span className="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                          <span>Active: {processingCount}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded bg-red-50 border border-red-150 text-red-700">
+                          <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                          <span>Failed: {failedCount}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-2.5 py-1.5 rounded bg-gray-50 border border-gray-150 text-gray-700">
+                          <span className="w-2.5 h-2.5 rounded-full bg-highlight"></span>
+                          <span>Pending: {total - deliveredCount - failedCount - processingCount}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Grid layout of dates */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {order.daily_deliveries_summary.map((item, idx) => {
+                    const statusConfig = {
+                      delivered: { bg: "bg-green-50/50 border-green-200 text-green-700", icon: CheckCircle, label: "Delivered" },
+                      failed: { bg: "bg-red-50/50 border-red-200 text-red-700", icon: XCircle, label: "Failed / Skipped" },
+                      out_for_delivery: { bg: "bg-blue-50/50 border-blue-200 text-blue-700", icon: Truck, label: "Out for Delivery" },
+                      on_hold: { bg: "bg-orange-50/50 border-orange-200 text-orange-700", icon: Clock, label: "On Hold (Low Balance)" },
+                      pending: { bg: "bg-gray-50/50 border-gray-200 text-gray-500", icon: Clock, label: "Pending" }
+                    }[item.status] || { bg: "bg-gray-50/50 border-gray-200 text-gray-500", icon: Clock, label: "Pending" };
+
+                    const StatusIcon = statusConfig.icon;
+
+                    return (
+                      <div key={idx} className={`p-4 border rounded-lg flex flex-col justify-between transition-all hover:shadow-sm ${statusConfig.bg}`}>
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="font-semibold text-sm text-text">
+                            {new Date(item.date).toLocaleDateString('en-IN', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                              weekday: 'short'
+                            })}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider">
+                            <StatusIcon className="w-3.5 h-3.5" />
+                            {statusConfig.label}
+                          </span>
+                        </div>
+                        {item.assignment ? (
+                          <div className="mt-2 text-xs border-t border-highlight pt-2 flex flex-col gap-1 text-text">
+                            <div>
+                              <span className="font-semibold text-gray-700">Rider:</span> {item.assignment.rider_name || "N/A"}
+                            </div>
+                            {item.assignment.rider_phone && (
+                              <div>
+                                <span className="font-semibold text-gray-700">Phone:</span> {item.assignment.rider_phone}
+                              </div>
+                            )}
+                            {item.assignment.delivered_at && (
+                              <div>
+                                <span className="font-semibold text-gray-700">Time:</span> {new Date(item.assignment.delivered_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="mt-2 text-xs border-t border-highlight pt-2 text-gray-700 italic">
+                            No rider assigned
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Delivery Address */}
             {order.address && (
               <div className="bg-background rounded-lg shadow border border-highlight p-6 relative">
@@ -614,6 +740,19 @@ const OrderDetailPage = () => {
                         View Rider Profile
                       </Link>
                     )}
+                  </div>
+                )}
+                {order.type !== 'onetime' && (
+                  <div className="mt-4 border-t border-highlight pt-4">
+                    <span className="font-semibold text-text text-xs uppercase tracking-wider block mb-2">Dev / Testing Tool</span>
+                    <button
+                      onClick={handleTriggerScheduler}
+                      disabled={saving}
+                      className="w-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 py-2 rounded-lg transition text-sm font-semibold flex items-center justify-center gap-2"
+                    >
+                      <Clock className="w-4 h-4 animate-pulse" />
+                      Trigger Daily Scheduler
+                    </button>
                   </div>
                 )}
               </div>

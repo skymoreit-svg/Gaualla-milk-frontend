@@ -7,8 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { API_ENDPOINTS } from "@/app/config/constants";
 import toast from "react-hot-toast";
 
-// Client-side only editor
-const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+import RichTextEditor from "../../../adminCompo/RichTextEditor";
 
 export default function AdminBlogManagePage({ params }) {
   const router = useRouter();
@@ -195,18 +194,9 @@ export default function AdminBlogManagePage({ params }) {
         </div>
 
         <div className="mt-4 border rounded-md overflow-hidden">
-          <JoditEditor
-            key={editorKey}
-            ref={editor}
+          <RichTextEditor
             value={content}
-            onBlur={(newContent) => setContent(newContent)}
-            config={{
-              readonly: false,
-              height: 440,
-              toolbarSticky: true,
-              toolbarAdaptive: false,
-              buttons: "bold,italic,paragraph,image,video",
-            }}
+            onChange={(newContent) => setContent(newContent)}
           />
         </div>
 

@@ -38,13 +38,13 @@ export default function CategoriesGrid() {
   }, []);
 
   if (loading) return (
-    <section className="py-10 sm:py-10 md:py -12 lg:py-14 bg-[var(--background)]">
+    <section className="py-10 sm:py-10 md:py-12 lg:py-14 bg-[var(--background)]">
       <LogoLoader text="Discovering Purity..." />
     </section>
   );
 
   return (
-    <section className="py-10 sm:py-10 md:py -12 lg:py-14 bg-[var(--background)] overflow-hidden">
+    <section className="py-10 sm:py-10 md:py-12 lg:py-14 bg-[var(--background)] overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mb-8 w-full overflow-hidden py-2">

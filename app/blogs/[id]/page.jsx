@@ -23,7 +23,7 @@
 
 //   if (!blog)
 //     return (
-//       <div className="py-10 sm:py-10 md:py -12 lg:py-14px-6 text-center">
+//       <div className="py-10 sm:py-10 md:py-12 lg:py-14px-6 text-center">
 //         <p className="text-lg">Blog not found.</p>
 //         <div className="mt-6">
 //           <Link href="/blogs" className="px-4 py-2 bg-background00 rounded-md">
@@ -79,6 +79,7 @@ import React from "react";
 import Link from "next/link";
 import { FaRegCalendarAlt, FaRegClock, FaArrowLeft, FaShareAlt, FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import "./premium-blog.css";
+import RichTextHtmlRenderer from "@/app/components/RichTextHtmlRenderer";
 
 function formatDate(dateStr) {
   if (!dateStr) return "March 23, 2026";
@@ -177,11 +178,9 @@ export default async function Page({ params }) {
           </header>
 
 
-          <section
+          <RichTextHtmlRenderer
             className="blog-body"
-            dangerouslySetInnerHTML={{
-              __html: blog.full_description || blog.content || "",
-            }}
+            html={blog.full_description || blog.content || ""}
           />
 
           <footer className="premium-footer mt-12 border-t border-highlight">

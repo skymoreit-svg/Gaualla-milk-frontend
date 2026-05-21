@@ -4,16 +4,13 @@ import axios from "axios";
 import slugify from "slugify";
 import Link from "next/link";
 import { adminurl } from "../../adminCompo/adminapis";
-import dynamic from "next/dynamic";
-
 // Enable credentials for all admin requests
 axios.defaults.withCredentials = true;
 import { FaPlus, FaPlusCircle,FaTag,FaSignature,FaLink,FaAlignLeft,FaDollarSign,FaRegMoneyBillAlt,FaBoxes,FaWeight,FaInfoCircle,FaExclamationCircle ,FaImages,FaUpload} from "react-icons/fa";
 import { ArrowLeft } from "lucide-react";
 
 import toast from "react-hot-toast";
-
-const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+import RichTextEditor from "../../adminCompo/RichTextEditor";
 
 
 
@@ -31,16 +28,10 @@ const ProductCreatePage = () => {
     details: "",
     images: null, // file
     one_time: false,
+    description2: "",
   });
 
-  const joditConfig = useMemo(() => ({
-    readonly: false,
-    toolbarAdaptive: false,
-    buttons: "bold,italic,paragraph,image,video",
-    uploader: {
-      insertImageAsBase64URI: true
-    }
-  }), []);
+
 
   // fetch categories
   const getCategories = async () => {
@@ -132,6 +123,7 @@ if (!form.stock) {
     details: "",
     images: null,
     one_time: false,
+    description2: "",
   });
 } else {
   toast.error(`❌ Error: ${res.data.message || "Product creation failed"}`);
@@ -219,11 +211,9 @@ if (!form.stock) {
           <FaAlignLeft className="text-primary" /> Description
         </label>
         <div className="mt-1 border border-highlight rounded-lg overflow-hidden bg-background">
-          <JoditEditor
-            key="description-editor"
+          <RichTextEditor
             value={form.description}
-            onBlur={(newContent) => setForm((prev) => ({ ...prev, description: newContent }))}
-            config={joditConfig}
+            onChange={(newContent) => setForm((prev) => ({ ...prev, description: newContent }))}
           />
         </div>
       </div>
@@ -304,11 +294,22 @@ if (!form.stock) {
           <FaInfoCircle className="text-primary" /> Details
         </label>
         <div className="mt-1 border border-highlight rounded-lg overflow-hidden bg-background">
-          <JoditEditor
-            key="details-editor"
+          <RichTextEditor
             value={form.details}
-            onBlur={(newContent) => setForm((prev) => ({ ...prev, details: newContent }))}
-            config={joditConfig}
+            onChange={(newContent) => setForm((prev) => ({ ...prev, details: newContent }))}
+          />
+        </div>
+      </div>
+
+      {/* Description 2 */}
+      <div>
+        <label className="block text-sm font-medium text-text flex items-center gap-2 mb-1">
+          <FaAlignLeft className="text-primary" /> Description 2
+        </label>
+        <div className="mt-1 border border-highlight rounded-lg overflow-hidden bg-background">
+          <RichTextEditor
+            value={form.description2}
+            onChange={(newContent) => setForm((prev) => ({ ...prev, description2: newContent }))}
           />
         </div>
       </div>

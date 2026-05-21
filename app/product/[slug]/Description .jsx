@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Info, Truck, Star, Edit3, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import RichTextHtmlRenderer from "@/app/components/RichTextHtmlRenderer";
 
 const Description = ({ data }) => {
   const [activeTab, setActiveTab] = useState("description");
@@ -47,9 +48,9 @@ const Description = ({ data }) => {
           >
             {activeTab === "description" && (
               <div className="max-w-4xl mx-auto">
-                <div 
+                <RichTextHtmlRenderer
                   className="prose prose-lg text-text leading-relaxed space-y-6"
-                  dangerouslySetInnerHTML={{ __html: data }}
+                  html={data}
                 />
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="p-6 bg-[var(--primary)]/5 rounded-2xl border border-[var(--primary)]/10">
