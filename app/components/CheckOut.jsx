@@ -12,7 +12,7 @@ import {
   FaExclamationTriangle,
   FaSpinner,
   FaMinus,
-
+  FaWallet,
 } from 'react-icons/fa';
 
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
@@ -33,6 +33,7 @@ export default function CheckOut() {
   const router = useRouter();
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [isSettingDefault, setIsSettingDefault] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   const [allAddress, setAllAddress] = useState();
@@ -49,6 +50,9 @@ export default function CheckOut() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
   const [currentPickerMonth, setCurrentPickerMonth] = useState(new Date());
+
+  const [wallet, setWallet] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("razorpay"); // 'razorpay' or 'wallet'
 
 
   const fetchCartItemById = async (id) => {
@@ -121,12 +125,27 @@ export default function CheckOut() {
 
   const { info, isLoading: userLoading } = useSelector((state) => state.user);
 
+  const fetchWallet = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/wallet/info`);
+      if (response.data.success) {
+        setWallet(response.data.wallet);
+      }
+    } catch (err) {
+      console.error("Error fetching wallet:", err);
+    }
+  };
+
   useEffect(() => {
     // Check if user is logged in
     const token = localStorage.getItem("accessToken");
     if (!userLoading && !info?.success && !token) {
       router.push("/login");
       return;
+    }
+
+    if (!userLoading && (info?.success || token)) {
+      fetchWallet();
     }
 
     // client-only
@@ -178,7 +197,10 @@ export default function CheckOut() {
   // Calendar Helper Functions
   const handleDateSelect = (date) => {
     if (!date) return;
-    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
+    const tomorrow = new Date();
+    tomorrow.setHours(0, 0, 0, 0);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    if (date < tomorrow) return;
 
     setSelectedDates((prev) => {
       const exists = prev.some((d) => d.getTime() === date.getTime());
@@ -261,6 +283,59 @@ export default function CheckOut() {
   const handlePlaceOrder = async () => {
     if (!defaultAddress) {
       setError("Please select a delivery address");
+      return;
+    }
+
+    if (paymentMethod === "wallet") {
+      if (!wallet || wallet.total_balance < totalToPay) {
+        setError("Insufficient wallet balance. Please select another method or recharge.");
+        return;
+      }
+
+      try {
+        setSaving(true);
+        setError("");
+
+        const payload = {
+          address_id: defaultAddress,
+          total_amount: parseFloat(totalToPay).toFixed(2),
+          type: selectedFrequency,
+          selectedDates: selectedFrequency === 'alternative' ? selectedDates : [],
+          cart_items: (Array.isArray(orderItems) ? orderItems : []).map((item) => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.cart_price,
+          })),
+        };
+
+        const { data } = await axios.post(`${baseurl}/order/pay-wallet`, payload, {
+          withCredentials: true,
+        });
+
+        if (data.success) {
+          const orderId = data.order_id || data.order?.id || null;
+          setSuccessOrderId(orderId);
+          setOrderSuccessOpen(true);
+          setOrderItems([]); // Clear items
+
+          // Clear cart
+          try {
+            await axios.delete(`${baseurl}/cart/clearall`, { withCredentials: true });
+          } catch (clearError) {
+            console.error("Error clearing cart:", clearError);
+          }
+
+          localStorage.removeItem("buyitem");
+          localStorage.removeItem("buyitems");
+        } else {
+          setError(data.message || "Failed to process wallet payment");
+        }
+      } catch (error) {
+        console.error("Wallet order payment error:", error);
+        setError(error.response?.data?.message || "Failed to place order using Wallet");
+      } finally {
+        setSaving(false);
+      }
       return;
     }
 
@@ -707,6 +782,66 @@ export default function CheckOut() {
                         </div>
                       </div>
                     )}
+                    {/* Payment Method Selector */}
+                    <div className="mb-6 border-t pt-4">
+                      <p className="text-sm font-semibold text-text mb-3">Choose Payment Method:</p>
+                      <div className="space-y-2">
+                        {/* Razorpay Option */}
+                        <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${paymentMethod === 'razorpay' ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-highlight hover:bg-background00'}`}>
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="razorpay"
+                            checked={paymentMethod === 'razorpay'}
+                            onChange={() => setPaymentMethod('razorpay')}
+                            className="text-[var(--primary)] focus:ring-[var(--primary)]"
+                          />
+                          <div className="flex-1">
+                            <p className="text-sm font-bold text-text">Debit/Credit Card, UPI, Netbanking</p>
+                            <p className="text-xs text-gray-500">Pay securely via Razorpay</p>
+                          </div>
+                        </label>
+
+                        {/* Wallet Option */}
+                        <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${paymentMethod === 'wallet' ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-highlight hover:bg-background00'}`}>
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="wallet"
+                            checked={paymentMethod === 'wallet'}
+                            onChange={() => setPaymentMethod('wallet')}
+                            className="text-[var(--primary)] focus:ring-[var(--primary)]"
+                          />
+                          <div className="flex-1">
+                            <div className="flex justify-between items-center">
+                              <p className="text-sm font-bold text-text">Gaualla Wallet</p>
+                              {wallet && (
+                                <span className={`text-xs font-bold px-2 py-0.5 rounded ${wallet.total_balance >= totalToPay ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                  Bal: ₹{wallet.total_balance.toFixed(2)}
+                                </span>
+                              )}
+                            </div>
+                            {wallet ? (
+                              <p className="text-xs text-gray-500">
+                                Main: ₹{wallet.main_balance.toFixed(2)} | Cashback: ₹{wallet.cashback_balance.toFixed(2)}
+                              </p>
+                            ) : (
+                              <p className="text-xs text-gray-500">Loading wallet balance...</p>
+                            )}
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {paymentMethod === 'wallet' && wallet && wallet.total_balance < totalToPay && (
+                      <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-lg text-xs font-medium flex flex-col gap-1">
+                        <span>⚠️ Insufficient Wallet Balance to place this order (₹{totalToPay.toFixed(2)}).</span>
+                        <Link href="/user/profile" className="text-[var(--primary)] hover:underline font-bold mt-1">
+                          Go to Profile & Recharge Wallet →
+                        </Link>
+                      </div>
+                    )}
+
                     <div className="flex justify-between mb-6">
                       <span className="text-lg font-semibold text-text">Total</span>
                       <span className="text-xl font-bold text-text">
@@ -716,12 +851,17 @@ export default function CheckOut() {
 
                     <button
                       onClick={handlePlaceOrder}
-                      disabled={!defaultAddress || (selectedFrequency === 'alternative' && selectedDates.length === 0)}
+                      disabled={
+                        !defaultAddress || 
+                        (selectedFrequency === 'alternative' && selectedDates.length === 0) ||
+                        (paymentMethod === 'wallet' && (!wallet || wallet.total_balance < totalToPay))
+                      }
                       className="w-full bg-[var(--primary)] hover:bg-black disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center"
                     >
                       {!defaultAddress ? 'Select Address First' :
                         (selectedFrequency === 'alternative' && selectedDates.length === 0) ? 'Select Dates on Calendar' :
-                        (isSettingDefault ? <FaSpinner className="animate-spin mr-2" /> : 'Place Order')}
+                        (paymentMethod === 'wallet' && (!wallet || wallet.total_balance < totalToPay)) ? 'Insufficient Wallet Balance' :
+                        (saving ? <FaSpinner className="animate-spin mr-2" /> : 'Place Order')}
                     </button>
                   </>
                 ) : (
@@ -774,23 +914,29 @@ export default function CheckOut() {
                   {day}
                 </div>
               ))}
-              {generateCalendarDays().map((date, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => date && handleDateSelect(date)}
-                  disabled={!date}
-                  className={`p-2 rounded text-xs font-medium transition-colors ${!date
-                    ? 'text-gray-600 cursor-default'
-                    : isDateSelected(date)
-                      ? 'bg-[var(--primary)] text-white'
-                      : date < new Date(new Date().setHours(0,0,0,0))
-                        ? 'text-gray-[#252729b8] cursor-not-allowed opacity-50'
-                        : 'bg-background00 text-text hover:bg-[var(--primary)]/10'
-                    }`}
-                >
-                  {date ? date.getDate() : ''}
-                </button>
-              ))}
+              {generateCalendarDays().map((date, idx) => {
+                const tomorrow = new Date();
+                tomorrow.setHours(0, 0, 0, 0);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const isPastOrToday = date && date < tomorrow;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => date && handleDateSelect(date)}
+                    disabled={!date || isPastOrToday}
+                    className={`p-2 rounded text-xs font-medium transition-colors ${!date
+                      ? 'text-gray-600 cursor-default'
+                      : isDateSelected(date)
+                        ? 'bg-[var(--primary)] text-white'
+                        : isPastOrToday
+                          ? 'text-gray-[#252729b8] cursor-not-allowed opacity-50'
+                          : 'bg-background00 text-text hover:bg-[var(--primary)]/10'
+                      }`}
+                  >
+                    {date ? date.getDate() : ''}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Selected Dates Display */}

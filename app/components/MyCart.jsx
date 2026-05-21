@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { FaMinus, FaPlus } from "react-icons/fa6";
-import { FaMapMarkerAlt, FaHome, FaBuilding, FaExclamationTriangle, FaSpinner } from "react-icons/fa";
+import { FaMapMarkerAlt, FaHome, FaBuilding, FaExclamationTriangle, FaSpinner, FaWallet } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineStar, MdOutlineStarBorder } from "react-icons/md";
 import Link from "next/link";
@@ -40,6 +40,9 @@ export default function MyCart({ cart, setCart }) {
   const [orderSuccessOpen, setOrderSuccessOpen] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState(null);
   const { info, isLoading: userLoading } = useSelector((state) => state.user);
+
+  const [wallet, setWallet] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("razorpay"); // 'razorpay' or 'wallet'
 
 
 
@@ -172,6 +175,17 @@ export default function MyCart({ cart, setCart }) {
     }
   }, []);
 
+  const fetchWallet = async () => {
+    try {
+      const response = await axios.get(`${baseurl}/wallet/info`);
+      if (response.data.success) {
+        setWallet(response.data.wallet);
+      }
+    } catch (err) {
+      console.error("Error fetching wallet info:", err);
+    }
+  };
+
   useEffect(() => {
     if (cart) {
       // Check if user is logged in
@@ -186,6 +200,7 @@ export default function MyCart({ cart, setCart }) {
       setError('');
       fetchCart();
       fetchaddress();
+      fetchWallet();
     }
   }, [cart, fetchCart, fetchaddress, info, userLoading, router]);
 
@@ -271,6 +286,60 @@ export default function MyCart({ cart, setCart }) {
 
     if (!hasItems) {
       setError("Your cart is empty");
+      return;
+    }
+
+    if (paymentMethod === "wallet") {
+      if (!wallet || wallet.total_balance < grandTotal) {
+        setError("Insufficient wallet balance. Please select another method or recharge.");
+        return;
+      }
+
+      try {
+        setIsProcessingPayment(true);
+        setError("");
+
+        const payload = {
+          address_id: defaultAddress,
+          total_amount: parseFloat(grandTotal).toFixed(2),
+          type: selectedFrequency,
+          selectedDates: selectedFrequency === "alternative"
+            ? selectedDates.map((d) => d.toISOString())
+            : [],
+          cart_items: (Array.isArray(cartData) ? cartData : []).map((item) => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.cart_price,
+          })),
+        };
+
+        const { data } = await axios.post(`${baseurl}/order/pay-wallet`, payload, {
+          withCredentials: true,
+        });
+
+        if (data.success) {
+          const orderId = data.order_id || data.order?.id || null;
+          setSuccessOrderId(orderId);
+          setOrderSuccessOpen(true);
+          setCartData([]); // Clear local items
+
+          // Clear cart
+          try {
+            await axios.delete(`${baseurl}/cart/clearall`, { withCredentials: true });
+          } catch (clearError) {
+            console.error("Error clearing cart:", clearError);
+          }
+
+          fetchCart();
+        } else {
+          setError(data.message || "Failed to process wallet payment");
+        }
+      } catch (error) {
+        console.error("Wallet order payment error:", error);
+        setError(error.response?.data?.message || "Failed to place order using Wallet");
+      } finally {
+        setIsProcessingPayment(false);
+      }
       return;
     }
 
@@ -539,8 +608,10 @@ export default function MyCart({ cart, setCart }) {
   // Handle date selection for alternative days (toggle individual dates)
   const handleDateSelect = (date) => {
     if (!date) return;
-    // keep existing behaviour: prevent selecting past dates
-    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return;
+    const tomorrow = new Date();
+    tomorrow.setHours(0, 0, 0, 0);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    if (date < tomorrow) return;
 
     setSelectedDates((prev) => {
       const exists = prev.some((d) => d.getTime() === date.getTime());
@@ -951,23 +1022,29 @@ export default function MyCart({ cart, setCart }) {
                             {day}
                           </div>
                         ))}
-                        {generateCalendarDays().map((date, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => date && handleDateSelect(date)}
-                            disabled={!date}
-                            className={`p-2 rounded text-sm font-medium transition-colors ${!date
-                              ? 'text-gray-600 cursor-default'
-                              : isDateSelected(date)
-                                ? 'bg-[var(--primary)] text-white'
-                                : date < new Date()
-                                  ? 'text-gray-[#252729b8] cursor-not-allowed'
-                                  : 'bg-background00 text-text hover:bg-primary'
-                              }`}
-                          >
-                            {date ? date.getDate() : ''}
-                          </button>
-                        ))}
+                        {generateCalendarDays().map((date, idx) => {
+                          const tomorrow = new Date();
+                          tomorrow.setHours(0, 0, 0, 0);
+                          tomorrow.setDate(tomorrow.getDate() + 1);
+                          const isPastOrToday = date && date < tomorrow;
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => date && handleDateSelect(date)}
+                              disabled={!date || isPastOrToday}
+                              className={`p-2 rounded text-sm font-medium transition-colors ${!date
+                                ? 'text-gray-600 cursor-default'
+                                : isDateSelected(date)
+                                  ? 'bg-[var(--primary)] text-white'
+                                  : isPastOrToday
+                                    ? 'text-gray-[#252729b8] cursor-not-allowed opacity-50'
+                                    : 'bg-background00 text-text hover:bg-primary'
+                                }`}
+                            >
+                              {date ? date.getDate() : ''}
+                            </button>
+                          );
+                        })}
                       </div>
 
                       {/* Selected Dates Display */}
@@ -1111,6 +1188,72 @@ export default function MyCart({ cart, setCart }) {
                   </div>
                 )}
 
+                {/* Payment Method Selector */}
+                <div className="mb-6 border-t pt-4">
+                  <p className="text-sm font-semibold text-text mb-3">Choose Payment Method:</p>
+                  <div className="space-y-2">
+                    {/* Razorpay Option */}
+                    <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${paymentMethod === 'razorpay' ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-highlight hover:bg-background00'}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="razorpay"
+                        checked={paymentMethod === 'razorpay'}
+                        onChange={() => setPaymentMethod('razorpay')}
+                        className="text-[var(--primary)] focus:ring-[var(--primary)]"
+                      />
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-text">Debit/Credit Card, UPI, Netbanking</p>
+                        <p className="text-xs text-gray-500">Pay securely via Razorpay</p>
+                      </div>
+                    </label>
+
+                    {/* Wallet Option */}
+                    <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${paymentMethod === 'wallet' ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-highlight hover:bg-background00'}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="wallet"
+                        checked={paymentMethod === 'wallet'}
+                        onChange={() => setPaymentMethod('wallet')}
+                        className="text-[var(--primary)] focus:ring-[var(--primary)]"
+                      />
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center">
+                          <p className="text-sm font-bold text-text">Gaualla Wallet</p>
+                          {wallet && (
+                            <span className={`text-xs font-bold px-2 py-0.5 rounded ${wallet.total_balance >= grandTotal ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              Bal: ₹{wallet.total_balance.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                        {wallet ? (
+                          <p className="text-xs text-gray-500">
+                            Main: ₹{wallet.main_balance.toFixed(2)} | Cashback: ₹{wallet.cashback_balance.toFixed(2)}
+                          </p>
+                        ) : (
+                          <p className="text-xs text-gray-500">Loading wallet balance...</p>
+                        )}
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                {paymentMethod === 'wallet' && wallet && wallet.total_balance < grandTotal && (
+                  <div className="mb-4 bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-lg text-xs font-medium flex flex-col gap-1">
+                    <span>⚠️ Insufficient Wallet Balance to place this order (₹{grandTotal.toFixed(2)}).</span>
+                    <button
+                      onClick={() => {
+                        setCart(false);
+                        router.push("/user/profile");
+                      }}
+                      className="text-[var(--primary)] hover:underline font-bold mt-1 text-left"
+                    >
+                      Go to Profile & Recharge Wallet →
+                    </button>
+                  </div>
+                )}
+
                 <div className="flex justify-between mb-6">
                   <span className="text-lg font-semibold text-text">Total</span>
                   <span className="text-xl font-bold text-text">
@@ -1120,7 +1263,12 @@ export default function MyCart({ cart, setCart }) {
 
                  <button
                   onClick={handlePlaceOrder}
-                  disabled={!defaultAddress || isProcessingPayment || !hasItems}
+                  disabled={
+                    !defaultAddress || 
+                    isProcessingPayment || 
+                    !hasItems ||
+                    (paymentMethod === 'wallet' && (!wallet || wallet.total_balance < grandTotal))
+                  }
                   className="w-full bg-[var(--primary)] hover:bg-[#4a2917] disabled:bg-gray-400 text-white py-3.5 rounded-lg text-lg font-semibold transition-colors shadow-md hover:shadow-lg flex justify-center items-center cursor-pointer"
                 >
                   {isProcessingPayment ? (
@@ -1130,6 +1278,8 @@ export default function MyCart({ cart, setCart }) {
                     </>
                   ) : !defaultAddress ? (
                     'Select Address First'
+                  ) : (paymentMethod === 'wallet' && (!wallet || wallet.total_balance < grandTotal)) ? (
+                    'Insufficient Wallet Balance'
                   ) : (
                     'Place Order'
                   )}

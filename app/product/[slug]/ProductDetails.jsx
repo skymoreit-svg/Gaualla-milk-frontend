@@ -7,7 +7,7 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStar, FaPlus } from "react-icons/fa";
 import { IoIosArrowUp } from "react-icons/io";
-import { ShoppingBag, Truck, DollarSign, ChevronRight, Star, Edit3 } from "lucide-react";
+import { ShoppingBag, Truck, DollarSign, ChevronRight, Star, Edit3, ShieldCheck } from "lucide-react";
 import Swal from "sweetalert2";
 
 // Swiper removed in favor of grid view
@@ -301,11 +301,12 @@ const ProductDetails = ({ slug }) => {
               )}
             </div>
 
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-highlight">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-highlight">
               {[
                 { icon: <Truck size={20} />, label: "Express Delivery" },
                 { icon: <DollarSign size={20} />, label: "Secure Payment" },
-                { icon: <Star size={20} />, label: "Pure Quality" }
+                { icon: <Star size={20} />, label: "Pure Quality" },
+                { icon: <ShieldCheck size={20} />, label: "70+ Quality Checks" }
               ].map((item, i) => (
                 <div key={i} className="flex flex-col items-center gap-2 text-center">
                   <div className="text-[var(--primary)]">{item.icon}</div>

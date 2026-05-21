@@ -42,6 +42,7 @@ const OrderDetailPage = () => {
   const [showMapModal, setShowMapModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
 
+
   useEffect(() => {
     if (orderId) {
       fetchOrder();
@@ -119,23 +120,6 @@ const OrderDetailPage = () => {
     }
   };
 
-  const handleTriggerScheduler = async () => {
-    try {
-      setSaving(true);
-      const response = await axios.post(`${adminurl}/trigger-scheduler`, {}, { withCredentials: true });
-      if (response.data.success) {
-        toast.success("Daily scheduler triggered successfully!");
-        fetchOrder();
-      } else {
-        toast.error("Failed to trigger scheduler");
-      }
-    } catch (err) {
-      console.error("Error triggering scheduler:", err);
-      toast.error("Failed to trigger scheduler: " + (err.response?.data?.error || err.message));
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
@@ -720,41 +704,60 @@ const OrderDetailPage = () => {
                 {order.delivery_otp && (
                   <div>
                     <span className="font-semibold text-text">Delivery OTP:</span>
-                    <p className="text-text font-mono text-lg">{order.delivery_otp}</p>
+                    <p className="text-text font-mono text-lg tracking-widest bg-green-50 border border-green-200 rounded px-3 py-1 mt-1 inline-block">{order.delivery_otp}</p>
+                    {["daily", "alternative", "weekly", "monthly", "custom_dates"].includes(order.type) && (
+                      <p className="text-xs text-gray-500 mt-1 italic">New OTP generated per delivery day</p>
+                    )}
                   </div>
                 )}
               </div>
               <div className="mt-4">
-                {(!order.delivery_status || order.delivery_status === "unassigned") ? (
-                  <button
-                    onClick={() => setShowAssignModal(true)}
-                    className="w-full bg-accent text-white py-2 rounded-lg hover:bg-accent transition text-sm font-medium"
-                  >
-                    Assign Rider
-                  </button>
-                ) : (
-                  <div className="text-sm text-text">
-                    <p className="font-medium">Rider assigned</p>
-                    {order.assigned_rider_id && (
-                      <Link href={`/admin/riders/${order.assigned_rider_id}`} className="text-primary hover:underline">
-                        View Rider Profile
-                      </Link>
-                    )}
-                  </div>
-                )}
-                {order.type !== 'onetime' && (
-                  <div className="mt-4 border-t border-highlight pt-4">
-                    <span className="font-semibold text-text text-xs uppercase tracking-wider block mb-2">Dev / Testing Tool</span>
-                    <button
-                      onClick={handleTriggerScheduler}
-                      disabled={saving}
-                      className="w-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 py-2 rounded-lg transition text-sm font-semibold flex items-center justify-center gap-2"
-                    >
-                      <Clock className="w-4 h-4 animate-pulse" />
-                      Trigger Daily Scheduler
-                    </button>
-                  </div>
-                )}
+                {(() => {
+                  const isSubscription = ["daily", "alternative", "weekly", "monthly", "custom_dates"].includes(order.type);
+                  const todayDelivered = isSubscription && order.delivery_status === "delivered";
+
+                  if (todayDelivered) {
+                    return (
+                      <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm">
+                        <div className="flex items-center gap-2 text-green-700 font-semibold mb-1">
+                          <CheckCircle className="w-4 h-4" />
+                          Today&apos;s delivery completed
+                        </div>
+                        <p className="text-green-600 text-xs">
+                          The rider has already delivered this order today. Next delivery will be available after the scheduler runs for the next scheduled date.
+                        </p>
+                        {order.assigned_rider_id && (
+                          <Link href={`/admin/riders/${order.assigned_rider_id}`} className="text-primary hover:underline text-xs mt-2 inline-block">
+                            View Rider Profile
+                          </Link>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  if (!order.delivery_status || order.delivery_status === "unassigned") {
+                    return (
+                      <button
+                        onClick={() => setShowAssignModal(true)}
+                        className="w-full bg-accent text-white py-2 rounded-lg hover:bg-accent transition text-sm font-medium"
+                      >
+                        Assign Rider
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <div className="text-sm text-text">
+                      <p className="font-medium">Rider assigned</p>
+                      {order.assigned_rider_id && (
+                        <Link href={`/admin/riders/${order.assigned_rider_id}`} className="text-primary hover:underline">
+                          View Rider Profile
+                        </Link>
+                      )}
+                    </div>
+                  );
+                })()}
+
               </div>
             </div>
           </div>
