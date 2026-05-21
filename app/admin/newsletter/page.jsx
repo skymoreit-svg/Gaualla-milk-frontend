@@ -15,7 +15,7 @@ const NewsletterSubscribersPage = () => {
     total: 0,
   });
 
-  const newsletterApiUrl = process.env.NEXT_PUBLIC_NEWSLETTER_API_URL || "http://localhost:8000/api/newsletter/subscribers";
+  const newsletterApiUrl = process.env.NEXT_PUBLIC_NEWSLETTER_API_URL || "https://api.gauallamilk.com/api/newsletter/subscribers";
 
   useEffect(() => {
     fetchSubscribers();

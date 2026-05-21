@@ -13,28 +13,27 @@
  */
 
 // Base API URL - can be overridden with NEXT_PUBLIC_API_BASE_URL
-export const API_BASE_URL = 
-  process.env.NEXT_PUBLIC_API_BASE_URL || 
-  process.env.NEXT_PUBLIC_API_URL || 
-  'http://localhost:9002';
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  'https://api.gauallamilk.com';
 
 // Base URL for images - defaults to API base URL if not specified
-export const IMAGE_BASE_URL = 
-  process.env.NEXT_PUBLIC_IMAGE_BASE_URL || 
+export const IMAGE_BASE_URL =
+  process.env.NEXT_PUBLIC_IMAGE_BASE_URL ||
   API_BASE_URL;
 
 // API Endpoints
 export const API_ENDPOINTS = {
   // User API endpoints
   USER_BASE: `${API_BASE_URL}/api/user`,
-  
+
   // Admin API endpoints
   ADMIN_BASE: `${API_BASE_URL}/admin`,
 
   // Rider API endpoints
   RIDER_BASE: `${API_BASE_URL}/api/rider`,
   RIDER_AUTH: `${API_BASE_URL}/api/rider/auth`,
-  
+
   // Image paths
   UPLOADS: `${IMAGE_BASE_URL}/uploads`,
 };
@@ -43,7 +42,7 @@ export const API_ENDPOINTS = {
 export const IMAGE_PATHS = {
   // Base uploads directory
   UPLOADS: `${IMAGE_BASE_URL}/uploads`,
-  
+
   // Full base URL for images (when you need just the base)
   BASE: IMAGE_BASE_URL,
 };

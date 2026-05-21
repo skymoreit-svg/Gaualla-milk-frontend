@@ -42,7 +42,7 @@ const Footer = () => {
 
   const newsletterUrl =
     process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ||
-    "http://localhost:8000/api/newsletter/subscribe";
+    "https://api.gauallamilk.com/api/newsletter/subscribe";
 
   const handleNewsletterChange = (event) => {
     const { name, value } = event.target;

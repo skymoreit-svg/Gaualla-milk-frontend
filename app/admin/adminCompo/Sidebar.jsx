@@ -146,11 +146,11 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className={`p-2 text-white rounded-md ${isActive("/admin/settlements")}`}>
+              {/* <li className={`p-2 text-white rounded-md ${isActive("/admin/settlements")}`}>
                 <Link href="/admin/settlements" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
                   <FaCreditCard /> <span>Settlements</span>
                 </Link>
-              </li>
+              </li> */}
 
               <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
                 <Link href="/admin/user" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
@@ -166,7 +166,7 @@ export default function Sidebar() {
 
               <li className={`p-2 text-white rounded-md ${isActive("/admin/offers")}`}>
                 <Link href="/admin/offers" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
-                  <MdLocalOffer /> <span>Offers</span>
+                  <MdLocalOffer /> <span>What we offer</span>
                 </Link>
               </li>
 
@@ -245,11 +245,11 @@ export default function Sidebar() {
               </Link>
             </li>
 
-            <li className={`p-2 text-white rounded-md ${isActive("/admin/settlements")}`}>
+            {/* <li className={`p-2 text-white rounded-md ${isActive("/admin/settlements")}`}>
               <Link href="/admin/settlements" className="flex items-center gap-x-4">
                 <FaCreditCard /> <span>Settlements</span>
               </Link>
-            </li>
+            </li> */}
 
             <li className={`p-2 text-white rounded-md ${isActive("/admin/user")}`}>
               <Link href="/admin/user" className="flex items-center gap-x-4">
@@ -265,7 +265,7 @@ export default function Sidebar() {
 
             <li className={`p-2 text-white rounded-md ${isActive("/admin/offers")}`}>
               <Link href="/admin/offers" className="flex items-center gap-x-4">
-                <MdLocalOffer /> <span>Offers</span>
+                <MdLocalOffer /> <span>What we offer</span>
               </Link>
             </li>
 

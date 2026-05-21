@@ -20,7 +20,7 @@ export default function OfferProductValid() {
   const fetchActiveOffer = async () => {
     try {
       setLoadingOffer(true);
-      const apiUrl = process.env.NEXT_PUBLIC_OFFERS_API_URL || "http://localhost:8000/admin/offers";
+      const apiUrl = process.env.NEXT_PUBLIC_OFFERS_API_URL || "https://api.gauallamilk.com/admin/offers";
       const { data } = await axios.get(`${apiUrl}?limit=1&offset=0&status=active`, {
         withCredentials: true,
       });
