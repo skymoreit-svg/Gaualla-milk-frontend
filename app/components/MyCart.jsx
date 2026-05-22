@@ -817,6 +817,11 @@ export default function MyCart({ cart, setCart }) {
                         <h5 className="text-lg md:text-xl font-semibold text-text">
                           {item?.name}
                         </h5>
+                        {item?.variant_name && (
+                          <span className="inline-block bg-[var(--primary)] text-white text-[10px] font-bold px-2 py-0.5 rounded mt-1">
+                            {item.variant_name}
+                          </span>
+                        )}
                         <div className="flex justify-between items-center mt-2">
                           <div className="flex items-center gap-2">
                             <span className="text-xl font-bold text-[var(--primary)]">₹{item?.total_price}</span>

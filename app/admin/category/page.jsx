@@ -176,7 +176,7 @@ export default function CategoryPage() {
                     <Link
                       href={`/admin/category/edit/${cat.id}`}
                       title="Edit"
-                      className="p-1 text-primary hover:bg-primary rounded"
+                      className="p-1 text-primary hover:text-white hover:bg-primary rounded"
                     >
                       <Edit2 className="w-5 h-5" />
                     </Link>

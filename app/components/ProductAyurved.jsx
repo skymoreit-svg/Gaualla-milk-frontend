@@ -29,6 +29,10 @@ export default function ProductAyurved() {
         fetchProduct();
     }, []);
 
+    const bestSellers = productData.filter(
+        (product) => product.is_best_seller == 1 || product.is_best_seller === true || product.is_best_seller === 'true'
+    );
+
     if (loading) return (
         <div className="bg-[var(--background)] py-20">
             <LogoLoader text="Collecting the Best of Nature..." />
@@ -61,9 +65,9 @@ export default function ProductAyurved() {
                     </p>
                 </div>
 
-                {productData.length > 0 ? (
+                {bestSellers.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 justify-items-center">
-                        {productData.map((product) => (
+                        {bestSellers.map((product) => (
                             <ProductAyurvedCard 
                                 key={product.id} 
                                 product={product} 
@@ -72,7 +76,7 @@ export default function ProductAyurved() {
                     </div>
                 ) : (
                     <div className="text-center py-10 sm:py-10 md:py-12 lg:py-14bg-background rounded-3xl border border-dashed border-highlight text-gray-[#252729b8] font-medium">
-                        No products available at the moment.
+                        No best sellers available at the moment.
                     </div>
                 )}
             </div>

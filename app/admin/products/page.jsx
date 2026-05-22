@@ -192,9 +192,15 @@ export default function ProductsPage() {
 							filtered.map((product) => {
 								const images = safeParseJSON(product.images);
 								const firstImage = images.length > 0 ? images[0] : null;
+								const variants = product.variants ? safeParseJSON(product.variants) : [];
 
 								return (
 									<div key={product.id} className="bg-background rounded-lg shadow p-5 relative border border-highlight">
+										{(product.is_best_seller === 1 || product.is_best_seller === "1" || product.is_best_seller === true) && (
+											<span className="bg-amber-500 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full absolute top-3 left-3 shadow-sm z-10">
+												Best Seller
+											</span>
+										)}
 										<div className="absolute top-3 right-3 flex items-center gap-2">
 											<Link href={`/admin/products/edit/${product.id}`} className="text-primary transition" title="Edit">
 												<Edit2 className="w-5 h-5" />
@@ -245,6 +251,11 @@ export default function ProductsPage() {
 												{product.unit_quantity && (
 													<div className="text-xs text-gray-700 mt-1">
 														{product.unit_quantity}
+													</div>
+												)}
+												{variants.length > 0 && (
+													<div className="text-xs text-primary font-semibold mt-1">
+														{variants.length} variant{variants.length > 1 ? 's' : ''}
 													</div>
 												)}
 											</div>

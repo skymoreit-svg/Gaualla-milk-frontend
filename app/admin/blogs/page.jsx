@@ -90,7 +90,7 @@ export default function AdminBlogsListPage() {
             <button
               onClick={fetchBlogs}
               disabled={listLoading}
-              className="px-3 py-1.5 rounded-md border border-primary bg-primary text-sm font-semibold text-primary"
+              className="px-3 py-1.5 rounded-md border border-primary bg-primary text-sm font-semibold text-white"
             >
               Refresh
             </button>
@@ -115,7 +115,7 @@ export default function AdminBlogsListPage() {
                     {blog.writer || blog.author || "—"}
                   </td>
                   <td className="px-3 py-3">
-                    <span className="px-2 py-1 text-xs rounded-full bg-primary">
+                    <span className="px-2 py-1 text-xs rounded-full bg-primary text-white">
                       {blog.tag || "—"}
                     </span>
                   </td>

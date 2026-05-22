@@ -29,9 +29,31 @@ const ProductCreatePage = () => {
     images: null, // file
     one_time: false,
     description2: "",
+    is_best_seller: false,
+    variants: [],
   });
 
+  const handleAddVariant = () => {
+    setForm((prev) => ({
+      ...prev,
+      variants: [...(prev.variants || []), { name: "", price: "", old_price: "", stock: "" }]
+    }));
+  };
 
+  const handleRemoveVariant = (index) => {
+    setForm((prev) => ({
+      ...prev,
+      variants: prev.variants.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleVariantChange = (index, field, val) => {
+    setForm((prev) => {
+      const updated = [...prev.variants];
+      updated[index] = { ...updated[index], [field]: val };
+      return { ...prev, variants: updated };
+    });
+  };
 
   // fetch categories
   const getCategories = async () => {
@@ -99,6 +121,8 @@ if (!form.stock) {
           for (let i = 0; i < value.length; i++) {
             formData.append("images", value[i]);
           }
+        } else if (key === "variants") {
+          formData.append("variants", JSON.stringify(value));
         } else if (value !== null && value !== undefined) {
           formData.append(key, value);
         }
@@ -124,6 +148,8 @@ if (!form.stock) {
     images: null,
     one_time: false,
     description2: "",
+    is_best_seller: false,
+    variants: [],
   });
 } else {
   toast.error(`❌ Error: ${res.data.message || "Product creation failed"}`);
@@ -154,24 +180,24 @@ if (!form.stock) {
 
     <form onSubmit={handleSubmit} className="p-6 space-y-6">
       {/* Category */}
-      <div className="bg-primary p-4 rounded-lg border border-primary">
-        <label className="block text-sm font-medium text-primary flex items-center gap-2 mb-1">
+      <div className="border border-highlight rounded-lg p-4">
+        <label className="block text-sm font-medium text-text flex items-center gap-2 mb-2">
           <FaTag className="text-primary" /> Category
         </label>
         <select
-  name="category_id"
-  value={form.category_id}
-  onChange={handleChange}
-  required
-  className="w-full border border-primary rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
->
-  <option value="">Select Category</option>
-  {categories.map((cat) => (
-    <option key={cat.id} value={String(cat.id)}>
-      {cat.name}
-    </option>
-  ))}
-</select>
+          name="category_id"
+          value={form.category_id}
+          onChange={handleChange}
+          required
+          className="w-full border border-highlight rounded-lg p-3 mt-1 focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-background text-text"
+        >
+          <option value="">Select Category</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={String(cat.id)}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Name */}
@@ -315,7 +341,7 @@ if (!form.stock) {
       </div>
 
       {/* One-time Checkbox */}
-      <div className="flex items-center space-x-3 p-4 bg-primary rounded-lg border border-primary">
+      <div className="flex items-center space-x-3 p-4 bg-primary bg-opacity-10 rounded-lg border border-primary border-opacity-20">
         <div className="flex items-center h-5">
           <input
             type="checkbox"
@@ -329,7 +355,111 @@ if (!form.stock) {
           <FaExclamationCircle className="text-primary" />
           <label className="text-sm font-medium text-text">One Time Product</label>
         </div>
-        <span className="text-xs text-primary ml-auto bg-primary px-2 py-1 rounded-full">Optional</span>
+        <span className="text-xs text-primary ml-auto bg-primary bg-opacity-20 px-2 py-1 rounded-full font-medium">Optional</span>
+      </div>
+
+      {/* Best Seller Checkbox */}
+      <div className="flex items-center space-x-3 p-4 bg-primary bg-opacity-10 rounded-lg border border-primary border-opacity-20">
+        <div className="flex items-center h-5">
+          <input
+            type="checkbox"
+            name="is_best_seller"
+            checked={form.is_best_seller}
+            onChange={handleChange}
+            className="w-4 h-4 text-primary border-highlight rounded focus:ring-primary"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <FaExclamationCircle className="text-primary" />
+          <label className="text-sm font-medium text-text">Best Seller Product</label>
+        </div>
+        <span className="text-xs text-primary ml-auto bg-primary bg-opacity-20 px-2 py-1 rounded-full font-medium">Optional</span>
+      </div>
+
+      {/* Variants Section */}
+      <div className="bg-background p-6 rounded-lg border border-highlight space-y-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-sm font-bold text-text flex items-center gap-2">
+            <FaBoxes className="text-primary" /> Product Variants
+          </label>
+          <button
+            type="button"
+            onClick={handleAddVariant}
+            className="flex items-center gap-2 bg-[var(--primary)] text-white px-3 py-1.5 rounded-lg hover:bg-opacity-90 transition-all font-semibold text-xs uppercase tracking-wider"
+          >
+            <FaPlus size={10} /> Add Variant
+          </button>
+        </div>
+        <p className="text-xs text-gray-700">
+          Define options (like size or weight) for this product. If left empty, the product sells at the default price and stock above.
+        </p>
+
+        {form.variants && form.variants.length > 0 ? (
+          <div className="space-y-4 mt-4">
+            {form.variants.map((variant, index) => (
+              <div key={index} className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-end p-4 bg-primary bg-opacity-5 rounded-lg border border-highlight relative">
+                <div>
+                  <label className="block text-xs font-semibold text-text mb-1">Variant Name</label>
+                  <input
+                    type="text"
+                    value={variant.name}
+                    onChange={(e) => handleVariantChange(index, "name", e.target.value)}
+                    placeholder="e.g. 500ml"
+                    required
+                    className="w-full border border-highlight rounded-lg p-2 text-sm bg-background text-text focus:ring-1 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-text mb-1">Price (₹)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={variant.price}
+                    onChange={(e) => handleVariantChange(index, "price", e.target.value)}
+                    placeholder="Price"
+                    required
+                    className="w-full border border-highlight rounded-lg p-2 text-sm bg-background text-text focus:ring-1 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-text mb-1">Old Price (₹)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={variant.old_price}
+                    onChange={(e) => handleVariantChange(index, "old_price", e.target.value)}
+                    placeholder="Old Price"
+                    className="w-full border border-highlight rounded-lg p-2 text-sm bg-background text-text focus:ring-1 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-text mb-1">Stock</label>
+                  <input
+                    type="number"
+                    value={variant.stock}
+                    onChange={(e) => handleVariantChange(index, "stock", e.target.value)}
+                    placeholder="Stock Qty"
+                    required
+                    className="w-full border border-highlight rounded-lg p-2 text-sm bg-background text-text focus:ring-1 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div className="flex justify-end sm:justify-start">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveVariant(index)}
+                    className="w-full sm:w-auto bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-colors text-xs font-semibold uppercase tracking-wider"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-6 border border-dashed border-highlight rounded-lg text-gray-700 text-sm">
+            No variants configured.
+          </div>
+        )}
       </div>
 
       {/* Images */}

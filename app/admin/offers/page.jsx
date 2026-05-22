@@ -448,7 +448,7 @@ export default function OffersPage() {
                               <button
                                 type="button"
                                 onClick={() => handleEdit(offerId)}
-                                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-primary hover:bg-primary transition"
+                                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-primary hover:text-white hover:bg-primary transition"
                               >
                                 <Edit2 className="w-4 h-4" />
                                 Edit

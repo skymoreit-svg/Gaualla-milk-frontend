@@ -23,6 +23,67 @@ import BenefitsTable from "@/app/components/Benefits";
 
 import "./product-premium.css";
 
+const getPricePerLiter = (name, price) => {
+  if (!name || !price) return null;
+  const numPrice = parseFloat(price);
+  if (isNaN(numPrice)) return null;
+
+  const clean = name.toLowerCase();
+
+  // Liters match
+  const literMatch = clean.match(/(\d+(\.\d+)?)\s*(l|liter|litre|ltr)/);
+  if (literMatch) {
+    const vol = parseFloat(literMatch[1]);
+    if (vol > 0) {
+      return (numPrice / vol).toFixed(1);
+    }
+  }
+
+  // Milliliters match
+  const mlMatch = clean.match(/(\d+(\.\d+)?)\s*(ml|milliliter|millilitre)/);
+  if (mlMatch) {
+    const volMl = parseFloat(mlMatch[1]);
+    if (volMl > 0) {
+      return (numPrice / (volMl / 1000)).toFixed(1);
+    }
+  }
+
+  // Kilograms match
+  const kgMatch = clean.match(/(\d+(\.\d+)?)\s*(kg|kilogram)/);
+  if (kgMatch) {
+    const vol = parseFloat(kgMatch[1]);
+    if (vol > 0) {
+      return (numPrice / vol).toFixed(1);
+    }
+  }
+
+  // Grams match
+  const gMatch = clean.match(/(\d+(\.\d+)?)\s*(g|gram)/);
+  if (gMatch) {
+    const volG = parseFloat(gMatch[1]);
+    if (volG > 0) {
+      return (numPrice / (volG / 1000)).toFixed(1);
+    }
+  }
+
+  return null;
+};
+
+const renderPerUnitRate = (name, price) => {
+  if (!name || !price) return null;
+  const rate = getPricePerLiter(name, price);
+  if (!rate) return null;
+
+  const clean = name.toLowerCase();
+  let unit = "L";
+  if ((clean.includes("g") && !clean.includes("l")) || clean.includes("kg") || clean.includes("gram")) {
+    unit = "kg";
+  }
+
+  const formattedRate = parseFloat(rate).toString();
+  return `₹${formattedRate}/${unit}`;
+};
+
 const ProductDetails = ({ slug }) => {
   const route = useRouter();
   const dispatch = useDispatch();
@@ -39,6 +100,7 @@ const ProductDetails = ({ slug }) => {
   const [AyutramartProduct, setAyutramartProduct] = useState();
 
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
   // DERIVED STATE
   const productImages = useMemo(() => {
@@ -53,18 +115,48 @@ const ProductDetails = ({ slug }) => {
     }
   }, [productData?.images]);
 
-  const discount = useMemo(() => {
-    if (productData?.price && productData?.old_price) {
-      const price = parseFloat(productData.price);
-      const oldPrice = parseFloat(productData.old_price);
-      if (oldPrice > price) {
-        return Math.round(((oldPrice - price) / oldPrice) * 100);
+  const productVariants = useMemo(() => {
+    if (!productData?.variants) return [];
+    try {
+      const parsed = typeof productData.variants === 'string'
+        ? JSON.parse(productData.variants)
+        : productData.variants;
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.error("Failed to parse product variants", e);
+      return [];
+    }
+  }, [productData?.variants]);
+
+  useEffect(() => {
+    if (productData) {
+      const parsed = productData.variants ? (typeof productData.variants === 'string' ? JSON.parse(productData.variants) : productData.variants) : [];
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        setSelectedVariant(parsed[0]);
+      } else {
+        setSelectedVariant(null);
       }
     }
-    return 0;
-  }, [productData?.price, productData?.old_price]);
+  }, [productData]);
 
-  const inCart = cartItems.some((item) => item.id === productData?.id);
+  const discount = useMemo(() => {
+    const price = selectedVariant ? parseFloat(selectedVariant.price) : (productData?.price ? parseFloat(productData.price) : 0);
+    const oldPrice = selectedVariant ? parseFloat(selectedVariant.old_price) : (productData?.old_price ? parseFloat(productData.old_price) : 0);
+    if (price && oldPrice && oldPrice > price) {
+      return Math.round(((oldPrice - price) / oldPrice) * 100);
+    }
+    return 0;
+  }, [productData?.price, productData?.old_price, selectedVariant]);
+
+  const inCart = useMemo(() => {
+    return cartItems.some(
+      (item) =>
+        item.id === productData?.id &&
+        (selectedVariant
+          ? item.variant_name === selectedVariant.name
+          : !item.variant_name)
+    );
+  }, [cartItems, productData?.id, selectedVariant]);
 
   const fetchallProduct = async () => {
     const response = await axios.get(`${baseurl}/getproduct/all`);
@@ -108,9 +200,13 @@ const ProductDetails = ({ slug }) => {
       return;
     }
 
+    const priceToSend = selectedVariant ? selectedVariant.price : price;
+    const variantNameToSend = selectedVariant ? selectedVariant.name : null;
+
     const response = await axios.post(`${baseurl}/cart/addtocart`, {
       product_id,
-      price,
+      price: priceToSend,
+      variant_name: variantNameToSend,
       quantity: quantity // Assuming API might support it or for future use
     });
 
@@ -201,6 +297,11 @@ const ProductDetails = ({ slug }) => {
     );
   }
 
+  const displayPrice = selectedVariant ? selectedVariant.price : productData?.price;
+  const displayOldPrice = selectedVariant ? selectedVariant.old_price : productData?.old_price;
+  const displayUnit = selectedVariant ? selectedVariant.name : productData?.unit_quantity;
+  const displayStock = selectedVariant ? selectedVariant.stock : productData?.stock;
+
   return (
     <div className="product-premium-story bg-[var(--background)] min-h-screen">
       
@@ -209,7 +310,7 @@ const ProductDetails = ({ slug }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           
           {/* LEFT: CLEAN GALLERY */}
-          <div className="flex flex-col-reverse md:flex-row gap-6 lg:sticky lg:top-8 self-start">
+          <div className="flex flex-col-reverse md:flex-row gap-6 lg:sticky lg:top-32 self-start">
             <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
               {productImages.map((img, i) => (
                 <button
@@ -259,18 +360,76 @@ const ProductDetails = ({ slug }) => {
 
             <div className="space-y-2">
               <div className="flex items-baseline">
-                <span className="oswald text-4xl font-bold text-text">₹{productData?.price}</span>
-                {productData?.old_price && (
-                  <span className="text-xl text-gray-[#252729b8] line-through">₹{productData?.old_price}</span>
+                <span className="oswald text-4xl font-bold text-text">₹{displayPrice}</span>
+                {displayOldPrice && (
+                  <span className="text-xl text-gray-[#252729b8] line-through">₹{displayOldPrice}</span>
                 )}
-                {productData?.unit_quantity && (
+                {displayUnit && (
                   <span className="oswald text-sm font-bold text-[var(--primary)] bg-[var(--background)] px-3 py-1 rounded">
-                    {productData.unit_quantity}
+                    {displayUnit}
                   </span>
                 )}
               </div>
               <p className="text-xs text-gray-[#252729b8] font-medium">*Prices are inclusive of all taxes</p>
             </div>
+
+            {/* Variants Selector */}
+            {productVariants.length > 0 && (
+              <div className="space-y-3">
+                <span className="text-base font-semibold text-gray-700 block">Select Variant</span>
+                <div className="flex flex-wrap gap-3">
+                  {productVariants.map((v, i) => {
+                    const priceVal = parseFloat(v.price) || 0;
+                    const oldPriceVal = parseFloat(v.old_price) || 0;
+                    const disc = (priceVal && oldPriceVal && oldPriceVal > priceVal)
+                      ? Math.round(((oldPriceVal - priceVal) / oldPriceVal) * 100)
+                      : 0;
+                    const perUnitRate = renderPerUnitRate(v.name, v.price);
+                    const isSelected = selectedVariant?.name === v.name;
+
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => setSelectedVariant(v)}
+                        className={`min-w-[140px] sm:min-w-[160px] flex-1 md:flex-initial rounded-xl border-2 overflow-hidden cursor-pointer transition-all ${
+                          isSelected
+                            ? "border-[var(--primary)] shadow-md scale-[1.02]"
+                            : "border-[var(--primary)]/20 hover:border-[var(--primary)]/40"
+                        }`}
+                      >
+                        {/* Header */}
+                        <div
+                          className={`px-3 py-2 text-center text-sm font-bold tracking-wide transition-colors ${
+                            isSelected
+                              ? "bg-[var(--primary)] text-white"
+                              : "bg-[var(--primary)]/5 text-[var(--text)]"
+                          }`}
+                        >
+                          {v.name}
+                        </div>
+                        {/* Body */}
+                        <div className="p-3 bg-white space-y-1">
+                          <div className="flex items-baseline flex-wrap gap-1">
+                            <span className="text-xl font-black text-[var(--text)]">₹{v.price}</span>
+                            {disc > 0 && (
+                              <>
+                                <span className="text-xs text-[var(--text)]/50 line-through">₹{v.old_price}</span>
+                                <span className="text-[11px] font-bold text-red-600">{disc}% off</span>
+                              </>
+                            )}
+                          </div>
+                          {perUnitRate && (
+                            <div className="text-xs font-semibold text-[var(--accent)]">
+                              {perUnitRate}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="p-6 bg-background rounded-2xl border border-highlight space-y-4">
               <h4 className="text-sm font-bold text-text uppercase tracking-widest">Key Highlights</h4>
@@ -287,13 +446,17 @@ const ProductDetails = ({ slug }) => {
                 <button onClick={() => setQuantity(quantity + 1)} className="text-gray-[#252729b8] hover:text-text text-xl font-medium">+</button>
               </div>
 
-              {inCart ? (
+              {displayStock <= 0 ? (
+                <button disabled className="flex-1 py-5 rounded-xl bg-gray-300 text-gray-500 font-bold uppercase tracking-widest cursor-not-allowed flex items-center justify-center gap-3">
+                  Out of Stock
+                </button>
+              ) : inCart ? (
                 <button onClick={() => dispatch(openCartDrawer())} className="flex-1 py-5 rounded-xl bg-text text-white font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-3">
                   <ShoppingBag size={20} /> View in Cart
                 </button>
               ) : (
                 <button 
-                  onClick={() => handeladdtocart(productData?.id, productData?.price)} 
+                  onClick={() => handeladdtocart(productData?.id, displayPrice)} 
                   className="flex-1 py-5 rounded-xl bg-[var(--primary)] text-white font-bold uppercase tracking-widest hover:bg-[#4a2917] transition-all shadow-lg shadow-[var(--primary)]/10 flex items-center justify-center gap-3"
                 >
                   <ShoppingBag size={20} /> Add to Basket
