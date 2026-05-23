@@ -129,14 +129,7 @@ const ProductDetails = ({ slug }) => {
   }, [productData?.variants]);
 
   useEffect(() => {
-    if (productData) {
-      const parsed = productData.variants ? (typeof productData.variants === 'string' ? JSON.parse(productData.variants) : productData.variants) : [];
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        setSelectedVariant(parsed[0]);
-      } else {
-        setSelectedVariant(null);
-      }
-    }
+    setSelectedVariant(null);
   }, [productData]);
 
   const discount = useMemo(() => {
@@ -390,7 +383,13 @@ const ProductDetails = ({ slug }) => {
                     return (
                       <div
                         key={i}
-                        onClick={() => setSelectedVariant(v)}
+                        onClick={() => {
+                          if (selectedVariant?.name === v.name) {
+                            setSelectedVariant(null);
+                          } else {
+                            setSelectedVariant(v);
+                          }
+                        }}
                         className={`min-w-[140px] sm:min-w-[160px] flex-1 md:flex-initial rounded-xl border-2 overflow-hidden cursor-pointer transition-all ${
                           isSelected
                             ? "border-[var(--primary)] shadow-md scale-[1.02]"

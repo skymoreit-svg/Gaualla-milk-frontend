@@ -15,7 +15,8 @@
 // Base API URL - can be overridden with NEXT_PUBLIC_API_BASE_URL
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  'https://api.gauallamilk.com';
+  // 'https://api.gauallamilk.com';
+  'http://localhost:8000';
 
 // Base URL for images - defaults to API base URL if not specified
 export const IMAGE_BASE_URL =

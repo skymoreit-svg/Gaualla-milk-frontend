@@ -305,6 +305,7 @@ export default function CheckOut() {
             product_id: item.product_id,
             quantity: item.quantity,
             price: item.cart_price,
+            variant_name: item.variant_name,
           })),
         };
 
@@ -351,6 +352,7 @@ export default function CheckOut() {
             product_id: item.product_id,
             quantity: item.quantity,
             price: item.cart_price,
+            variant_name: item.variant_name,
           })),
         };
 
@@ -458,6 +460,7 @@ export default function CheckOut() {
                 product_id: item.product_id,
                 quantity: item.quantity,
                 price: item.cart_price,
+                variant_name: item.variant_name,
               })),
             });
 

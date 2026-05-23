@@ -310,6 +310,7 @@ export default function MyCart({ cart, setCart }) {
             product_id: item.product_id,
             quantity: item.quantity,
             price: item.cart_price,
+            variant_name: item.variant_name,
           })),
         };
 
@@ -361,6 +362,7 @@ export default function MyCart({ cart, setCart }) {
             product_id: item.product_id,
             quantity: item.quantity,
             price: item.cart_price,
+            variant_name: item.variant_name,
           })),
         };
 
@@ -458,6 +460,7 @@ export default function MyCart({ cart, setCart }) {
                 product_id: item.product_id,
                 quantity: item.quantity,
                 price: item.cart_price,
+                variant_name: item.variant_name,
               })),
             });
 
