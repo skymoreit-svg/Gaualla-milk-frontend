@@ -159,7 +159,7 @@ export default function OrderActionPage() {
                  <label className="text-xs text-gray-400 font-bold uppercase mb-1 block">Customer OTP</label>
                  <input 
                     type="text" 
-                    placeholder="Enter 4-digit OTP"
+                    placeholder="Enter 6-digit OTP"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     className="w-full text-center text-3xl font-black rounded-xl border-2 border-gray-100 py-4 focus:border-emerald-500 outline-none transition-colors"
@@ -225,7 +225,14 @@ export default function OrderActionPage() {
               {order.items?.map((item, idx) => (
                 <div key={idx} className="p-4 flex justify-between items-center">
                   <div>
-                    <p className="font-bold text-gray-900">{item.product_name}</p>
+                    <p className="font-bold text-gray-900">
+                      {item.product_name}
+                      {item.variant_name && (
+                        <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                          {item.variant_name}
+                        </span>
+                      )}
+                    </p>
                     <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                   </div>
                   <p className="font-bold text-gray-700 text-sm">₹{item.price * item.quantity}</p>

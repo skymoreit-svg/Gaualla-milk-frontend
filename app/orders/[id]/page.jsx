@@ -306,6 +306,11 @@ const OrderDetailPage = () => {
                         <div className="flex-1">
                           <h4 className="font-semibold text-text mb-2">
                             {item.product_name || "Product"}
+                            {item.variant_name && (
+                              <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-[var(--primary)]/10 text-[var(--primary)]">
+                                {item.variant_name}
+                              </span>
+                            )}
                           </h4>
                           <div className="grid grid-cols-2 gap-2 text-sm text-text">
                             <div>
