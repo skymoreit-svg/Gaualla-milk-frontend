@@ -245,9 +245,20 @@ export default function ProductsPage() {
 												)}
 											</div>
 											<div className="text-right">
-												<span className={`text-sm font-medium ${product.stock > 0 ? 'text-accent' : 'text-red-600'}`}>
-													{product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-												</span>
+												{variants.length > 0 ? (
+													<div className="flex flex-col gap-0.5">
+														<span className="text-xs text-gray-500 font-medium">Base: <span className={product.stock > 0 ? 'text-accent font-bold' : 'text-red-600 font-bold'}>{product.stock > 0 ? `${product.stock}` : '0'}</span></span>
+														{variants.map((v, vi) => (
+															<span key={vi} className={`text-xs font-semibold ${parseInt(v.stock) > 0 ? 'text-primary' : 'text-red-500'}`}>
+																{v.name}: {parseInt(v.stock) > 0 ? v.stock : '0'}
+															</span>
+														))}
+													</div>
+												) : (
+													<span className={`text-sm font-medium ${product.stock > 0 ? 'text-accent' : 'text-red-600'}`}>
+														{product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+													</span>
+												)}
 												{product.unit_quantity && (
 													<div className="text-xs text-gray-700 mt-1">
 														{product.unit_quantity}
