@@ -29,7 +29,7 @@ export default function OffersPage() {
   const [formMode, setFormMode] = useState("create");
   const [fetchingSingle, setFetchingSingle] = useState(false);
 
-  const apiBase = process.env.NEXT_PUBLIC_ADMIN_OFFERS_API_URL || 
+  const apiBase = process.env.NEXT_PUBLIC_ADMIN_OFFERS_API_URL ||
     // "https://api.gauallamilk.com/admin/offers";
     "http://localhost:8000/admin/offers";
 

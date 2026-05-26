@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { API_ENDPOINTS } from "../../config/constants";
 import { 
@@ -12,7 +12,10 @@ import {
   FaMotorcycle, 
   FaHistory, 
   FaWallet,
-  FaBell
+  FaBell,
+  FaChevronDown,
+  FaChevronUp,
+  FaClipboardList
 } from "react-icons/fa";
 import { RxHamburgerMenu } from "react-icons/rx";
 
@@ -20,7 +23,17 @@ export default function RiderSidebar() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentStatus = searchParams?.get("status");
   const [rider, setRider] = useState(null);
+  const [ordersOpen, setOrdersOpen] = useState(false);
+
+  useEffect(() => {
+    // Keep Orders dropdown open if user is currently on an orders list page
+    if (pathname === "/rider/orders") {
+      setOrdersOpen(true);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -53,10 +66,6 @@ export default function RiderSidebar() {
   const isActive = (route) => {
     return pathname === route ? "bg-emerald-600 border-l-4 border-white" : "hover:bg-emerald-700";
   };
-
-  const menuItems = [
-    { title: "Dashboard", icon: <FaHome />, path: "/rider/dashboard" },
-  ];
 
   return (
     <>
@@ -105,17 +114,57 @@ export default function RiderSidebar() {
           </div>
 
           <nav className="space-y-1 flex-grow">
-            {menuItems.map((item) => (
-              <Link 
-                key={item.path}
-                href={item.path} 
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-4 p-3 rounded-lg transition-all duration-200 ${isActive(item.path)}`}
+            <Link 
+              href="/rider/dashboard" 
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-4 p-3 rounded-lg transition-all duration-200 ${isActive("/rider/dashboard")}`}
+            >
+              <span className="text-lg"><FaHome /></span>
+              <span className="font-medium text-sm">Dashboard</span>
+            </Link>
+
+            {/* Orders Dropdown */}
+            <div className="space-y-1">
+              <button
+                onClick={() => setOrdersOpen(!ordersOpen)}
+                className={`w-full flex items-center justify-between p-3 rounded-lg hover:bg-emerald-700 transition-all duration-200 text-left ${
+                  pathname === "/rider/orders" ? "bg-emerald-800/40 text-white" : "text-emerald-100"
+                }`}
               >
-                <span className="text-lg">{item.icon}</span>
-                <span className="font-medium text-sm">{item.title}</span>
-              </Link>
-            ))}
+                <div className="flex items-center gap-4">
+                  <span className="text-lg"><FaClipboardList /></span>
+                  <span className="font-medium text-sm">Orders</span>
+                </div>
+                <span>{ordersOpen ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}</span>
+              </button>
+
+              {ordersOpen && (
+                <div className="pl-10 space-y-1 animate-[slideDown_0.2s_ease-out]">
+                  <Link
+                    href="/rider/orders?status=completed"
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center p-2 rounded-lg text-sm transition-all duration-200 ${
+                      pathname === "/rider/orders" && currentStatus === "completed"
+                        ? "text-white font-bold bg-emerald-700"
+                        : "text-emerald-200 hover:text-white"
+                    }`}
+                  >
+                    Completed Orders
+                  </Link>
+                  <Link
+                    href="/rider/orders?status=cancelled"
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center p-2 rounded-lg text-sm transition-all duration-200 ${
+                      pathname === "/rider/orders" && currentStatus === "cancelled"
+                        ? "text-white font-bold bg-emerald-700"
+                        : "text-emerald-200 hover:text-white"
+                    }`}
+                  >
+                    Cancelled Orders
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
             
           <div className="mt-auto pt-6 border-t border-emerald-800">

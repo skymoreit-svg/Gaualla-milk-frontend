@@ -90,7 +90,7 @@ const OrdersPage = () => {
       return { bg: "bg-[var(--primary)]/10", text: "text-[var(--primary)]", icon: CheckCircle };
     }
     if (statusLower === "processing" || statusLower === "out_for_delivery") {
-      return { bg: "bg-primary", text: "text-primary", icon: Truck };
+      return { bg: "bg-[var(--primary)]/10", text: "text-[var(--primary)]", icon: Truck };
     }
     if (statusLower === "pending") {
       return { bg: "bg-yellow-100", text: "text-highlight", icon: Clock };

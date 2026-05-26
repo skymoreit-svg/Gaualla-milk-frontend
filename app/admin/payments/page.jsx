@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { 
-  DollarSign, 
-  TrendingUp, 
-  CreditCard, 
-  RefreshCw, 
+import {
+  DollarSign,
+  TrendingUp,
+  CreditCard,
+  RefreshCw,
   AlertCircle,
   CheckCircle,
   XCircle,
@@ -161,10 +161,10 @@ const PaymentsPage = () => {
             {/* Total Transactions */}
             <div className="bg-background rounded-lg shadow border border-highlight p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-primary rounded-lg">
-                  <CreditCard className="w-6 h-6 text-primary" />
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <CreditCard className="w-6 h-6 text-accent" />
                 </div>
-                <CheckCircle className="w-5 h-5 text-primary" />
+                <CheckCircle className="w-5 h-5 text-accent" />
               </div>
               <h3 className="text-sm font-medium text-text mb-1">Total Transactions</h3>
               <p className="text-2xl font-bold text-text">
@@ -178,10 +178,10 @@ const PaymentsPage = () => {
             {/* Payment Links */}
             <div className="bg-background rounded-lg shadow border border-highlight p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-primary rounded-lg">
-                  <RefreshCw className="w-6 h-6 text-primary" />
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <RefreshCw className="w-6 h-6 text-accent" />
                 </div>
-                <Clock className="w-5 h-5 text-primary" />
+                <Clock className="w-5 h-5 text-accent" />
               </div>
               <h3 className="text-sm font-medium text-text mb-1">Payment Links</h3>
               <p className="text-2xl font-bold text-text">
@@ -241,8 +241,8 @@ const PaymentsPage = () => {
               className="bg-background rounded-lg shadow border border-highlight p-6 hover:shadow-lg transition cursor-pointer"
             >
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary rounded-lg">
-                  <CreditCard className="w-6 h-6 text-primary" />
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <CreditCard className="w-6 h-6 text-accent" />
                 </div>
                 <div>
                   <h3 className="font-bold text-text">View All Transactions</h3>
@@ -271,8 +271,8 @@ const PaymentsPage = () => {
               className="bg-background rounded-lg shadow border border-highlight p-6 hover:shadow-lg transition cursor-pointer"
             >
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary rounded-lg">
-                  <Eye className="w-6 h-6 text-primary" />
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <Eye className="w-6 h-6 text-accent" />
                 </div>
                 <div>
                   <h3 className="font-bold text-text">Webhook Events</h3>
