@@ -14,6 +14,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { FaCreditCard } from "react-icons/fa";
 import { MdNewspaper } from "react-icons/md";
 import { MdLocalOffer } from "react-icons/md";
+import { MdWbSunny } from "react-icons/md";
 import NotificationBell from "./NotificationBell";
 
 export default function Sidebar() {
@@ -170,6 +171,12 @@ export default function Sidebar() {
                 </Link>
               </li>
 
+              <li className={`p-2 text-white rounded-md ${isActive("/admin/splash-messages")}`}>
+                <Link href="/admin/splash-messages" onClick={() => setOpen(false)} className="flex items-center gap-x-4">
+                  <MdWbSunny /> <span>Splash Messages</span>
+                </Link>
+              </li>
+
               <li className="p-2 text-white rounded-md hover:bg-primary cursor-pointer"
                   onClick={handleLogout}>
                 <div className="flex items-center gap-x-4">
@@ -266,6 +273,12 @@ export default function Sidebar() {
             <li className={`p-2 text-white rounded-md ${isActive("/admin/offers")}`}>
               <Link href="/admin/offers" className="flex items-center gap-x-4">
                 <MdLocalOffer /> <span>What we offer</span>
+              </Link>
+            </li>
+
+            <li className={`p-2 text-white rounded-md ${isActive("/admin/splash-messages")}`}>
+              <Link href="/admin/splash-messages" className="flex items-center gap-x-4">
+                <MdWbSunny /> <span>Splash Messages</span>
               </Link>
             </li>
 
