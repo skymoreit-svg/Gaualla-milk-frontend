@@ -75,7 +75,7 @@ const OurStorySection = () => {
         </div>
 
         {/* Main Story Content */}
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-12 items-start mb-5">
           {/* Left Image */}
           <div className="md:sticky md:top-32 md:h-fit rounded-3xl overflow-hidden shadow-2xl">
             <img

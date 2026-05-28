@@ -30,9 +30,9 @@ export default function MyNav() {
 
   const MobileLinks = [
     { title: "Home", link: "/" },
-    { title: "About us", link: "/about" },
+    // { title: "About us", link: "/about" },
     { title: "Blogs", link: "/blogs" },
-    { title: "Our Stories", link: "/about" },
+    { title: "Our Story", link: "/about" },
     { title: "Products", link: "/product?name=all" },
     { title: "Lab Reports", link: "#" },
     { title: "Contact us", link: "/contact-us" },
@@ -241,7 +241,7 @@ export default function MyNav() {
 
         <ul className="lg:flex hidden items-center gap-x-6 text-base font-oswald uppercase tracking-wider font-medium">
           <li>
-            <Link href="/about" className="text-text hover:text-[var(--primary)] transition-colors">Our Stories</Link>
+            <Link href="/about" className="text-text hover:text-[var(--primary)] transition-colors">Our Story</Link>
           </li>
           <li>
             <Link href="/blogs" className="text-text hover:text-[var(--primary)] transition-colors">Blogs</Link>
