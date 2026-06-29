@@ -13,7 +13,7 @@ import BottomfixLinks from "./BottomfixLinks";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { baseurl } from "./utlis/apis";
+import { baseurl, API_BASE_URL } from "./utlis/apis";
 import { toast } from "react-hot-toast";
 
 const Footer = () => {
@@ -42,8 +42,7 @@ const Footer = () => {
 
   const newsletterUrl =
     process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ||
-    "https://api.gauallamilk.com/api/newsletter/subscribe";
-    // "http://localhost:8000/api/newsletter/subscribe";
+    `${API_BASE_URL}/api/newsletter/subscribe`;
 
   const handleNewsletterChange = (event) => {
     const { name, value } = event.target;

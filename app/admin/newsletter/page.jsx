@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "@/app/components/utlis/apis";
 import { Mail, Phone, Calendar, Users, Loader, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 
 const NewsletterSubscribersPage = () => {
@@ -16,8 +17,7 @@ const NewsletterSubscribersPage = () => {
   });
 
   const newsletterApiUrl = process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ||
-    "https://api.gauallamilk.com/api/newsletter/subscribers";
-  // "http://localhost:8000/api/newsletter/subscribers";
+    `${API_BASE_URL}/api/newsletter/subscribers`;
 
   useEffect(() => {
     fetchSubscribers();

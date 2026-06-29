@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
+import { API_BASE_URL } from "./utlis/apis";
 
 export default function OfferProductValid() {
   const [currentOffer, setCurrentOffer] = useState(null);
@@ -21,8 +22,7 @@ export default function OfferProductValid() {
     try {
       setLoadingOffer(true);
       const apiUrl = process.env.NEXT_PUBLIC_OFFERS_API_URL || 
-        "https://api.gauallamilk.com/admin/offers";
-        // "http://localhost:8000/admin/offers";
+        `${API_BASE_URL}/admin/offers`;
       const { data } = await axios.get(`${apiUrl}?limit=1&offset=0&status=active`, {
         withCredentials: true,
       });
